@@ -1,0 +1,22 @@
+<div ng-controller="dashCtrl" layout="row" layout-fill style="height:100vh; overflow:hidden">   
+    <div class="colMenu">
+        <div ui-view="menu" style="height: 100%; height: 100vh; display: flex; flex-direction: column;">
+        </div>
+
+    </div>
+    <div   class="colContent">
+        <div   ui-view="content" >
+
+        </div>
+        <lightbox closingFunc="$root.closingFunc"></lightbox>
+
+    </div>
+
+
+    <div class="colAux">
+        <div ui-view="aux">
+
+        </div>
+    </div>
+
+</div>

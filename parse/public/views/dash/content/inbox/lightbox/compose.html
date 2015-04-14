@@ -1,0 +1,30 @@
+<div ng-cloak class="padStandard flexed"  layout="column">
+        
+    <h2 class="mdfi_content_drafts"></h2>
+    <md-input-container class="padBottom8">
+        <label>To:</label>
+        <input class="pad0" type="text" ng-model="recipient.to.nickname">
+    </md-input-container>
+    <!--<md-autocomplete
+        md-selected-item="ctrl.selectedItem"
+        md-search-text="ctrl.searchText"
+        md-items="item in ctrl.querySearch(ctrl.searchText)"
+        md-item-text="display"
+        placeholder="To:">
+      <span md-highlight-text="ctrl.searchText">{{item.display}}</span>
+    </md-autocomplete>
+	<hr>-->
+    <md-input-container class="">
+        <label>Message</label>
+        <textarea ng-model="recipient.to.note" columns="1"></textarea>
+    </md-input-container>
+    <div layout="row">
+        <div flex><i class="mdfi_file_attachment cursorP" style="font-size:24px;"></i></div>
+        <div layout="row" layout-align="end">
+        	<button class="btn btnAqua" ng-click="closeLightBox()" ng-disabled="showPin" style="margin-right:8px;">Cancel</button>
+        	<button class="btn btn-primary" ng-click="startSend(recipient)" ng-disabled="showPin">Send</button>
+        </div>
+    </div>
+    
+</div>
+

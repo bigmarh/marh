@@ -1,0 +1,33 @@
+{
+  "name": "Love_Will_Seed",
+  "description": "Seed to build single page apps",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "install": "napa",
+    "build": "browserify -t node-lessify app/app.js > dist/bundle.js",
+    "start": "npm run build && cd dist && w3",
+    "start-hey": "node hey.js",
+    "watch": "watchify -t node-lessify app/app.js -o dist/bundle.js",
+    "deploy": "cp -R ~/LoveWillApps/Seedlings/simplesend./dist/ ~/LoveWillApps/Seedlings/simplesend./parse/public/ && cd ~/LoveWillApps/Seedlings/simplesend./parse && parse develop 'Simple Send'"
+  },
+  "napa": {
+    "angular": "angular/bower-angular",
+    "angular-route": "angular/bower-angular-route",
+    "angular-resource": "angular/bower-angular-resource",
+    "angular-sanitize": "angular/bower-angular-sanitize",
+    "ui-router": "angular-ui/ui-router"
+  },
+  "devDependencies": {
+    "watchify": "^1.0.1"
+  },
+  "dependencies": {
+    "bip38": "^1.2.0",
+    "brfs": "^1.4.0",
+    "crypto-js": "^3.1.4",
+    "cssify": "^0.6.0",
+    "express": "^4.8.8",
+    "node-lessify": "0.0.4",
+    "parse-browserify": "^0.1.1"
+  }
+}

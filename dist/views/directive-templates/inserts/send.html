@@ -1,0 +1,53 @@
+
+<md-card style="width:330px" class="fadeIn animated previewCard bg-danger pad16  md-whiteframe-z3"  >
+
+<div ng-controller="sendCtrl">
+    <h3 class="text-center mar0">Send Transaction</h3>
+    <hr>
+    <form accept-charset="utf-8">
+        <div>
+            <label for="">Choose Account to send from:</label>
+            <select name="Account" ng-change="clear = !clear" ng-model="current.fromAccount" class="selectStyle" ng-options="accounts[address] as accounts[address].get('name')+' - '+accounts[address].get('accountNum')  for (address,account) in accounts"></select>
+
+
+
+    </div>
+<md-input-container class="">
+    <label>To: BTC Address or Email</label>
+    <input ng-init="current.toAccount = 'CFr99841LyMkyX5ZTGepY58rjXJhyNGXHf' || accounts[lastAddress]" class="pad0" type="text" ng-model="current.toAccount">
+
+
+</md-input-container>
+
+<section class="sendSection pad8">
+    <h3 class="mar0">Send Amount:</h3>
+        <div>
+            <bit-fiat value="current.amount" clear="clear" balance="current.fromAccount.get('balance')" ></bit-fiat>
+                </div>
+        
+
+</section>
+               
+
+    <md-input-container class="padBottom0">
+        <label>Note</label>
+        <textarea ng-model="current.note" columns="1"></textarea>
+    </md-input-container>
+
+
+        <md-input-container>
+            <label>Tags</label>
+            <input class="pad0" type="text" ng-model="current.tags">
+        </md-input-container>
+        <div layout="row" layout-align="space-between">
+            <button class="btn btnAqua" ng-click="closeSendBox()" type="reset" ng-disabled="showPin" flex="45">Cancel</button>
+            <button class="btn btn-primary" ng-click="startSend(current); build=true" ng-disabled="showPin" flex="45">
+                Build & Preview
+            </button>
+        </div>
+    </form>
+</div>
+</md-card>
+
+<!-- centered content-->
+

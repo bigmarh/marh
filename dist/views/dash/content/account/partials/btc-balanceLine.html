@@ -1,0 +1,17 @@
+<div layout="row" flex>
+  <div class="moneyBalance" flex="2">
+    <span class="text-big">{{account.get('balance') |  balance}}</span>
+    <br>
+    <small>Balance</small>
+</div>
+<div class="moneyBalance" flex="2">
+    <span class="text-big">{{account.get('balance')| convertCurrency:$root.BTCunit | number}}</span>
+    <br>
+    <small ng-click="$root.cycleUnits()">{{$root.BTCunit}} Balance</small>
+</div>
+<div>
+    <a href="" class="btn btnAqua" ng-click="loadSend(account)">Send</a>
+    <a href="" class="btn btn-primary" ng-click="loadRequest(account)">Request</a>
+</div>
+  
+</div>

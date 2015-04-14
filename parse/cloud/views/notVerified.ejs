@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="Verification">
+<head>
+	<title></title>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+  
+</head>
+<body>
+<a href="/"  ng-click="getNewVerification()"title="">Get a new Verification email</a>
+<script>
+	
+/**
+* Verification Module
+*
+* Description
+*/
+angular.module('Verification', []).controller('controller', ['$scope','$http', function($scope,$http){
+
+	$scope.getNewVerification = function(){
+		$http.post('').
+  success(function(data, status, headers, config) {
+    // this callback will be called asynchronously
+    // when the response is available
+    console.log(data);
+  }).
+  error(function(data, status, headers, config) {
+    // called asynchronously if an error occurs
+    // or server returns response with an error status.
+  });
+	}
+	
+}])
+
+
+
+</script>
+</body>
+</html>

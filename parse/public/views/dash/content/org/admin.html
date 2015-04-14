@@ -1,0 +1,41 @@
+<md-card flex layout="column">
+    <md-content flex class="md-padding" layout="column">
+        <div ng-if="!accounts.length" ng-show="accounts" >
+
+            We Love {{Org.get('name')}}
+            <br> This is for the tutorial, add your <a ng-click="createUser($event,true)">first user account</a>.
+
+        </div>
+
+        <div ng-if="accounts.length" flex>
+            <a ng-click="createUser($event,false)"> Add User</a>
+            <a ng-click="addCompanyAccount()">Add New Account</a>
+
+            <h4>Users:</h4>
+            <hr>
+            <div flex ng-repeat="user in users" class="fadeIn animated">
+                <div flex layout="row">
+                    <div>
+                        <img ng-src="{{user.image.url ||'https://i2.wp.com/i.vimeocdn.com/portrait/default-blue_300x300.png'}}" class='img-circle pad8 icon50' alt="" /> {{user.fullName}}
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <h4>Accounts:</h4>
+            <hr>
+            <div ng-repeat="account in accounts | orderBy:'createdAt'" class="fadeIn animated">
+                <div flex layout="row">
+
+                    <div flex>{{account.name}}</div>
+                    <div flex>{{account.createdAt | date:'short'}}</div>
+                 <!--    <div flex>{{account.accountNum}}</div> -->
+                    <div flex="50"><small>{{account.address ||  "Account Not Active"}}</small>
+                    </div>
+
+                </div>
+                <hr>
+
+            </div>
+        </div>
+    </md-content>
+</md-card>

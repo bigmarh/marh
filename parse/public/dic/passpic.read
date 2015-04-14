@@ -1,0 +1,14 @@
+/******
+	var icons = [];
+	 for(i in document.getElementById('results').children){
+	 var iconObj = {};
+	 iconObj.imageSrc =  document.getElementById('results').children[i].children && document.getElementById('results').children[i].children[0].children[0].src;
+	 var title =  document.getElementById('results').children[i].children && document.getElementById('results').children[i].children[0].children[1].innerText;
+	 iconObj.title = title && title.split(' - ')[0].replace('.png','')
+	 icons.push(iconObj);
+
+	 }
+	document.write(JSON.stringify(icons))
+
+**///
+

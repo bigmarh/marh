@@ -1,0 +1,73 @@
+<style type="text/css">
+    body{
+        background: #EDECEB;
+    }
+</style>
+<md-toolbar layout="row" layout-align="center center"class="pad8 padSide16" style="background:white;">
+    <div flex><img src="/img/peLogo.svg" alt="" style="width:40px;"></div>
+    <span><logout class="btn btn-primary bg-primary"></logout></span>
+</md-toolbar>
+<div layout="column" layout-align="center center" class="padBottom24">
+    <div class="pad16 text-center">
+        <h1 class="marBottom0"><strong>Set-up your organization</strong></h1>
+        <p style="font-size:20px; font-weight:100;">
+            Enter the credentials below to begin set-up.
+            
+        </p>
+    </div>
+    <div class="card pad16" style="width:320px;">
+        <form name="$passForm" ng-submit="createOrg()" accept-charset="utf-8">
+
+
+            <md-input-container>
+                <label>Organization Name</label>
+                <input required name="orgName" ng-model="org.name" placeholder="" type="text">
+                <div ng-messages="projectForm.description.$error">
+                  <div ng-message="required">This is required.</div>
+                </div>
+                
+            </md-input-container>
+            <div class="error" ng-show="$passForm.orgName.$error.required">
+                <!--<p>Required.</p>-->
+            </div>
+            <md-content style="padding-left:5px" class="marTop16">
+                <strong>Domain:</strong>
+                <br>
+                {{org.domain}}
+            </md-content>
+            <md-input-container>
+                <label>Password:</label>
+                <input type="password" placeholder="Password" name="password" id="password" required ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[-+_!@#$%^&*.,?])).{8,}$/" ng-model="password">
+                <div ng-messages="projectForm.description.$error">
+                  <div ng-message="required">This is required.</div>
+                </div>
+
+
+            </md-input-container>
+            <div class="error" ng-show="$passForm.password.$error.required">
+                <!--<p>Required.</p>-->
+            </div>
+            <div class="error org-reg" ng-show="$passForm.password.$error.pattern">
+                <p>The password must have at least One Uppercase, One Lower Case, One digit and one odd character "-+_!@#$%^&*.,?"</p>
+            </div>
+            <md-input-container>
+                <label>Confirm Password:</label>
+                <input type="password" name="confirmPassword" id="confirmPassword" placeholder="confirm password" ng-model="confirmPassword" repeat-password match="password" required>
+                <div ng-messages="projectForm.description.$error">
+                  <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <div class="error" ng-show="$passForm.confirmPassword.$error.required">
+                <!--<p>Required.</p>-->
+            </div>
+            <div class="error org-reg" ng-show="$passForm.confirmPassword.$error.equals">
+                <p>The passwords do not match</p>
+            </div>
+
+            <button type="submit" class="btn pull-left btn-primary btn-block marTop16" ng-disabled="!$passForm.$valid">Generate Organization Card</button>
+        </form>
+    </div>
+</div>
+
+<!--<logout></logout>-->

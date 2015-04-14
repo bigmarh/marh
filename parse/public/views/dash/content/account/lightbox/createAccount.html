@@ -1,0 +1,59 @@
+<md-dialog aria-label="Add User">
+    <md-content>
+        <div role="button" tabindex="0" ng-click="hide()" class="close pull-right" aria-label="Close"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAATElEQVR42mNgIBcEBQX9J1oOJADD2BRjyP0HAmwSyGIggGISuia8ivFpwqkYmzPwBQRWxXg1oTsDV0DgDQ2cmmAS2DyIUw5faCDLAQCLaJ2x1IMFrQAAAABJRU5ErkJggg==" width="12" height="12" class="gwt-Image" alt="Close image">
+        </div>
+        <div layout="column">
+            <div>
+                <div>
+                    <h4>Create a New Account</h4>
+                    <select name="Account" required ng-model="newAccount.type" ng-init="newAccount.type = 'Personal'" id="" class="selectStyle">
+                        <option>Personal</option>
+                        <option>Joint</option>
+                    </select>
+                </div>
+            </div>
+            <div ng-show="newAccount.type == 'Personal'">
+                <form ng-submit="createAccount(newAccount)"  accept-charset="utf-8">
+
+                    <md-input-container class="padBottom16" flex>
+                        <label>Add Individual Account Name</label>
+                        <input type="text" ng-model="newAccount.name" placeholder="Add Individual Account Name" style="text-transform:capitalize">
+                    </md-input-container>
+                    <!--<div>
+            <input type="text" ng-model="newAccount.name" placeholder="Add Individual Account Name" style="text-transform:capitalize">
+        </div>-->
+                    <p>Keychain: Origin Master - Origin Backup - Last Sign</p>
+                    <div>
+                        <button type="submit" class="btn btn-primary "> 
+                            Create New Account
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+            <div ng-show="newAccount.type == 'Joint'">
+                <form action="createAccount_submit" method="get" accept-charset="utf-8">
+                    <!-- <h3>Add Joint Account Name</h3>
+            <input type="text" ng-model="newAccount.name" placeholder="">
+            <h3>Add Joint Signees</h3>
+            <div ng-init="signees = [1]">
+                <input type="email" required ng-model="newAccount.signees[$index]" ng-repeat=" sign in signees track by $index" placeholder="Add Email">
+            </div>-->
+                    <md-input-container class="padBottom8" flex>
+                        <label>Add Joint Account Name</label>
+                        <input type="text" ng-model="newAccount.name" placeholder="">
+                    </md-input-container>
+                    <h4 class="marBottom0">Add additional account users</h4>
+                    <div ng-init="signees = [1]">
+                        <md-input-container class="padBottom8" flex ng-repeat=" sign in signees track by $index">
+                            <label>Add Joint Signees</label>
+                            <input type="email" required ng-model="newAccount.signees[$index]" placeholder="Add Email">
+                        </md-input-container>
+                    </div>
+                    <a ng-click="signees.push(1)">+ Add Item</a>{{newAccount.signees}}
+                </form>
+
+            </div>
+        </div>
+    </md-content>
+</md-dialog>

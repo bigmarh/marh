@@ -1,0 +1,27 @@
+<div ng-cloak class="padStandard" >
+    <!--  add right-card for animation -->
+
+   <label>To:</label>
+        <input class="pad0" type="text" placeholder="BTC Address or Email">
+        <br>
+    <h3 class="labelSub">Amount:</h3>
+    
+   <div class="splitForm"> 
+        
+        <span class="label label-default" ng-click="$root.cycleUnits()" >{{$root.BTCunit}}</span>
+        <input class="pad0" ng-model="sendBits" type="number"  ng-change="sendDollars = updateDollars(sendBits) " placeholder="0.00">
+    </div>
+    <div class="splitForm"> 
+        
+        <span class="label label-default">{{$root.currency.currency}}</span>
+        <input class="pad0" type="number" ng-model="sendDollars"  ng-change="sendBits = updateBits(sendDollars) "  placeholder="0.00">
+
+    </div>
+    <div>
+        <button class="btn btn-block" ng-click="showPin = true" ng-disabled="showPin">SEND</button>
+    </div>
+
+
+
+
+</div>

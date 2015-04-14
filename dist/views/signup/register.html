@@ -1,0 +1,50 @@
+<div class="container">
+    <h1 class="text-center">
+		Welcome To Mothership
+		<br>
+		<small>Let's begin by setting up your profile.</small>
+	</h1>
+    <div class="row">
+        <div class="col-xs-offset-2 col-xs-8">
+            <md-whiteframe class="md-whiteframe-z2 bg-white pad16-0">
+                <div class="text-center">
+                    <i class="glyphicon glyphicon-heart-empty" style="font-size: 40px; color:#9B70FD; padding:8px;" aria-hidden="true"></i>
+                </div>
+                <form novalidate name="form" ng-submit="signUp()" class="flexed">
+                    <div class="flexCon2 padSide16">
+                            <md-input-container>
+                              <label>Full Name</label>
+                              <input ng-model="userObj.fullName">
+                            </md-input-container>
+
+                            <md-input-container>
+                              <label>Email</label>
+                              <input ng-model="userObj.email" name="uEmail" type="email" required>
+                            </md-input-container>
+                            
+                            <md-input-container>
+                              <label for="password">Password</label>
+                              <input name="password" required pattern=".{8,}" ng-model="userObj.password" type="password">
+                            </md-input-container>
+                    </div>
+
+                    <div class="flexCon padSide16">
+                        <div class="text-center">
+                            <img src="img/download.svg" alt="" class="img-circle" style="width:100px">
+                        </div>
+                    </div>
+
+                </form>
+                <hr>
+                <div class="text-right pad8 padSide16">
+                    <button ng-disabled="form.$invalid" class="btn btn-primary btn-lg" ng-click="signUp()">
+						<i class="glyphicon glyphicon-arrow-right"></i>
+					</button>
+                </div>
+
+                </div>
+                <!-- card -->
+            </md-whiteframe>
+        </div>
+
+    </div>

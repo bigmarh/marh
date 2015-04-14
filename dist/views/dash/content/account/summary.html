@@ -1,0 +1,22 @@
+<div >
+    <div class="colSubNav">
+        <div class="subNav" layout="row">
+            <div ng-include="'../views/dash/content/account/partials/nav.html'" scope="" onload="" flex></div>
+            <!--<a href="" class="btn btn-primary" ng-click="newAccount=true"><span class="glyphicon glyphicon-plus"></span>  Add Account</a>-->
+            <a href="" class="btn btn-primary" ng-click="loadCreateAccount(account,$event)">
+                <span class="mdfi_content_add"></span>Add Account</a>
+        </div>
+    </div>
+    <div >
+      <div class="colTitle">
+        <h1 class="flexCon mar0">Summary</h1>
+
+    </div>
+
+    <div class="colSummary" >
+       <div ng-include="'../views/dash/content/account/partials/transactions.html'" scope="" onload="">
+        <!-- transactions -->
+    </div>  
+    </div>
+    
+</div>

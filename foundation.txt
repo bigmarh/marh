@@ -1,0 +1,22 @@
+mkdir app
+mkdir dist
+mkdir style
+mkdir views
+touch hey.js
+touch app/app.js
+touch app/routes.js
+touch app/config.js
+mkdir app/Controllers
+touch app/Controllers/index.js
+mkdir app/Services
+touch app/Services/index.js
+mkdir app/Directives
+touch app/Directives/index.js
+mkdir app/Filters
+touch app/Filters/index.js
+mkdir app/Helpers
+touch app/Helpers/index.js
+touch dist/index.html
+touch style/style.css
+touch views/page1.html
+

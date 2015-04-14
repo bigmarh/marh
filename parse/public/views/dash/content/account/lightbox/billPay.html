@@ -1,0 +1,46 @@
+<div>
+    <h2 class="text-center">Pay Bill</h2>
+    <div layout="row">
+        <strong>Pay To:</strong>
+        <md-select ng-model="neighborhood" placeholder="Select Payee">
+            <md-option ng-value="opt" ng-repeat="payees">{{ payees }}</md-option>
+        </md-select>
+    </div>
+    <div>
+        <strong>Address:</strong>
+        <p>
+            911 Washington Avenue
+            <br>St. Louis, MO 63101
+        </p>
+    </div>
+    <div>
+        <strong>Acct. Number:</strong>
+        <p>
+            0012755465442432
+        </p>
+    </div>
+    <div>
+        <strong>Payment For:</strong>
+        <p>Electric</p>
+    </div>
+    <div>
+        <md-input-container>
+            <label>Memo</label>
+            <textarea ng-model="recipient.to.memo" columns="1"></textarea>
+        </md-input-container>
+    </div>
+    <div layout="row" layout-align="space-between">
+        <md-input-container flex="45">
+            <label>bits</label>
+            <input class="pad0" type="text">
+        </md-input-container>
+        <md-input-container>flex="45"
+            <label>dollar amount</label>
+            <input class="pad0" type="text">
+        </md-input-container>
+    </div>
+    <div layout="row" layout-align="space-between">
+        <button class="btn btnAqua" ng-click="closeLightBox()" ng-disabled="showPin" flex="45">Cancel</button>
+        <button class="btn btn-primary" ng-click="startSend(recipient)" ng-disabled="showPin" flex="45">Send</button>
+    </div>
+</div>

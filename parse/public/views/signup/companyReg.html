@@ -1,0 +1,61 @@
+<div container>
+    <h1 class="text-center">
+        Register Your Organization
+        <br>
+        <small>Enter your organizations information below.</small>
+    </h1>
+    <div class="row">
+        <div class="col-xs-offset-4 col-xs-4">
+            <md-whiteframe ng-hide="createWallet" class="md-whiteframe-z2 bg-white pad16-0">
+                <div class="text-center">
+                    <span class="glyphicon glyphicon-heart-empty" style="font-size: 40px; color:#9B70FD; padding:8px;" aria-hidden="true"></span>
+                </div>
+                <form ng-submit="AddRoles()" name="orgForm" novalidate class="flexed padSide16 flexCol">
+                    
+                            <md-input-container>
+                              <label>Organization Name</label>
+                              <input required name="orgName" ng-model="orgName" placeholder="" type="text">
+                            </md-input-container>
+
+                </form>
+                <div class="text-right padSide16">
+                    <span class="btn btn-primary btn-lg" ng-click="AddRoles()">
+                        REGISTER
+                    </span>
+                </div>
+            </md-whiteframe>
+            <!-- card -->
+            <md-whiteframe ng-show="createWallet" class="md-whiteframe-z2 bg-white pad16-0">
+                <div class="flexCon">
+                    <div class="flexed" layout=column>
+                        <p class="padSide16">Generate and Protect Company Backup</p>
+                        <hr>
+                        <form name="protect" accept-charset="utf-8">
+        
+                            <md-input-container class="padSide16">
+                                <label>Password:</label>
+                                <input type="password" ng-model="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="pwd1" onchange="form.pwd2.pattern = this.value;">
+                            </md-input-container>
+                            <md-input-container class="padSide16">
+                                <label>Confirm Password:</label>
+                                <input type="password" required ng-model="confirmPassword" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="pwd2">
+                            </md-input-container>
+
+                             <!--<p>Backup to Cloud?:
+                            <input type="checkbox" name="" ng-model="backup" value="">
+                            </p>-->
+                            <md-checkbox ng-model="backup">
+                                <i class="mdfi_file_cloud_upload"></i> Backup to Cloud?
+                              </md-checkbox>
+                            <hr>
+                            <div class="padSide16">
+                                <button class="btn btn-primary pull-right" ng-click="protectandDownload()" ng-disabled="protect.$invalid">Protect And Download Card</button>
+                            </div>
+                            
+                        </form> 
+                    </div>
+                </div>
+            </md-whiteframe>
+        </div>
+    </div>
+</div>
