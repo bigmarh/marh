@@ -1,8 +1,4 @@
 module.exports = function(app, Parse) {
-
-   
-
-
     app.controller('registerCtrl', ['$scope', "$rootScope", '$state', '$messages',
         function($scope, $rootScope, $state, $messages) {
             if (!Parse.User.current()) window.location = "/";
@@ -83,6 +79,9 @@ module.exports = function(app, Parse) {
         });
         var nextStep = ($state.params.number) ? parseInt($state.params.number) + 1 : 1;
           $scope.Next = function() {
+
+
+            
             $state.go('register.step', {
                     number: nextStep
                 })

@@ -1,12 +1,5 @@
 /*var required = require('../helpers/bitcore');*/
-var bitcore = window.bitcore = require('bitcore');
 
-
-
-var privateKey = new bitcore.PrivateKey();
-var address = privateKey.toAddress();
-
-console.log(address);
 var CryptoJS = require('crypto-js');
 var uuid = require('node-uuid');
 window.currency = {

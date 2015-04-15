@@ -2,7 +2,10 @@ require('angular/angular');
 require('angular-route/angular-route');
 require('angular-resource/angular-resource');
 require('ui-router/release/angular-ui-router');
-//require('./helpers/hammer.js');
+
+//Load bitcoin Libraries
+var bitcore = window.bitcore = require('bitcore');
+window.bip39 = require('bip39');
 
 //require parse
 var Parse = require('parse-browserify');

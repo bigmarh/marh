@@ -33,7 +33,6 @@ module.exports = function(stateProvider, Parse) {
             url: '/step/:number',
             resolve: {
                 checkParams: ['$stateParams', '$rootScope', function($stateParams, $rootScope) {
-                    console.log($stateParams);
                     return $rootScope.currentStep = steps[$stateParams.number] || steps["default"];
                 }]
             },
