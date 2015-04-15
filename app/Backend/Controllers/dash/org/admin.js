@@ -1,11 +1,10 @@
 module.exports = function(app, Parse) {
-    app.controller('adminCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', 'loadOrg', '$mdDialog','$messages',
-        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, loadOrg, $mdDialog,$messages) {
+    app.controller('adminCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog','$messages',
+        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog,$messages) {
 
             //reset current account
             Accounts.currentAccount = {};
             $scope.currency = currency;
-            if (!$scope.Org) $state.go('setUp.org');
             $scope.accounts = false;
 
             $scope.loadRequest = function(data) {
@@ -23,7 +22,7 @@ module.exports = function(app, Parse) {
                     targetEvent: ev,
                 });
             }
-
+/*
             $scope.$watch(function() {
                 return Org.current
             }, function(newVal, oldVal) {
@@ -37,7 +36,7 @@ module.exports = function(app, Parse) {
                         alert(err);
                     });
                 }
-            });
+            });*/
 
 
             $rootScope.$on('updateCompanyAccounts',function(event,options){

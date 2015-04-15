@@ -26,7 +26,19 @@ module.exports = function(app, Parse) {
                     return textFile;
 
                 },
+                makeId: function(number,type) {
+                    var text = "";
 
+                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#$%^&*!@";
+                    if(type == "digits") possible = "0123456789";
+                    if(type == "letters") possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+                    if(type == "digits-letters") possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    
+                    for (var i = 0; i < number; i++)
+                        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+                    return text;
+                },
                 createBKUPDF: function(keys) {
 
                     function a(a) {

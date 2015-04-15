@@ -1,11 +1,25 @@
 <div ng-hide="code">
-	-----Form for password entry goes here --------
-	<a title="" ng-click="getCode();">Create and Protect Signature</a>
+    -----Form for password entry goes here --------
+    <a title="" ng-click="getCode();">Create and Protect Signature</a>
 </div>
-<div ng-show="code"> 
-	{{code}}
-	<a title="" ng-disabled="!downloadedCard" ng-click="Next();">Next</a>
+<div ng-show="code">
+    <h3>Back Up Words</h3>
+    <p>
+       
+        {{code}}
+    </p>
+    <br>
+    <button  ng-hide="downloadedCard" ng-click="DownloadCard()">Download</button>
+    <form ng-show="downloadedCard && !checkNumberPassed">
+        <h3>Enter Key Card Number</h3>
+        <input ng-model="card.num" type="text" required />
+        <button title="" ng-click="checkCardNumber();">
+			Activate Card
+		</button>
+    </form>
+    <a title="" ng-show="checkNumberPassed" ng-click="Next();">Next</a>
 </div>
+
 
 
 

@@ -1,27 +1,9 @@
 module.exports = function(stateProvider, Parse, resolvers) {
 
     stateProvider.state('org', {
-            url: '/org',
             abstract: true,
             resolve: {
                 checkAll: resolvers.checkAll,
-                setType: ['AccountsService', function(Accounts) {
-                    return Accounts.settings = {
-                        type: "Org",
-                        currency: currency
-                    };
-
-                }],
-
-                getAccounts: ['AccountsService', '$stateParams', 'checkAll', function(Accounts, $stateParams) {
-                    return Accounts.getAccounts("Org");
-                }],
-                loadOrg: ['OrgService', 'setType', function(Org) {
-                    return Org.get()
-                }],
-                getSpotPrice: ['WalletService', 'getAccounts', function(Wallet, getAccounts) {
-                    return Wallet.getSpotPrice();
-                }]
             },
 
             views: {
@@ -50,21 +32,9 @@ module.exports = function(stateProvider, Parse, resolvers) {
             }
         })
         .state('org.index', {
-            url: '',
+            url: '/',
             resolve: {
-                admin: ['AccountsService', '$state', '$q', 'checkAll', 'getAccounts', function(Accounts, $state, $q, checkAll, getAccounts) {
-                    if (getAccounts.length)
-                        if (Parse.User.current().get('isAdmin') && !Object.keys(Accounts.accounts['Org']).length) {
-                            console.log("is admin with no Accounts");
-                            $state.go('org.admin');
-                        }
 
-                }],
-
-                getSpotPrice: ['admin', 'WalletService', 'AccountsService', '$rootScope', function(admin, Wallet, Accounts, $rootScope) {
-                    Accounts.currency = $rootScope.currency = currency;
-                    return Wallet.getSpotPrice();
-                }]
             },
             views: {
                 'content@org': {

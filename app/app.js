@@ -22,11 +22,11 @@ var defaultModules = function(addOnArray){
 
 	
 var app = angular.module('myapp', defaultModules());
-require('./Globals')(app, Parse);
-var appHome = angular.module('home',['myapp']);
+var appHome = angular.module('home',defaultModules());
 var appRegister = angular.module('register',['ui.router','angular.filter', 'Scope.safeApply', 'ngResource','ngMaterial']);
-require('./Globals')(appRegister, Parse);
-
+[app,appHome,appRegister].map(function(app){
+    require('./Globals')(app, Parse);
+})
 
 appHome.config(require('./Frontend/routes')(Parse));
 app.config(require('./Backend/routes')(Parse));

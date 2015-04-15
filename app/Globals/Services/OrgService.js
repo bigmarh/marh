@@ -9,7 +9,8 @@ window.clone = function(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 module.exports = function(app, Parse) {
-    app.service('OrgService', ['$http', 'UtilService', '$rootScope', 'BlockCypher', 'WalletService', 'LastSign', '$q', 'AccountsService', function($http, util, $rootScope, BlockCypher, Wallet, LastSign, $q, Accounts) {
+
+    app.service('OrgService', ['$http', 'UtilService', '$rootScope', 'BlockCypher', 'WalletService', 'LastSign', '$q', 'AccountsService', '$messages', function($http, util, $rootScope, BlockCypher, Wallet, LastSign, $q, Accounts, $messages) {
         var Org = {
             current: {},
             setCurrent: function(org) {
@@ -44,7 +45,7 @@ module.exports = function(app, Parse) {
                 if (Org.current.get('accounts') && Org.current.get('accounts').length) {
                     Org.current.get('accounts').map(function(account) {
                         if (account == null) {
-                            Org.current.remove('accounts',account)
+                            Org.current.remove('accounts', account)
                             check();
                         } else {
                             account.fetch().then(function(account) {
@@ -109,11 +110,11 @@ module.exports = function(app, Parse) {
             addAccount: function(users, cb, cbErr) {
 
             },
-            addRoles: function($scope, user, cb, error) {
+            addRoles: function(orgObj, user, cb) {
 
                 try {
-                    console.log("Create Roles");
-                    var orgName = $scope.org.domain.replace(/\./g, '_');
+                    $messages.log("Create Roles");
+                    var orgName = orgObj.domain.replace(/\./g, '_');
                     var adminTitle = orgName + "_Administrators";
 
                     //create org admin role
@@ -122,16 +123,15 @@ module.exports = function(app, Parse) {
                     var adminRole = new Parse.Role(adminTitle, roleACL);
                     adminRole.getUsers().add(Parse.User.current());
                     adminRole.save().then(function(adminRole) {
-                        // Create Company
-                        Org.createCompany(adminRole, $scope, cb, error);
+                        // Create Company 
+                        return cb(adminRole, orgObj);
 
                     }, function(e, data) {
-                        console.log(e);
                         //Send Email to org admin with info about 
-                        "There is a org set up with that name, ask the admin to add you";
+                        throw "There is a org set up with that name, ask the admin to add you";
                     });
                 } catch (e) {
-                    console.log(e);
+                    $messages.log(e);
                     error(e);
                 }
 
@@ -142,7 +142,7 @@ module.exports = function(app, Parse) {
 
                     Org.createUserAccount(results, cb, cbErr);
                 }, function(err) {
-                    console.log(err);
+                    $messages.log(err);
                 })
             },
             createUserAccount: function(data, cb, cbErr) {
@@ -178,118 +178,91 @@ module.exports = function(app, Parse) {
 
 
             },
-            createCompany: function(role, $scope, cb, error) {
-                console.log("Create Company");
+            setPayload: function(org, password, cb) {
 
-                if (!$scope.password) return alert("Have to have password");
-                var HD = new bitcore.HDPrivateKey();
-                var backupHD = new bitcore.HDPrivateKey();
-                HD = HD.derive("m");
-                backupHD = backupHD.derive("m");
-                var payload = Wallet.encryptKey(JSON.stringify(HD), $scope.password);
-                console.log(HD);
-                var backupPayload = Wallet.encryptKey(JSON.stringify(backupHD), $scope.password);
-                var orgName = $scope.org.domain.replace(/ /g, '_');
+                var orgName = org.get('domain').replace(/\./g, '_');
+                var adminTitle = orgName + "_Administrators";
 
+                var restrictedAcl = new Parse.ACL();
+                restrictedAcl.setPublicReadAccess(false);
+                restrictedAcl.setPublicWriteAccess(false);
 
-
-                buildAccount()
-
-                //Build org
-                function buildAccount() {
-                    console.log('Start Building Org');
-                    var Orgz = Parse.Object('Org');
-                    var orgACL = new Parse.ACL();
-                    orgACL.setRoleWriteAccess(role, true);
-                    orgACL.setRoleReadAccess(role, true);
-                    Orgz.setACL(orgACL);
-                    var comObj = {
-                        domain: $scope.org.domain,
-                        name: $scope.org.name,
-                        creator: Parse.User.current(),
-                        sharedKey: uuid.v4(),
-                    }
-
-                    Orgz.set('activated', false);
-                    var relation = Orgz.relation('users');
-                    relation.add(Parse.User.current());
-                    var accountRelations = Orgz.relation('accounts');
-                    Orgz.save(comObj).then(function(org) {
-                        console.log('Saved Org');
-                        Parse.User.current().set('isAdmin', true);
-                        Parse.User.current().save();
-
-                        LastSign.createSignWithAC(
-                            function success(result) {
-                                console.log('Got New LastSign Key');
-                                done(result.xpubkey, result.idsl);
-                            },
-                            org.id,
-                            "Org"
-                        );
-                        var done = function(lsXpub, id) {
-                                org.set('keychains', [{
-                                    xpub: HD.xpubkey,
-                                    path: '',
-                                    type: "org-main",
-                                    owner: org.id
-                                }, {
-                                    xpub: backupHD.xpubkey,
-                                    path: '',
-                                    type: "org-second",
-                                    owner: org.id,
-                                    backup: true
-                                }, {
-                                    type: "org-lastsign",
-                                    xpub: lsXpub,
-                                    path: ''
-                                }])
-                                org.save();
-
-                                var encryptedPass = Wallet.encryptKey($scope.password, id);
-                                //Save Payload for Org keys
-                                var pL = Parse.Object('Payload');
-                                pL.set('content', payload);
-                                pL.set('type', 'org')
-                                pL.set('secret', bitcore.crypto.Hash.sha256(new Buffer(org.get('sharedKey') + $scope.password)).toString('hex'));
-                                pL.set('passWordEncKey', encryptedPass);
-                                pL.set('identifier', org.id);
-                                pL.set('content', payload);
-                                var restrictedAcl = new Parse.ACL();
-                                restrictedAcl.setPublicReadAccess(false);
-                                restrictedAcl.setPublicWriteAccess(false);
-                                restrictedAcl.setRoleReadAccess(role, true);
-                                pL.setACL(restrictedAcl);
-                                pL.save(null).then(function(payload) {
-                                    /* util.createBKUPDF([{
-                                         title: "Org ID:" + org.id,
-                                     }, {
-                                         title: "Encrypted Private Key",
-                                         content: payload
-                                     }, {
-                                         title: "Encrypted Backup Key",
-                                         content: backupPayload
-                                     }, {
-                                         title: "Encrypted Passcode",
-                                         content: encryptedPass
-                                     }, {
-                                         title: "Company Last Sign xpub",
-                                         content: lsXpub
-                                     }]);*/
-                                    cb(org);
-                                }, function(error) {
-                                    console.log(error);
-                                });
-                            }
-                            //Print Keys for company
-
-                    }, function(error) {
-                        error(error.message);
-
-                    });
+                var sharedKey = uuid.v4();
+                mnemonic = bip39.generateMnemonic();
+                var HD = new bitcore.HDPrivateKey.fromSeed(bip39.mnemonicToSeed(mnemonic));
+                var payloadObj = {
+                    sharedKey: sharedKey,
+                    privKey: HD.xprivkey
                 }
 
+                var passWordEncKey = bitcore.encoding.Base58(bitcore.crypto.Random.getRandomBufferBrowser(18)).toString();
+                var encKey = Wallet.encryptKey(JSON.stringify(payloadObj), "" + password);
+                var encPass = Wallet.encryptKey("" + password, passWordEncKey);
+                var Payload = Parse.Object.extend('Payload')
+                var payload = new Payload();
+                //restrict Access Level
+                payload.setACL(restrictedAcl);
+                payload.set('content', encKey);
+                payload.set('type', 'org')
+                payload.set('identifier', org.id);
+                payload.set('secret', bitcore.crypto.Hash.sha256(new Buffer(sharedKey)).toString('hex'));
+                payload.set('passWordEncKey', passWordEncKey);
+                var cardNumber = $rootScope.cardNumber = util.makeId(7, 'digits');
+                payload.set('cardNumber', cardNumber);
+                $messages.log(cardNumber);
+                payload.save().then(function(payload) {
+                    $messages.log([{
+                        Heading: "Organization Key Card #" + cardNumber
+                    }, {
+                        title: "Encrypted Private Key",
+                        content: payload.get('content')
+                    }, {
+                        title: "Encrypted Passcode",
+                        content: encPass
+                    }]);
+                    org.set('key-activated', false);
+                    org.set('payload', payload);
+                    org.save();
+                    cb(mnemonic);
+                }, function(error) {
+                    cbErr(error);
+                });
+
+            },
+
+            createCompany: function(role, orgObj, cb, error) {
+                $messages.log("Create Company");
+                var Orgz = Parse.Object('Organization');
+                var orgACL = new Parse.ACL();
+                orgACL.setRoleWriteAccess(role, true);
+                orgACL.setRoleReadAccess(role, true);
+                Orgz.setACL(orgACL);
+                var comObj = {
+                    domain: orgObj.domain,
+                    name: orgObj.name,
+                    creator: Parse.User.current(),
+                    sharedKey: uuid.v4(),
+                    meta: orgObj.meta
+                }
+
+                Orgz.set('verified', false);
+                Orgz.relation('users').add(Parse.User.current());
+                var accountRelations = Orgz.relation('accounts');
+                Orgz.save(comObj).then(function(org) {
+                    $messages.log('Saved Org');
+                    Parse.User.current().set('isAdmin', true);
+                    Parse.User.current().set('org', org)
+                    Parse.User.current().save();
+                    org.save();
+                    cb();
+
+                }, function(error) {
+                    error(error.message);
+
+                });
             }
+
+
         };
         return Org;
     }])

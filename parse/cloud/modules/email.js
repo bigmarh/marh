@@ -18,7 +18,7 @@ var Emails = {
     getVerificationToken: function(userId) {
         var self = this;
         var promise = new Parse.Promise();
-        var Token = Parse.Object.extend('verificationToken');
+        var Token = Parse.Object.extend('Verify_Token');
         token = new Token();
         this.userId = userId;
         token.save({

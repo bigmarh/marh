@@ -5,7 +5,22 @@ module.exports = function(app, Parse) {
             /*  Parse.User.logIn('lamar@pheeva.com','1234').then(function(user){
                         if(user) $state.go('accounts.summary');
                       })*/
-            $scope.userObj = {email:Math.random()+"@lovewills.us"};
+            $scope.userObj = {email:"lamar@lovewills.us"};
+            $scope.logIn = function(){
+                var user = new Parse.User();
+                   user.logIn($scope.email,$scope.password, {
+                    success: function(user) {
+                        // Hooray! Let them use the app now.
+                        // console.log(user);
+                        window.location = "/app"
+                    },
+                    error: function(user, error) {
+                        // Show the error message somewhere and let the user try again.
+                        $messages.error("Error: " + error.code + " " + error.message);
+                    }
+                });
+
+            }
             $scope.signUp = function() {
                 var user = new Parse.User();
                 $scope.userObj.username = $scope.userObj.email.toLowerCase();

@@ -1,9 +1,9 @@
 module.exports = function(app, Parse) {
     app.controller('userCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog',
         function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog) {
-
+           
             $scope.fields = {
-                domain: Org.current.get('domain')
+                domain: Org.current.get('domain') 
             }
             if (Org.firstUser) {
                 var name = Parse.User.current().get('fullName').split(' ');
