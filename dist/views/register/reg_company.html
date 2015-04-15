@@ -1,5 +1,94 @@
-<div>
+<!--<div>
 	Reg Company  {{user.get('email')}}
 <a title="" ng-click="Next();">Next</a>
 
-</div>
+</div>-->
+
+<md-toolbar layout="row">
+      <md-button class="md-icon-button" aria-label="Settings">
+          <md-icon class="mdfi_navigation_menu"></md-icon>
+        </md-button>
+        <h1>
+          Enterprise
+        </h1>
+    </md-toolbar>
+
+    <div flex layout="column" layout-align="start center" layout-margin layout-padding>
+        <ul class="steps">
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li class="active">4</li>
+          <li>5</li>
+          <li>6</li>
+          <li><i class="mdfi_navigation_check"></i></li>
+        </ul> 
+        <div layout="column" style="max-width:780px;">
+          <div>
+              <h1>Next register your company</h1>
+          </div>
+          <div layout="row">
+            <div flex>
+              <h3>Enter your company information</h3>
+              <p class="instruction">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna wirl aliqua. Up exlaborum incididunt quis nostrud exercitatn.
+              </p>
+            </div>
+            <div flex>
+              <md-whiteframe class="md-whiteframe-z1 pad2432 marBottom32" layout="column" layout-padding style="-webkit-margin-before: 1em;">
+                <md-input-container>
+                  <label>Company Name</label>
+                  <input type="company" required>
+                </md-input-container>
+                <md-input-container>
+                  <label>Company Email</label>
+                  <input type="companyWebsite" required>
+                </md-input-container>
+                <md-input-container>
+                  <label>Company Website</label>
+                  <input type="companyWebsite" required>
+                </md-input-container>
+                <md-input-container>
+                  <label>Phone</label>
+                  <input type="phone" required>
+                </md-input-container>
+                
+                <md-input-container>
+                  <label>Address</label>
+                  <input type="address" required>
+                </md-input-container>
+                <md-input-container>
+                  <label>City</label>
+                  <input type="city" required>
+                </md-input-container>
+                <div layout="row">
+                  <div flex>
+                    <md-select placeholder="State" ng-model="someVal">
+                      <md-option value="1">One</md-option>
+                      <md-option value="2">Two</md-option>
+                    </md-select>
+                  </div>
+                  <div flex>
+                    <md-input-container>
+                    <label>Postal Code</label>
+                    <input type="zip" required>
+                  </md-input-container>
+                  </div>
+                </div>
+                <md-select placeholder="Country / Reg" ng-model="someVal">
+                  <md-option value="1">One</md-option>
+                  <md-option value="2">Two</md-option>
+                </md-select>
+                <div layout="row" layout class="marTop32">
+                  <div flex="50"> 
+                    
+                  </div>
+                  <div flex="50" layout="row" layout-align="end center">
+                    <md-button class="md-raised md-primary" ng-click="Next();">Next</md-button>
+                  </div>
+                </div>
+              </md-whiteframe>
+            </div>
+          </div>
+        </div>
+    </div>

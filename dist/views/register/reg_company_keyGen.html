@@ -1,5 +1,66 @@
-<div>
+<!--<div>
 Company Gen  {{$root.current_user.get('email')}}
 <a title="" ng-click="Next();">Next</a>
 
-</div>
+</div>-->
+<md-toolbar layout="row">
+      <md-button class="md-icon-button" aria-label="Settings">
+          <md-icon md-svg-icon="assets/svg/menu.svg"></md-icon>
+        </md-button>
+        <h1>
+          Enterprise
+        </h1>
+    </md-toolbar>
+
+    <div flex layout="column" layout-align="start center" layout-margin layout-padding>
+        <ul class="steps">
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li class="active">4</li>
+          <li>5</li>
+          <li>6</li>
+          <li>7</li>
+        </ul> 
+        <div layout="column" style="max-width:780px;">
+          <div>
+              <h1>Now secure your company account</h1>
+          </div>
+          <div layout="row" layout-wrap>
+            <div flex>
+              <h3>Enter your company information</h3>
+              <p class="instruction">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna wirl aliqua. Up exlaborum incididunt quis nostrud exercitatn.
+              </p>
+            </div>
+            <div flex>
+              <md-whiteframe class="md-whiteframe-z1 pad2432" layout="column" layout-padding style="-webkit-margin-before: 1em;">
+                <!--<md-input-container>
+                  <label>Enter a PIN</label>
+                  <input type="pin" required>
+                </md-input-container>
+                <md-input-container>
+                  <label>Confirm your PIN</label>
+                  <input type="email" required>
+                </md-input-container>-->
+                <md-input-container>
+                  <label>Enter a company KEY password</label>
+                  <input type="keypassword" required>
+                </md-input-container>
+                <md-input-container>
+                  <label>Confirm company KEY password</label>
+                  <input type="keypassword" required>
+                </md-input-container>
+                <div layout="row" layout>
+                  <div flex="50"> 
+                    <md-button md-no-ink><span class="md-subhead"><i class=" mdfi_navigation_arrow_back"></i></span></md-button>
+                  </div>
+                  <div flex="50" layout="row" layout-align="end center">
+                    <md-button class="md-raised md-primary" ng-click="Next();">Next</md-button>
+                  </div>
+                </div>
+              </md-whiteframe>
+            </div>
+          </div>
+        </div>
+    </div>

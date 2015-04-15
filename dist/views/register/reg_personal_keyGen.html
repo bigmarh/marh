@@ -1,12 +1,117 @@
-<div ng-hide="code">
+<!--<div ng-hide="code">
 	-----Form for password entry goes here --------
 	<a title="" ng-click="getCode();">Create and Protect Signature</a>
 </div>
 <div ng-show="code"> 
 	{{code}}
 	<a title="" ng-disabled="!downloadedCard" ng-click="Next();">Next</a>
+</div>-->
+
+
+ <md-toolbar layout="row">
+      <md-button class="md-icon-button" aria-label="Settings">
+          <md-icon class="mdfi_navigation_menu"></md-icon>
+        </md-button>
+        <h1>
+          Enterprise
+        </h1>
+    </md-toolbar>
+
+    <div flex layout="column" layout-align="start center" layout-margin layout-padding>
+        <ul class="steps">
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li class="active">4</li>
+          <li>5</li>
+          <li>6</li>
+          <li>7</li>
+        </ul> 
+        <div layout="column" style="max-width:780px;" ng-hide="code">
+          <div>
+              <h1>Secure your account</h1>
+          </div>
+          <div layout="row" layout-wrap>
+            <div flex>
+              <h3>Enter your personal information</h3>
+              <p class="instruction">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna wirl aliqua. Up exlaborum incididunt quis nostrud exercitatn.
+              </p>
+            </div>
+
+            <div >
+</div>
+            <div flex >
+              <md-whiteframe class="md-whiteframe-z1 pad2432" layout="column" layout-padding style="-webkit-margin-before: 1em;">
+                <md-input-container>
+                  <label>Enter a personal KEY password</label>
+                  <input type="keypassword" required>
+                </md-input-container>
+                <md-input-container>
+                  <label>Confirm personal KEY password</label>
+                  <input type="keypassword" required>
+                </md-input-container>
+                    <md-button class="md-raised md-primary" ng-click="getCode();">Create &amp; Protect Signature</md-button>
+              </md-whiteframe>
+            </div>
+          </div>
+        </div>
+
+
+        <div > 
+	
 </div>
 
+		<div layout="column" style="max-width:780px;" ng-show="code">
+          <div>
+              <h1>Important</h1>
+          </div>
+          <div layout="row" layout-wrap>
+            <div flex>
+              <h3>Write down &amp; save your personal key!</h3>
+              <p class="instruction">
+                This is a very important next step. You are about to download the keys to your software so be sure to save the information and write down the pnumonic.
+              </p>
+            </div>
+            <div flex>
+              <md-whiteframe class="md-whiteframe-z1 pad2432" layout="column" layout-padding style="-webkit-margin-before: 1em;">
+              	<p>{{code}}</p>
+                <md-button class="md-raised md-primary" title="" ng-disabled="!downloadedCard" ng-click="Next();">Download personal Key</md-button>
+              </md-whiteframe>
+            </div>
+          </div>
+        </div>
+    </div>
 
+    <script src="./bower_components/angular/angular.js"></script>
+    <script src="./bower_components/angular-animate/angular-animate.js"></script>
+    <script src="./bower_components/angular-aria/angular-aria.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-material/angular-material.js"></script>
 
+    <script src="./src/users/Users.js"></script>
+    <script src="./src/users/UserController.js"></script>
+    <script src="./src/users/UserService.js"></script>
+
+    <script type="text/javascript">
+
+          angular
+              .module('starterApp', ['ngMaterial', 'users'])
+              .config(function($mdThemingProvider, $mdIconProvider){
+
+                  $mdIconProvider
+                      .defaultIconSet("./assets/svg/avatars.svg", 128)
+                      .icon("menu"       , "./assets/svg/menu.svg"        , 24)
+                      .icon("share"      , "./assets/svg/share.svg"       , 24)
+                      .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
+                      .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
+                      .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
+                      .icon("phone"      , "./assets/svg/phone.svg"       , 512);
+
+                      $mdThemingProvider.theme('default')
+                          .primaryPalette('blue-grey', {'default': '900'})
+                          .accentPalette('red');
+
+              });
+
+    </script>
 
