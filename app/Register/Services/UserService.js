@@ -56,7 +56,7 @@ module.exports = function(app, Parse) {
                         }]);
                         user.set('payload', payload);
                         user.save();
-                        cb();
+                        cb(mnemonic);
                     }, function(error) {
                         cbErr(error);
                     });

@@ -1,6 +1,12 @@
-<div>
-	Key Gen {{user.get('email')}}
-	{{user.get('personal')}}
-<a title="" ng-click="Next();">Next</a>
-
+<div ng-hide="code">
+	-----Form for password entry goes here --------
+	<a title="" ng-click="getCode();">Create and Protect Signature</a>
 </div>
+<div ng-show="code"> 
+	{{code}}
+	<a title="" ng-disabled="!downloadedCard" ng-click="Next();">Next</a>
+</div>
+
+
+
+
