@@ -220,7 +220,7 @@ module.exports = function(app, Parse) {
                         title: "Encrypted Passcode",
                         content: encPass
                     }]);
-                    org.set('key-activated', false);
+                    org.set('key_activated', false);
                     org.set('payload', payload);
                     org.save();
                     cb(mnemonic);
@@ -242,7 +242,7 @@ module.exports = function(app, Parse) {
                     name: orgObj.name,
                     creator: Parse.User.current(),
                     sharedKey: uuid.v4(),
-                    meta: orgObj.meta
+                    meta: orgObj
                 }
 
                 Orgz.set('verified', false);
