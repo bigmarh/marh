@@ -2,7 +2,7 @@ module.exports = function(stateProvider) {
     stateProvider.state('inbox', {
         url: '/inbox',
         resolve: {
-            loadAccounts: ['AccountsService', '$q', '$timeout', '$state', function(Accounts, $q, $timeout, $state) {
+            /*loadAccounts: ['AccountsService', '$q', '$timeout', '$state', function(Accounts, $q, $timeout, $state) {
 
                 var promise1 = Accounts.getAccounts();
                 promise1.then(function(accounts) {
@@ -14,7 +14,7 @@ module.exports = function(stateProvider) {
                     console.log(company);
                 })
                 return promise;
-            }],
+            }],*/
             getSpotPrice: ['WalletService', function(Wallet) {
                 return Wallet.getSpotPrice();
             }]

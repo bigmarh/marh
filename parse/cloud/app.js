@@ -17,7 +17,7 @@ app.get('/hello', function(req, res) {
 
 app.get('/verified/:token/:userId', function(req, res) {
 
-	var query = new Parse.Query('verificationToken');
+	var query = new Parse.Query('Verify_Token');
 	query.equalTo('objectId',req.params.token);
 	query.equalTo('userId',req.params.userId);
 	query.first().then(function(token){
@@ -36,7 +36,7 @@ app.get('/verified/:token/:userId', function(req, res) {
 });
 app.post('/verified/:token/:userId', function(req, res) {
 
-	var query = new Parse.Query('verificationToken');
+	var query = new Parse.Query('Verify_Token');
 	query.equalTo('objectId',req.params.token);
 	query.equalTo('userId',req.params.userId);
 	query.first().then(function(token){

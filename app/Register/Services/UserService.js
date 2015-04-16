@@ -2,8 +2,8 @@ var CryptoJS = require('crypto-js');
 var uuid = require('node-uuid');
 
 module.exports = function(app, Parse) {
-    app.factory('UserService', ['$state', '$http', '$resource', '$rootScope', 'WalletService', '$messages',
-        function($state, $http, $resource, $rootScope, Wallet, $messages) {
+    app.factory('UserService', ['$state', '$http', '$resource', '$rootScope', 'WalletService', '$messages','UtilService',
+        function($state, $http, $resource, $rootScope, Wallet, $messages,util) {
             var restrictedAcl = new Parse.ACL(Parse.User.current());
             restrictedAcl.setPublicReadAccess(false);
             restrictedAcl.setPublicWriteAccess(false);
@@ -27,13 +27,12 @@ module.exports = function(app, Parse) {
                 setPayload: function(user, obj, cb, cbErr) {
                     var sharedKey = uuid.v4();
                     mnemonic = bip39.generateMnemonic();
-                    console.log(mnemonic);
                     var HD = new bitcore.HDPrivateKey.fromSeed(bip39.mnemonicToSeed(mnemonic));
                     var payloadObj = {
                         sharedKey: sharedKey,
                         privKey: HD.xprivkey
                     }
-                    console.log(HD);
+
                     var passWordEncKey = bitcore.encoding.Base58(bitcore.crypto.Random.getRandomBufferBrowser(18)).toString();
                     var encKey = Wallet.encryptKey(JSON.stringify(payloadObj), "" + obj.password);
                     var encPass = Wallet.encryptKey("" + obj.password, passWordEncKey);
@@ -46,14 +45,18 @@ module.exports = function(app, Parse) {
                     payload.set('identifier', user.id);
                     payload.set('secret', bitcore.crypto.Hash.sha256(new Buffer(sharedKey)).toString('hex'));
                     payload.set('passWordEncKey', passWordEncKey);
+                    var cardNumber = $rootScope.cardNumber = util.makeId(7, 'digits');
+                    payload.set('cardNumber', cardNumber);
+                    $messages.log(cardNumber);
                     payload.save().then(function(payload) {
                         $messages.log([{
                             title: "Encrypted Private Key",
                             content: payload.get('content')
-                        },{
+                        }, {
                             title: "Encrypted Passcode",
                             content: encPass
                         }]);
+                        user.set('user-key_activated', false);
                         user.set('payload', payload);
                         user.save();
                         cb(mnemonic);

@@ -5,7 +5,14 @@ var bitcore = required('bitcore');
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 // For example:
 
-
+Parse.Cloud.define('orgExists', function(req, res) {
+    Parse.Cloud.useMasterKey()
+    var query = new Parse.Query('Org');
+    query.equalTo('domain', req.params.domain);
+    query.first().then(function(org) {
+        res.success((org != undefined));
+    })
+})
 
 Parse.Cloud.define("hello", function(request, response) {
     console.log("Hey");

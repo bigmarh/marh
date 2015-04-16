@@ -11,5 +11,7 @@ module.exports = function(app, Parse) {
     //Load styles
     require('./styles')
 
+    
+
 
 }

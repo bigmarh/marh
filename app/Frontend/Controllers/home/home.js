@@ -1,11 +1,28 @@
 module.exports = function(app, Parse) {
-    app.controller('homeCtrl', ['$scope', "$rootScope", '$state','$messages',
-        function($scope, $rootScope, $state,$messages) {
+    app.controller('homeCtrl', ['$scope', "$rootScope", '$state', '$messages',
+        function($scope, $rootScope, $state, $messages) {
             if (Parse.User.current()) return window.location = "/register/";
             /*  Parse.User.logIn('lamar@pheeva.com','1234').then(function(user){
                         if(user) $state.go('accounts.summary');
                       })*/
-            $scope.userObj = {email:Math.random()+"@lovewills.us"};
+            $scope.userObj = {
+                email: "lamar@lovewills.us"
+            };
+            $scope.logIn = function() {
+                console.log($scope.userObj)
+                var user = new Parse.User();
+                Parse.User.logIn($scope.userObj.email,$scope.userObj.password, {
+                    success: function(user) {
+                        // Do stuff after successful login.
+                        window.location = "/app"
+
+                    },
+                    error: function(user, error) {
+                        // The login failed. Check error to see why.
+                    }
+                });
+
+            }
             $scope.signUp = function() {
                 var user = new Parse.User();
                 $scope.userObj.username = $scope.userObj.email.toLowerCase();

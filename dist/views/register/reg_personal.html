@@ -1,87 +1,83 @@
 <!--<div >
-	personal  {{$root.current_user.get('email')}}
+  personal  {{$root.current_user.get('email')}}
 <a title="" ng-click="Next();">Next</a>
 
 </div>-->
 <md-toolbar layout="row">
-      <md-button class="md-icon-button" aria-label="Settings">
-          <md-icon class="mdfi_navigation_menu"></md-icon>
-        </md-button>
-        <h1>
+    <md-button class="md-icon-button" aria-label="Settings">
+        <md-icon class="mdfi_navigation_menu"></md-icon>
+    </md-button>
+    <h1>
           Enterprise
         </h1>
-    </md-toolbar>
-
-    <div flex layout="column" layout-align="start center" layout-margin layout-padding>
-        <div layout="column" style="max-width:900px;">
-          <div>
-              <h1>Let’s begin the registration process</h1>
-          </div>
-          <div layout="row" layout-wrap>
+</md-toolbar>
+<div flex layout="column" layout-align="start center" layout-margin layout-padding>
+    <div layout="column" style="max-width:900px;">
+        <div>
+            <h1>Let’s begin the registration process</h1>
+        </div>
+        <div layout="row" layout-wrap>
             <div flex>
-              <h3>Enter your personal information</h3>
-              <p class="instruction">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna wirl aliqua. Up exlaborum incididunt quis nostrud exercitatn.
-              </p>
+                <h3>Enter your personal information</h3>
+                <p class="instruction">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna wirl aliqua. Up exlaborum incididunt quis nostrud exercitatn.
+                </p>
             </div>
             <div flex>
-              <md-whiteframe class="md-whiteframe-z1" layout="column" layout-padding style="-webkit-margin-before: 1em;">
-                <md-input-container>
-                  <label>Full Name</label>
-                  <input type="fullName" required>
-                </md-input-container>
-                <md-input-container>
-                  <label>Pre-filled Email</label>
-                  <input type="email" required>
-                </md-input-container>
-                <md-input-container>
-                  <label>Password</label>
-                  <input type="email" required>
-                </md-input-container>
-                <md-input-container>
-                  <label>Password Confirmation</label>
-                  <input type="email" required>
-                </md-input-container>
-                <div layout="row" layout>
-                  <div flex="50"> </div>
-                  <div flex="50" offset="50">
-                    <md-button class="md-raised" title="" ng-click="Next();">Next</md-button>
-                  </div>
-                </div>
-              </md-whiteframe>
+                <md-whiteframe class="md-whiteframe-z1" layout="column" layout-padding style="-webkit-margin-before: 1em;">
+                    <form name="$personal" method="get" accept-charset="utf-8">
+                        <md-input-container>
+                            <label>Full Name</label>
+                            <input type="fullName" ng-model="meta.fullName" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Email</label>
+                            <input type="email" ng-model="meta.email" disabled required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Password</label>
+                            <input type="password" ng-model="password" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Password Confirmation</label>
+                            <input type="password" ng-model="passwordMatch" required>
+                        </md-input-container>
+                        <div layout="row" layout>
+                            <div flex="50"> </div>
+                            <div flex="50" offset="50">
+                                <md-button class="md-raised" title="" ng-disabled="(password != passwordMatch) || !$personal.$valid" ng-click="Next();">Next</md-button>
+                            </div>
+                        </div>
+                </md-whiteframe>
+                </form>
             </div>
-          </div>
         </div>
     </div>
+</div>
+<script src="./bower_components/angular/angular.js"></script>
+<script src="./bower_components/angular-animate/angular-animate.js"></script>
+<script src="./bower_components/angular-aria/angular-aria.js"></script>
+<script type="text/javascript" src="./bower_components/angular-material/angular-material.js"></script>
+<script src="./src/users/Users.js"></script>
+<script src="./src/users/UserController.js"></script>
+<script src="./src/users/UserService.js"></script>
+<script type="text/javascript">
+angular
+    .module('starterApp', ['ngMaterial', 'users'])
+    .config(function($mdThemingProvider, $mdIconProvider) {
 
-    <script src="./bower_components/angular/angular.js"></script>
-    <script src="./bower_components/angular-animate/angular-animate.js"></script>
-    <script src="./bower_components/angular-aria/angular-aria.js"></script>
-    <script type="text/javascript" src="./bower_components/angular-material/angular-material.js"></script>
+        $mdIconProvider
+            .defaultIconSet("./assets/svg/avatars.svg", 128)
+            .icon("menu", "./assets/svg/menu.svg", 24)
+            .icon("share", "./assets/svg/share.svg", 24)
+            .icon("google_plus", "./assets/svg/google_plus.svg", 512)
+            .icon("hangouts", "./assets/svg/hangouts.svg", 512)
+            .icon("twitter", "./assets/svg/twitter.svg", 512)
+            .icon("phone", "./assets/svg/phone.svg", 512);
 
-    <script src="./src/users/Users.js"></script>
-    <script src="./src/users/UserController.js"></script>
-    <script src="./src/users/UserService.js"></script>
+        $mdThemingProvider.theme('default')
+            .primaryPalette('blue-grey')
+            .accentPalette('red');
 
-    <script type="text/javascript">
-
-          angular
-              .module('starterApp', ['ngMaterial', 'users'])
-              .config(function($mdThemingProvider, $mdIconProvider){
-
-                  $mdIconProvider
-                      .defaultIconSet("./assets/svg/avatars.svg", 128)
-                      .icon("menu"       , "./assets/svg/menu.svg"        , 24)
-                      .icon("share"      , "./assets/svg/share.svg"       , 24)
-                      .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
-                      .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
-                      .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
-                      .icon("phone"      , "./assets/svg/phone.svg"       , 512);
-
-                      $mdThemingProvider.theme('default')
-                          .primaryPalette('blue-grey')
-                          .accentPalette('red');
-
-              });
-
-    </script>
+    });
+</script>

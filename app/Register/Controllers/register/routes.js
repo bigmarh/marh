@@ -42,6 +42,7 @@ module.exports = function(stateProvider, Parse) {
             url: '/',
             resolve: {
                 checkParams: ['$rootScope', function($rootScope) {
+                    $rootScope.current_user = Parse.User.current().fetch();
                     return $rootScope.currentStep = steps["default"];
                 }]
             },

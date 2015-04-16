@@ -8,6 +8,7 @@
     "build": "browserify -t node-lessify app/app.js > dist/bundle.js",
     "start": "npm run build && cd dist && w3",
     "start-hey": "node hey.js",
+    "push":"git push origin master && git push backup master",
     "watch": "watchify -t node-lessify app/app.js -o dist/bundle.js",
     "deploy": "cp -R ~/LoveWillApps/Seedlings/simplesend./dist/ ~/LoveWillApps/Seedlings/simplesend./parse/public/ && cd ~/LoveWillApps/Seedlings/simplesend./parse && parse develop 'Simple Send'"
   },

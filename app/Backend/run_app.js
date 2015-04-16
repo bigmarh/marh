@@ -4,6 +4,10 @@ module.exports = function(app, Parse) {
 
             $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
                 $messages.log("Started:"+toState.name);
+                if(!Parse.User.current()){
+                    event.preventDefault();
+                    window.location = "/";
+                }
                 Account.state = toState.name;
         
             })

@@ -1,9 +1,8 @@
 module.exports = function(app, Parse) {
-    app.controller('orgCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', 'loadOrg', '$mdDialog', 'LastSign',
+    app.controller('orgCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'LastSign',
         function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, loadOrg, $mdDialog, LastSign) {
             $scope.user = Parse.User.current();
-            $scope.Org = Org.current = loadOrg;
-            $rootScope.currency = Accounts.settings.currency;
+        
             //reset current account
             Accounts.currentAccount = {};
             $scope.first = {

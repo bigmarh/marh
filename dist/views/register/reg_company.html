@@ -35,34 +35,33 @@
             </div>
             <div flex>
               <md-whiteframe class="md-whiteframe-z1 pad2432 marBottom32" layout="column" layout-padding style="-webkit-margin-before: 1em;">
+              <form name="$orgForm">
+               
                 <md-input-container>
                   <label>Company Name</label>
-                  <input type="company" required>
+                  <input type="company" ng-model="org.name" required>
                 </md-input-container>
-                <md-input-container>
-                  <label>Company Email</label>
-                  <input type="companyWebsite" required>
-                </md-input-container>
+            
                 <md-input-container>
                   <label>Company Website</label>
-                  <input type="companyWebsite" required>
+                  <input type="companyWebsite" ng-model="org.domain" required>
                 </md-input-container>
                 <md-input-container>
                   <label>Phone</label>
-                  <input type="phone" required>
+                  <input type="phone" ng-model="org.phone" required>
                 </md-input-container>
                 
                 <md-input-container>
                   <label>Address</label>
-                  <input type="address" required>
+                  <input type="address" ng-model="org.address"required>
                 </md-input-container>
                 <md-input-container>
                   <label>City</label>
-                  <input type="city" required>
+                  <input type="city"  ng-model="org.city" required>
                 </md-input-container>
                 <div layout="row">
                   <div flex>
-                    <md-select placeholder="State" ng-model="someVal">
+                    <md-select placeholder="State" ng-model="org.state">
                       <md-option value="1">One</md-option>
                       <md-option value="2">Two</md-option>
                     </md-select>
@@ -70,7 +69,7 @@
                   <div flex>
                     <md-input-container>
                     <label>Postal Code</label>
-                    <input type="zip" required>
+                    <input type="zip" ng-model="org.zip"required>
                   </md-input-container>
                   </div>
                 </div>
@@ -83,9 +82,9 @@
                     
                   </div>
                   <div flex="50" layout="row" layout-align="end center">
-                    <md-button class="md-raised md-primary" ng-click="Next();">Next</md-button>
+                    <md-button class="md-raised md-primary" ng-disabled="!$orgForm.$valid" ng-click="Next();">Next</md-button>
                   </div>
-                </div>
+                </div></form>
               </md-whiteframe>
             </div>
           </div>
