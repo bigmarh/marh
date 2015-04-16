@@ -2302,6 +2302,17 @@ md-toolbar h1 {
   line-height: 40px;
   font-weight: 300;
 }
+.colContent {
+  background: #e9e9e9;
+  overflow-y: scroll;
+  padding-bottom: 64px;
+}
+.centerCard {
+  width: 76.66%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .md-display-3 {
   font-size: 5.6em;
   font-weight: 400;
@@ -2396,4 +2407,34 @@ md-toolbar h1 {
 }
 .steps .active ~ li::before {
   background: #d8d8d8;
+}
+.listGroupItem.active,
+.listGroupItem.active:hover,
+.listlistGroupItem.active:focus {
+  z-index: 2;
+  color: #21201a;
+  background-color: rgba(0, 0, 0, 0.04);
+  border: none;
+}
+.listGroupItem {
+  position: relative;
+  display: block;
+  padding: 16px;
+  margin-bottom: -1px;
+  background-color: transparent;
+  border: none;
+  color: #979797;
+  line-height: 1em;
+}
+.listGroupItem span {
+  margin-right: 12px;
+  width: 14px;
+}
+a.listGroupItem {
+  color: #979797;
+  text-decoration: none;
+}
+.listGroupItem:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+  color: #21201a;
 }
