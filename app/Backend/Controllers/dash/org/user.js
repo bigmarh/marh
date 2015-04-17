@@ -3,7 +3,7 @@ module.exports = function(app, Parse) {
         function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog) {
            
             $scope.fields = {
-                domain: Org.current.get('domain') 
+                domain: Org.currentOrg.get('domain') 
             }
             if (Org.firstUser) {
                 var name = Parse.User.current().get('fullName').split(' ');
@@ -14,8 +14,8 @@ module.exports = function(app, Parse) {
 
             $scope.addUser = function() {
                 Org.addUser($scope.fields, function(account, user) {
-                    Org.current.addUnique('accounts', account);
-                    Org.current.save().then(function(org) {
+                    Org.currentOrg.addUnique('accounts', account);
+                    Org.currentOrg.save().then(function(org) {
                         var acct = account.attributes;
                         acct.createdAt = account.createdAt;
                         $rootScope.$broadcast('updateCompanyAccounts', {

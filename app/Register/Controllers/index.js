@@ -1,5 +1,5 @@
 module.exports= function(app, Parse){
-	Parse.User.current().fetch();
+	Parse.User.current() && Parse.User.current().fetch();
 	require('./register')(app, Parse);
 
 }

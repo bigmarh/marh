@@ -20,9 +20,8 @@ module.exports = function(Parse) {
                 }
 
                 //Get Company 
-                Parse.User.current().get('org').fetch().then(function(org) {
-                    Org.current = org;
-                })
+
+                Org.load();
 
                 function checkForAccount() {
                     if (Parse.User.current().get('payload'))

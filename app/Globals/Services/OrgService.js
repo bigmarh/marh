@@ -12,23 +12,46 @@ module.exports = function(app, Parse) {
 
     app.service('OrgService', ['$http', 'UtilService', '$rootScope', 'BlockCypher', 'WalletService', 'LastSign', '$q', 'AccountsService', '$messages', function($http, util, $rootScope, BlockCypher, Wallet, LastSign, $q, Accounts, $messages) {
         var Org = {
-            current: {},
+            currentOrg: {},
+            load: function(cb){
+                Parse.User.current().get('org').fetch().then(function(org) {
+                    $messages.log(org);
+                    Org.setCurrent(org);
+                    cb && cb();
+                })
+            },
             setCurrent: function(org) {
-
-                Org.current = org;
+                Org.currentOrg = org;
             },
             getCurrent: function() {
-                var query = Parse.Query('Org');
-                query.equalTo('domain', Parse.User.current().get('domain'));
+                var deferred = $q.defer();
+                var query = new Parse.Query('Organization');
+                query.equalTo('objectId', Parse.User.current().get('org').id);
                 query.first(function(org) {
                     if (org) Org.setCurrent(org);
+                    deferred.resolve(org);
                 }, function(error) {
                     alert(error.message);
+                    deferred.reject();
                 })
+                return deferred.promise;
+            },
+            getUsers: function(page) {
+                var deferred = $q.defer();
+                Org.currentOrg.relation("users").query().find({
+                    success: function(users) {
+                        deferred.resolve(users);
+                    },
+                    error: function(error) {
+                        alert("Error: " + error.code + " " + error.message);
+                        deferred.reject(error);
+                    }
+                });
+                return deferred.promise;
             },
             get: function() {
                 var deferred = $q.defer();
-                var query = new Parse.Query('Org');
+                var query = new Parse.Query('Organization');
                 query.equalTo('domain', Parse.User.current().get('domain'));
                 query.include('accounts');
                 query.first().then(function(org) {
@@ -42,10 +65,10 @@ module.exports = function(app, Parse) {
                 var deferred = $q.defer();
                 var accounts = [];
                 var users = [];
-                if (Org.current.get('accounts') && Org.current.get('accounts').length) {
-                    Org.current.get('accounts').map(function(account) {
+                if (Org.currentOrg.get('accounts') && Org.currentOrg.get('accounts').length) {
+                    Org.currentOrg.get('accounts').map(function(account) {
                         if (account == null) {
-                            Org.current.remove('accounts', account)
+                            Org.currentOrg.remove('accounts', account)
                             check();
                         } else {
                             account.fetch().then(function(account) {
@@ -60,7 +83,7 @@ module.exports = function(app, Parse) {
                     })
 
                     function check() {
-                        if (Org.current.get('accounts').length == accounts.length) {
+                        if (Org.currentOrg.get('accounts').length == accounts.length) {
                             next();
                         }
                     }
@@ -70,7 +93,7 @@ module.exports = function(app, Parse) {
                 }
 
                 function next() {
-                    Org.current.relation('users').query().find().then(function(users) {
+                    Org.currentOrg.relation('users').query().find().then(function(users) {
                         users = users.map(function(user) {
                             newUser = clone(user.attributes);
                             newUser.fullObj = user;
@@ -85,16 +108,6 @@ module.exports = function(app, Parse) {
                 }
 
 
-                return deferred.promise;
-            },
-            getUsers: function(loadOrg) {
-
-                var deferred = $q.defer();
-                var relation = Org.current.relation('accounts');
-                var query = relation.query();
-                query.find().then(function(users) {
-                    deferred.resolve(users);
-                })
                 return deferred.promise;
             },
             getAccounts: function(loadOrg) {
@@ -137,7 +150,7 @@ module.exports = function(app, Parse) {
 
             },
             addUser: function(fields, cb, cbErr) {
-                fields.org = Org.current.id;
+                fields.org = Org.currentOrg.id;
                 Parse.Cloud.run('org_AddUser', fields).then(function(results) {
 
                     Org.createUserAccount(results, cb, cbErr);
@@ -145,39 +158,7 @@ module.exports = function(app, Parse) {
                     $messages.log(err);
                 })
             },
-            createUserAccount: function(data, cb, cbErr) {
-                var org = data.org || Org.current;
-                var user = data.user || Parse.User.current();
-                var orgName = org.get('domain').replace(/\./g, '_');
-                var adminRole = orgName + "_Administrators";
-
-                var query = new Parse.Query('Accounts');
-                query.equalTo('Org', org);
-                query.count().then(function(number) {
-                    var acctObj = {
-                        account: {
-                            Org: org,
-                            name_slug: org.get('domain') + ":" + user.get('email').split('@')[0],
-                            type: "Org",
-                            name: user.get('fullName')
-                        },
-                        keychains: Accounts.joinChains([user.get('originChain')], org.get('keychains'), true, number),
-                        pathnumber: number,
-                        signatures: [2, 4], //m-of-n
-                        access: [user, {
-                            isRole: adminRole
-                        }],
-                        signees: [user, org]
-                    }
-                    Accounts.buildAccount(acctObj, function(account) {
-                        cb(account, user);
-                    }, cbErr);
-                })
-
-
-
-
-            },
+    
             setPayload: function(org, password, cb) {
 
                 var orgName = org.get('domain').replace(/\./g, '_');

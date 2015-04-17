@@ -24,6 +24,11 @@ module.exports = function(stateProvider, Parse, resolvers) {
         })
         .state('org.admin', {
             url: '/admin',
+            resolve:{
+                getOrg:['OrgService',function(Org){
+                    return Org.getCurrent();
+                }]
+            },
             views: {
                 'content@org': {
                     templateUrl: 'views/dash/content/org/admin.html',
