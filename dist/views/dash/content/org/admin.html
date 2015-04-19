@@ -1,4 +1,4 @@
-<md-card flex layout="column">
+<md-card layout="column" class="centerCard">
     <md-content flex class="md-padding" layout="column">
         <div ng-if="!users.length" >
 
@@ -9,7 +9,7 @@
 
         <div ng-if="users.length" flex>
             <a ng-click="createUser($event,false)"> Add User</a>
-            <a ng-click="addCompanyAccount()">Add New Account</a>
+            <a ng-click="createAccount($event,false)">Add New Account</a>
 
             <h4>Users:</h4>
             <hr>

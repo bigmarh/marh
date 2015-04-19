@@ -7,8 +7,8 @@ module.exports = function(Parse) {
         var resolvers = {
 
             checkAll: ['AccountsService', 'OrgService', '$q', '$state', '$rootScope', function(Accounts, Org, $q, $state, $rootScope) {
-                var fns = [checkForAccount]
-                if(!Parse.User.current().get('authorized') && !Parse.User.current().get('isAdmin')) window.location = "/no-access"
+                var fns = [checkForAccount,checkForOrg]
+                if(!Parse.User.current().get('authorized_by') && !Parse.User.current().get('isAdmin')) window.location = "/no-access"
                 var deferred = $q.defer();
                 //Check if logged in
                 if (Parse.User.current()) {
@@ -28,6 +28,10 @@ module.exports = function(Parse) {
                         next()
                     else
                         window.location = "/register"
+                }
+                function checkForOrg() {
+                    if(!Parse.User.current().get('org')) return window.location = "/register";
+                    next();
                 }
 
 

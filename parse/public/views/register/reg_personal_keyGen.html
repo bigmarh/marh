@@ -1,0 +1,118 @@
+<md-toolbar layout="row">
+    <md-button class="md-icon-button" aria-label="Settings">
+        <md-icon class="mdfi_navigation_menu"></md-icon>
+    </md-button>
+    <h1>
+          Enterprise
+        </h1>
+</md-toolbar>
+<div flex layout="column" layout-align="start center" layout-margin layout-padding>
+    <ul class="steps">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li class="active">4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+    </ul>
+    <div layout="column" style="max-width:780px;" ng-hide="code">
+        <div>
+            <h1>Secure your account</h1>
+        </div>
+        <div layout="row" layout-wrap>
+            <div flex>
+                <h3>Enter your personal information</h3>
+                <p class="instruction">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna wirl aliqua. Up exlaborum incididunt quis nostrud exercitatn.
+                </p>
+            </div>
+            <div>
+            </div>
+            <div flex>
+                <md-whiteframe class="md-whiteframe-z1 pad2432" layout="column" layout-padding style="-webkit-margin-before: 1em;">
+                    <form name="$passForm" ng-submit="getCode()">
+                        <md-input-container>
+                            <label>Password:</label>
+                            <input type="password" placeholder="Password" name="password" id="password" required ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[-+_!@#$%^&*.,?])).{8,}$/" ng-model="password">
+                            <div ng-messages="projectForm.description.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                        <div class="error" ng-show="$passForm.password.$error.required">
+                            <!--<p>Required.</p>-->
+                        </div>
+                        <div class="error org-reg" ng-show="$passForm.password.$error.pattern">
+                            <p>The password must have at least One Uppercase, One Lower Case, One digit and one odd character "-+_!@#$%^&*.,?"</p>
+                        </div>
+                        <md-input-container>
+                            <label>Confirm Password:</label>
+                            <input type="password" name="confirmPassword" id="confirmPassword" ng-model="confirmPassword" repeat-password match="password" required>
+                            <div ng-messages="projectForm.description.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                        <div class="error" ng-show="$passForm.confirmPassword.$error.required">
+                            <!--<p>Required.</p>-->
+                        </div>
+                        <div class="error org-reg" ng-show="$passForm.confirmPassword.$error.equals">
+                            <p>The passwords do not match</p>
+                        </div>
+                        <button type="submit" class="btn pull-left btn-primary btn-block marTop16" ng-disabled="!$passForm.$valid">Generate Organization Card</button>
+                    </form>
+                </md-whiteframe>
+            </div>
+        </div>
+    </div>
+    <div>
+    </div>
+    <div layout="column" style="max-width:780px;" ng-show="code">
+        <div>
+            <h1>Important</h1>
+        </div>
+        <div layout="row" layout-wrap>
+            <div flex>
+                <h3>Write down &amp; save your personal key!</h3>
+                <p class="instruction">
+                    This is a very important next step. You are about to download the keys to your software so be sure to save the information and write down the pnumonic.
+                </p>
+            </div>
+            <div flex>
+                <md-whiteframe class="md-whiteframe-z1 pad2432" layout="column" layout-padding style="-webkit-margin-before: 1em;">
+                    <p>{{code}}</p>
+                    <md-button class="md-raised md-primary" title="" ng-show="!downloadedCard" ng-click="DownloadCard();">Download personal Key</md-button>
+                    <form ng-show="downloadedCard && !checkNumberPassed">
+                        <h3>Enter Key Card Number</h3>
+                        <input ng-model="card.num" type="text" required />
+                        <button title="" ng-click="checkCardNumber();">
+                            Activate Card
+                        </button>
+                    </form>
+                    <a title="" ng-show="checkNumberPassed" ng-click="Next();">Next</a>
+                </md-whiteframe>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+angular
+    .module('starterApp', ['ngMaterial', 'users'])
+    .config(function($mdThemingProvider, $mdIconProvider) {
+
+        $mdIconProvider
+            .defaultIconSet("./assets/svg/avatars.svg", 128)
+            .icon("menu", "./assets/svg/menu.svg", 24)
+            .icon("share", "./assets/svg/share.svg", 24)
+            .icon("google_plus", "./assets/svg/google_plus.svg", 512)
+            .icon("hangouts", "./assets/svg/hangouts.svg", 512)
+            .icon("twitter", "./assets/svg/twitter.svg", 512)
+            .icon("phone", "./assets/svg/phone.svg", 512);
+
+        $mdThemingProvider.theme('default')
+            .primaryPalette('blue-grey', {
+                'default': '900'
+            })
+            .accentPalette('red');
+
+    });
+</script>

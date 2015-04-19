@@ -1,5 +1,4 @@
-var required = require('../helpers/bitcore');
-var bitcore = required('bitcore');
+
 var CryptoJS = require('crypto-js');
 var uuid = require('node-uuid');
 window.error = function(obj) {
@@ -11,9 +10,12 @@ window.clone = function(obj) {
 module.exports = function(app, Parse) {
 
     app.service('OrgService', ['$http', 'UtilService', '$rootScope', 'BlockCypher', 'WalletService', 'LastSign', '$q', 'AccountsService', '$messages', function($http, util, $rootScope, BlockCypher, Wallet, LastSign, $q, Accounts, $messages) {
+        
         var Org = {
             currentOrg: {},
+            users:[],
             load: function(cb){
+                
                 Parse.User.current().get('org').fetch().then(function(org) {
                     $messages.log(org);
                     Org.setCurrent(org);
@@ -37,9 +39,11 @@ module.exports = function(app, Parse) {
                 return deferred.promise;
             },
             getUsers: function(page) {
+                
                 var deferred = $q.defer();
                 Org.currentOrg.relation("users").query().find({
                     success: function(users) {
+                        Org.users = users;
                         deferred.resolve(users);
                     },
                     error: function(error) {
@@ -186,6 +190,7 @@ module.exports = function(app, Parse) {
                 payload.set('content', encKey);
                 payload.set('type', 'org')
                 payload.set('identifier', org.id);
+                payload.set('xpub',HD.derive("m/0'").xpubkey);
                 payload.set('secret', bitcore.crypto.Hash.sha256(new Buffer(sharedKey)).toString('hex'));
                 payload.set('passWordEncKey', passWordEncKey);
                 var cardNumber = $rootScope.cardNumber = util.makeId(7, 'digits');

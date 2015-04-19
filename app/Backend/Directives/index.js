@@ -1,5 +1,4 @@
 module.exports = function(app, Parse) {
-
     app.directive("btcInput", ["$rootScope", function(a) {
             var b = '<div class="xform-inline">  <div class="col-xs-6">    <div class="input-group">      <span class="input-group-addon">BTC</span>      <input class="form-control btc-input" type="text" data-ng-model="btc" data-ng-change="onChangedBTC()" placeholder="0.00">    </div>  </div>  <div class="col-xs-6">    <div class="input-group">      <span class="input-group-addon">{{label}}</span>      <input class="form-control currency-input" type="text" data-ng-model="other" data-ng-change="onChangedAmount()" placeholder="0.00" ng-disabled="currency.perBTC == 0">    </div>  </div></div>';
             return {
@@ -127,7 +126,7 @@ module.exports = function(app, Parse) {
                     clear: "="
                 },
                 transclude: true,
-                templateUrl: '/views/directive-templates/bitToFiat.html',
+                templateUrl: '/views/popups/bitToFiat.html',
                 controller: ["$scope", "$rootScope", "WalletService", "UtilService", function($scope, $rootScope, Wallet, Util) {
                     $scope.currency = currency;
                     $scope.$watch('clear', function(nV, Ov) {
@@ -164,7 +163,7 @@ module.exports = function(app, Parse) {
                 scope: {
                     closingFunc: "="
                 },
-                templateUrl: '/views/directive-templates/lightbox.html',
+                templateUrl: '/views/popups/lightbox.html',
                 controller: ["$scope", "$rootScope", "WalletService", "UtilService", function($scope, $rootScope, Wallet, Util) {
 
 
@@ -193,7 +192,7 @@ module.exports = function(app, Parse) {
         }]).directive("transPreview", ["$rootScope", function(a) {
             return {
                 restrict: "E",
-                templateUrl: '/views/directive-templates/transbox.html',
+                templateUrl: '/views/popups/transbox.html',
                 controller: ["$scope", "$rootScope", "WalletService", "UtilService", "Trans", "$timeout","$messages",
                     function($scope, $rootScope, Wallet, Util, Trans, $timeout,$messages) {
 
@@ -224,7 +223,7 @@ module.exports = function(app, Parse) {
 
                         $rootScope.$on('openTransBox', function(event, options) {
                             $messages.log("Called to Open Preview");
-                            $scope.template = '/views/directive-templates/inserts/transPreview.html';
+                            $scope.template = '/views/popups/inserts/transPreview.html';
                             $scope.openTransBox(options);
                         })
                         $rootScope.$on('closeTransBox', function(event, options) {
@@ -238,7 +237,7 @@ module.exports = function(app, Parse) {
         .directive("sendBox", ["$rootScope", function(a) {
             return {
                 restrict: "E",
-                templateUrl: '/views/directive-templates/transbox.html',
+                templateUrl: '/views/popups/transbox.html',
                 controller: ["$scope", "$rootScope", "WalletService", "UtilService", "Trans", "AccountsService", '$state', '$timeout','$messages',
                  function($scope, $rootScope, Wallet, Util, Trans, Accounts, $state, $timeout,$messages) {
 
@@ -265,7 +264,7 @@ module.exports = function(app, Parse) {
                     $rootScope.$on('openSend', function(event, options) {
                         $messages.log("Called to Open Send");
                         if (options) $scope.current = options;
-                        $scope.template = '/views/directive-templates/inserts/send.html';
+                        $scope.template = '/views/popups/inserts/send.html';
                         $scope.openSendBox();
                     })
                     $rootScope.$on('closeSend', function(event, options) {
@@ -277,7 +276,7 @@ module.exports = function(app, Parse) {
         }]).directive("googleLogin", ["$rootScope", function(a) {
             return {
                 restrict: "E",
-                templateUrl: '/views/directive-templates/googleLogin.html',
+                templateUrl: '/views/popups/googleLogin.html',
                 controller: ["$scope", "$rootScope", "GoogleService", function($scope, $rootScope, Google) {
                     $scope.signIn = function() {
                         Google.signIn();

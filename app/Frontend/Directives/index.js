@@ -125,7 +125,7 @@ module.exports = function(app, Parse) {
                     clear: "="
                 },
                 transclude: true,
-                templateUrl: '/views/directive-templates/bitToFiat.html',
+                templateUrl: '/views/popups/bitToFiat.html',
                 controller: ["$scope", "$rootScope", "WalletService", "UtilService", function($scope, $rootScope, Wallet, Util) {
                     $scope.currency = currency;
                     $scope.$watch('clear', function(nV, Ov) {
@@ -162,7 +162,7 @@ module.exports = function(app, Parse) {
                 scope: {
                     closingFunc: "="
                 },
-                templateUrl: '/views/directive-templates/lightbox.html',
+                templateUrl: '/views/popups/lightbox.html',
                 controller: ["$scope", "$rootScope", "WalletService", "UtilService", function($scope, $rootScope, Wallet, Util) {
 
 
@@ -191,7 +191,7 @@ module.exports = function(app, Parse) {
         }]).directive("transPreview", ["$rootScope", function(a) {
             return {
                 restrict: "E",
-                templateUrl: '/views/directive-templates/transbox.html',
+                templateUrl: '/views/popups/transbox.html',
                 controller: ["$scope", "$rootScope", "WalletService", "UtilService", "Trans", "$timeout",
                     function($scope, $rootScope, Wallet, Util, Trans, $timeout) {
 
@@ -222,7 +222,7 @@ module.exports = function(app, Parse) {
 
                         $rootScope.$on('openTransBox', function(event, options) {
                             console.log("Called to Open Preview");
-                            $scope.template = '/views/directive-templates/inserts/transPreview.html';
+                            $scope.template = '/views/popups/inserts/transPreview.html';
                             $scope.openTransBox(options);
                         })
                         $rootScope.$on('closeTransBox', function(event, options) {
@@ -236,7 +236,7 @@ module.exports = function(app, Parse) {
       .directive("googleLogin", ["$rootScope", function(a) {
             return {
                 restrict: "E",
-                templateUrl: '/views/directive-templates/googleLogin.html',
+                templateUrl: '/views/popups/googleLogin.html',
                 controller: ["$scope", "$rootScope", "GoogleService", function($scope, $rootScope, Google) {
                     $scope.signIn = function() {
                         Google.signIn();

@@ -6,12 +6,8 @@ module.exports = function(app, Parse) {
             Accounts.currentAccount = {};
             $scope.currency = currency;
             $scope.accounts = false;
-            Org.getUsers().then(function(users){
-                $scope.users = users.map(function(user){
-                    return user.attributes;
-                });
-                $scope.$safeApply();
-            });
+            $scope.users =  getOrg.users;
+           
 
             $scope.loadRequest = function(data) {
                 Util.launchLB({
@@ -20,29 +16,21 @@ module.exports = function(app, Parse) {
                 })
             }
 
-            $scope.createUser = function(ev, first) {
-                    if (first) Org.firstUser = true;
+            $scope.createUser = function(ev) {
                     $mdDialog.show({
                         controller: 'userCtrl',
-                        templateUrl: '/views/directive-templates/addUser.html',
+                        templateUrl: '/views/popups/dialogs/addUser.html',
                         targetEvent: ev,
                     });
-                }
-                /*
-                            $scope.$watch(function() {
-                                return Org.currentOrg
-                            }, function(newVal, oldVal) {
-                                if (typeof newVal !== 'undefined') {
-                                    $messages.log("Org Changed");
-                                    Org.fetchAccountsAndUsers().then(function(UandA) {
-                                        $scope.users = UandA.users;
-                                        $scope.accounts = UandA.accounts || true;
-                                        $scope.$safeApply();
-                                    },function(err){
-                                        alert(err);
-                                    });
-                                }
-                            });*/
+            }
+             $scope.createAccount = function(ev) {
+                    $mdDialog.show({
+                        controller: 'userAccountCtrl as ctrl',
+                        templateUrl: '/views/popups/dialogs/addAccount.html',
+                        targetEvent: ev,
+                    });
+            }
+       
 
 
             $rootScope.$on('updateCompanyAccounts', function(event, options) {
@@ -64,5 +52,6 @@ module.exports = function(app, Parse) {
     require('./user')(app, Parse);
     require('./one')(app, Parse);
     require('./transfer')(app, Parse);
+    require('./userAccount')(app, Parse);
 
 }

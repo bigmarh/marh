@@ -1,9 +1,9 @@
 module.exports = function(app, Parse) {
-    app.controller('userCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog',
-        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog) {
-           
+    app.controller('userCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'UserService',
+        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, User) {
+
             $scope.fields = {
-                domain: Org.currentOrg.get('domain') 
+                domain: Parse.User.current().get('domain')
             }
             if (Org.firstUser) {
                 var name = Parse.User.current().get('fullName').split(' ');
@@ -13,27 +13,17 @@ module.exports = function(app, Parse) {
             }
 
             $scope.addUser = function() {
-                Org.addUser($scope.fields, function(account, user) {
-                    Org.currentOrg.addUnique('accounts', account);
-                    Org.currentOrg.save().then(function(org) {
-                        var acct = account.attributes;
-                        acct.createdAt = account.createdAt;
-                        $rootScope.$broadcast('updateCompanyAccounts', {
-                            account: acct
-                        });
-                        if (!Org.firstUser) {
-                            var newUser = user.attributes;
-                            newUser.fullObj = user;
-                            $rootScope.$broadcast('add_CompanyUser', {
-                                user: newUser
-                            })
-                        }
-                        $scope.hide();
-                    })
-                }, function(err) {
-                    alert(err.message);
+
+                User.addNew($scope.fields, function(user) {
+                    if (!Org.firstUser) {
+                        var newUser = user.attributes;
+                        newUser.fullObj = user;
+                        $rootScope.$broadcast('add_CompanyUser', {
+                            user: newUser
+                        })
+                    }
                     $scope.hide();
-                });
+                })
             }
 
 

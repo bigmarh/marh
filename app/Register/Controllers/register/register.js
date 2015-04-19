@@ -1,5 +1,5 @@
 module.exports = function(app, Parse) {
-    
+
     var current_user = Parse.User.current();
     app.controller('registerCtrl', ['$scope', "$rootScope", '$state', '$messages',
         function($scope, $rootScope, $state, $messages) {
@@ -30,17 +30,18 @@ module.exports = function(app, Parse) {
     controller('Reg_Personal', ['$scope', '$rootScope', '$state', '$messages', 'UserService', function($scope, $rootScope, $state, $messages, User) {
         var nextStep = ($state.params.number) ? parseInt($state.params.number) + 1 : 1;
         $rootScope.currentStep = steps["default"];
-        if (current_user.get('personal_meta') ) return $state.go('register.step', {
+        if (current_user.get('personal_meta')) return $state.go('register.step', {
             number: nextStep
         });
 
 
         $scope.meta = {
-            email:current_user.get('email')
+            email: current_user.get('email'),
+            fullName: current_user.get('fullName')
         }
 
         $scope.Next = function() {
-        
+
             current_user.set('fullName', $scope.meta.fullName);
             current_user.set('password', $scope.password);
             current_user.set('domain', current_user.get('email').split('@')[1]);
@@ -65,7 +66,7 @@ module.exports = function(app, Parse) {
         $scope.password = "qwepoi";
 
         var nextStep = ($state.params.number) ? parseInt($state.params.number) + 1 : 1;
-            $scope.card = {};
+        $scope.card = {};
         $scope.getCode = function() {
             User.setPayload(current_user, $scope.password, function(mnemonic) {
                 $scope.code = mnemonic;
@@ -81,7 +82,7 @@ module.exports = function(app, Parse) {
             if ($rootScope.cardNumber == $scope.card.num) {
                 $scope.checkNumberPassed = true;
                 current_user.set('key_activated', true);
-                current_user.save().then($messages.success,$messages.error);
+                current_user.save().then($messages.success, $messages.error);
             } else {
                 $messages.error("This Card Number is not correct");
             }
@@ -90,9 +91,10 @@ module.exports = function(app, Parse) {
             //add Pdf download function
             $scope.downloadedCard = true;
         }
-    
+
 
         $scope.Next = function() {
+            if (current_user.get('org')) return window.location = "/app";
             $state.go('register.step', {
                 number: nextStep
             })
@@ -110,7 +112,6 @@ module.exports = function(app, Parse) {
         var nextStep = ($state.params.number) ? parseInt($state.params.number) + 1 : 1;
         $scope.org = {
             domain: current_user.get('email').split('@')[1],
-            name: "TestName",
         }
         $scope.Next = function() {
             Org.addRoles($scope.org, current_user, function(adminRole, orgObj) {
@@ -126,6 +127,9 @@ module.exports = function(app, Parse) {
 
     }]).
     controller('Reg_Company_KeyGen', ['$scope', '$rootScope', '$state', '$messages', 'UserService', 'OrgService', function($scope, $rootScope, $state, $messages, User, Org) {
+        $scope.Next = function() {
+            window.location = "/app/"
+        }
         if (!current_user.get('personal_meta')) return $state.go('register.start');
         if (!current_user.get('payload') || !current_user.get('key_activated')) return $state.go('register.step', {
             number: 1
@@ -134,11 +138,13 @@ module.exports = function(app, Parse) {
             number: 2
         });
 
-        current_user.get('org').fetch().then(function(org) {
-            if (org.get('payload'))
-                $scope.Next();
+        if (Parse.User.current().get('isAdmin'))
+            current_user.get('org').fetch().then(function(org) {
+                if (org.get('payload')) $scope.Next();
 
-        })
+            }, $scope.Next);
+        else
+            $scope.Next()
 
 
 
@@ -173,9 +179,7 @@ module.exports = function(app, Parse) {
         }
 
 
-        $scope.Next = function() {
-            window.location = "/app/"
-        }
+
 
     }])
 

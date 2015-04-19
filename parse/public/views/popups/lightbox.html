@@ -1,0 +1,5 @@
+<div ng-init="lightBox.lightInit = true" class="lightBox bounceInDown animated" ng-class="{'bounceOutUp':!lightBox.show, 'ng-hide':lightBox.lightInit}">
+    <i class=" pull-right mdfi_navigation_close" style="font-size:24px;" ng-click="closeLightBox()">     
+         </i>
+    <ng-include src="lightBox.template"></ng-include>
+</div>

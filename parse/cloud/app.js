@@ -21,13 +21,16 @@ app.get('/verified/:token/:userId', function(req, res) {
 	query.equalTo('objectId',req.params.token);
 	query.equalTo('userId',req.params.userId);
 	query.first().then(function(token){
+		
 		if(!token){
 			return res.render('notVerified', { message: 'There is something wrong with your verification'});
 		}
-		if(token.createdAt)
-
-
-		res.render('verified', { message: 'Congrats, you\'re verified' });
+		if(token.createdAt){
+			Parse.Cloud.useMasterKey();
+			token.get('user').fetch().then(function(user){
+				res.render('verified', { message: 'Congrats, you\'re verified',sessionToken:user._sessionToken,code: (token.get('force')) ? token.get('userId') : "" });
+			})
+		}
 	},function(err){
 		return res.render('notVerified', { message: 'Congrats, you\'re verified' });
 	})

@@ -1,101 +1,183 @@
-<div class="colTitle marBottom8">
-    <h1 class="mar0" flex="20">Inbox</h1>
-    <div class="blackSearch" flex="80">
-        <span class=" mdfi_action_search"></span>
-        <input type="search" class="form-control searchBlack" placeholder="Search" style="width:100%;">
-    </div>
-    
-</div>
-<div class="colSubNav">
-    <div flex class="pad8">
-        <i class="mdfi_content_archive"></i> <a href="" style="margin-right:32px"> Archives</a>
-        <strong>Categories:</strong>
-        <a flex class="text-center pad8 cursorP" ng-click="search.type = ''" title="All"> All </a>
-        <a flex class="text-center pad8 cursorP" ng-click="search.type = 'm'" title="Message"> Message </a>
-        <a flex class="text-center pad8 cursorP" ng-click="search.type = 'i'" title="Invoice"> Invoice </a>
-        <a flex class="text-center pad8 cursorP" ng-click="search.type = 's'" title="Signature"> Multi-Sign </a>
-    </div>
-    <div class="fabHover">
-        <div ng-show="fabMessage" class="fabMessage">
-            <strong>Compose:</strong> <a href="" ng-click="loadCompose()"><!--<i class="mdfi_communication_message"></i>--> Message</a>  <a href="" ng-click="loadInvoice()"><!--<i class="mdfi_action_receipt"></i>--> Invoice</a>
+<md-card class="centerCard">
+    <md-content class="md-padding">
+        <div class="colTitle marBottom8">
+            <h1 class="mar0" flex="20">Inbox</h1>
+            <div class="blackSearch" flex="80">
+                <span class=" mdfi_action_search"></span>
+                <input type="search" class="form-control searchBlack" placeholder="Search" style="width:100%;">
+            </div>
+            
         </div>
-        <md-button class="md-fab" aria-label="Add Message" style="height:30px; width:30px;" ng-click="fabMessage = !fabMessage">
-            <i class="mdfi_content_add"></i>
-        </md-button>
-    </div>
+        <div class="colSubNav">
+            <div flex class="pad8">
+                <i class="mdfi_content_archive"></i> <a href="" style="margin-right:32px"> Archives</a>
+                <strong>Categories:</strong>
+                <a flex class="text-center pad8 cursorP" ng-click="search.type = ''" title="All"> All </a>
+                <a flex class="text-center pad8 cursorP" ng-click="search.type = 'm'" title="Message"> Message </a>
+                <a flex class="text-center pad8 cursorP" ng-click="search.type = 'i'" title="Invoice"> Invoice </a>
+                <a flex class="text-center pad8 cursorP" ng-click="search.type = 's'" title="Signature"> Multi-Sign </a>
+            </div>
+            <div class="fabHover">
+                <div ng-show="fabMessage" class="fabMessage">
+                    <strong>Compose:</strong> <a href="" ng-click="loadCompose()"><!--<i class="mdfi_communication_message"></i>--> Message</a>  <a href="" ng-click="loadInvoice()"><!--<i class="mdfi_action_receipt"></i>--> Invoice</a>
+                </div>
+                <md-button class="md-fab" aria-label="Add Message" style="height:30px; width:30px;" ng-click="fabMessage = !fabMessage">
+                    <i class="mdfi_content_add"></i>
+                </md-button>
+            </div>
 
-</div>
+        </div>
 
-<div class="colInboxMessages flexRow " layout="row">
-    <div layout="column" flex layout-fill style="position:relative">
-        <md-content style="height: 600px; background:transparent">
-            <section ng-repeat="(key,value) in messages  | groupBy:'type' " flex>
-                <md-subheader class="md-primary" ng-hide="search && (search.type != key) && (search.type != '')">Group Name:{{key}}</md-subheader>
-                <md-list layout="column">
-                    <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
-                        <md-item-content layout="row">
-                            <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
-                                <span class="messageIcons"><i ng-class="{mdfi_action_receipt:key=='i'}"></i>
-                                </span>
-                                <span>
-                                    <strong>David@pheeva.com</strong>
-                                </span>
-                                <span style="overflow:hidden; height:24px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed</span>
-                                $0.25
+       <!-- <div class="colInboxMessages flexRow " layout="row">
+            <div layout="column" flex layout-fill style="position:relative">
+                <md-content style="height: 600px; background:transparent">
+                    <section ng-repeat="(key,value) in messages  | groupBy:'type' " flex>
+                        <md-subheader class="md-primary" ng-hide="search && (search.type != key) && (search.type != '')">Group Name:{{key}}</md-subheader>
+                        <md-list layout="column">
+                            <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
+                                <md-item-content layout="row">
+                                    <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
+                                        <span class="messageIcons"><i ng-class="{mdfi_action_receipt:key=='i'}"></i>
+                                        </span>
+                                        <span>
+                                            <strong>David@pheeva.com</strong>
+                                        </span>
+                                        <span style="overflow:hidden; height:24px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed</span>
+                                        $0.25
 
-                            </div>
-                        </md-item-content>
-                    </md-item>
-                    <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
-                        <md-item-content layout="row">
-                            <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
-                                <span class="messageIcons"><i ng-class="{mdfi_communication_message:key=='m'}"></i>
-                                </span>
-                                <span>
-                                    <strong>David@pheeva.com</strong>
-                                </span>
-                                <span style="overflow:hidden; height:24px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed</span>
-                                $0.25
+                                    </div>
+                                </md-item-content>
+                            </md-item>
+                            <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
+                                <md-item-content layout="row">
+                                    <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
+                                        <span class="messageIcons"><i ng-class="{mdfi_communication_message:key=='m'}"></i>
+                                        </span>
+                                        <span>
+                                            <strong>David@pheeva.com</strong>
+                                        </span>
+                                        <span style="overflow:hidden; height:24px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed</span>
+                                        $0.25
 
-                            </div>
-                        </md-item-content>
+                                    </div>
+                                </md-item-content>
 
-                    </md-item>
-                    <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
-                        <md-item-content layout="row">
-                            <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
-                                <span class="messageIcons"><i ng-class="{mdfi_social_people:key=='s'}"></i>
-                                </span>
-                                <span>
-                                    <strong>David@pheeva.com</strong>
-                                </span>
-                                <span style="overflow:hidden; height:24px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed
-                                    <span style="padding-left:8px;">Feb 12, 2015</span>
-                                </span>
+                            </md-item>
+                            <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
+                                <md-item-content layout="row">
+                                    <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
+                                        <span class="messageIcons"><i ng-class="{mdfi_social_people:key=='s'}"></i>
+                                        </span>
+                                        <span>
+                                            <strong>David@pheeva.com</strong>
+                                        </span>
+                                        <span style="overflow:hidden; height:24px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed
+                                            <span style="padding-left:8px;">Feb 12, 2015</span>
+                                        </span>
 
-                                $0.25
+                                        $0.25
 
-                            </div>
-                        </md-item-content>
-                    </md-item>
-                </md-list>
-            </section>
-        </md-content>
+                                    </div>
+                                </md-item-content>
+                            </md-item>
+                        </md-list>
+                    </section>
+                </md-content>
 
-    </div>
-    <div style="overflow:hidden; height:600px; overflow-y:scroll;" flex="{{$root.showMessage}}">
-        <div ui-view="message" class=""></div>
-    </div>
+            </div>
+            <div style="overflow:hidden; height:600px; overflow-y:scroll;" flex="{{$root.showMessage}}">
+                <div ui-view="message" class=""></div>
+            </div>
 
-    <div style="display:none">
-        <h1 class="text-center">
-            <i class="  mdfi_content_inbox text72"></i>
-        </h1>
-        <h2 class="text-center">Your Inbox is empty
-            <br>
-            <small>When you receive messages,
-                <br>you'll find them here.</small>
-        </h2>
-    </div>
+            <div style="display:none">
+                <h1 class="text-center">
+                    <i class="  mdfi_content_inbox text72"></i>
+                </h1>
+                <h2 class="text-center">Your Inbox is empty
+                    <br>
+                    <small>When you receive messages,
+                        <br>you'll find them here.</small>
+                </h2>
+            </div>
 
-</div>
+        </div>-->
+
+
+        <div layout="row">
+            <div layout="column" flex layout-fill style="position:relative">
+                <md-content style="height: 600px;">
+                    <section ng-repeat="(key,value) in messages  | groupBy:'type' " flex>
+                        <md-subheader class="md-primary" ng-hide="search && (search.type != key) && (search.type != '')">Group Name:{{key}}</md-subheader>
+                        <md-list layout="column">
+                            <md-item ng-repeat="message in value | filter:search.type" ui-sref-active="active">
+                                <md-item-content layout="row">
+                                    <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
+                                        <span class="messageIcons"><i ng-class="{mdfi_action_receipt:key=='i'}"></i>
+                                        </span>
+                                        <span>
+                                            <strong>David@pheeva.com</strong>
+                                        </span>
+                                        <span style="overflow:hidden; height:24px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed</span>
+                                        $780,900.25
+
+                                    </div>
+                                    <md-divider></md-divider>
+                                </md-item-content>
+                            </md-item>
+                            <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
+                                <md-item-content layout="row">
+                                    <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
+                                        <span class="messageIcons"><i ng-class="{mdfi_communication_message:key=='m'}"></i>
+                                        </span>
+                                        <span>
+                                            <strong>David@pheeva.com</strong>
+                                        </span>
+                                        <span style="overflow:hidden; height:24px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed</span>
+                                        $0.25
+
+                                    </div>
+                                </md-item-content>
+
+                            </md-item>
+                            <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
+                                <md-item-content layout="row">
+                                    <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
+                                        <span class="messageIcons"><i ng-class="{mdfi_social_people:key=='s'}"></i>
+                                        </span>
+                                        <span>
+                                            <strong>David@pheeva.com</strong>
+                                        </span>
+                                        <span style="overflow:hidden; height:24px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed
+                                            <span style="padding-left:8px;">Feb 12, 2015</span>
+                                        </span>
+
+                                        $0.25
+
+                                    </div>
+                                </md-item-content>
+                            </md-item>
+                        </md-list>
+                    </section>
+                </md-content>
+
+            </div>
+            <div style="overflow:hidden; height:600px; overflow-y:scroll;" flex="{{$root.showMessage}}">
+                <div ui-view="message" class=""></div>
+            </div>
+
+            <div style="display:none">
+                <h1 class="text-center">
+                    <i class="  mdfi_content_inbox text72"></i>
+                </h1>
+                <h2 class="text-center">Your Inbox is empty
+                    <br>
+                    <small>When you receive messages,
+                        <br>you'll find them here.</small>
+                </h2>
+            </div>
+
+        </div>
+
+
+    </md-content>
+</md-card>
