@@ -2,8 +2,10 @@ module.exports = function(app, Parse) {
     app.controller('userAccountCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'UserService',
         function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, User) {
 
-            $scope.selectedUsers = [];
-            $scope.selectedAdmins = [];
+            $scope.account = {
+                selectedSignees: [],
+                selectedAdmins: []
+            }
             $scope.users = Org.users.map(function(user) {
                 user.attributes.value = user;
                 user.attributes.display = user.attributes.fullName;
@@ -12,9 +14,9 @@ module.exports = function(app, Parse) {
                 return user.attributes
             })
 
-            $scope.selectedItemChange = function(user){
+            $scope.selectedItemChange = function(user) {
                 console.log(user);
-                $scope.selectedAdmins.push(user);
+                $scope.account.selectedAdmins.push(user);
             }
 
             $scope.hide = function() {

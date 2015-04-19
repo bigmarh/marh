@@ -20,24 +20,22 @@
             <md-tab label="signees">
                 </md-content>
                 <md-content flex class=" pad8 ">
-                    <md-contact-chips class="ContactChips" ng-model="account.selectedSignees" md-contacts="users" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match placeholder="Who Can Sign">
+                    <md-contact-chips class="ContactChips" ng-model="account.selectedSignees" md-contacts="users" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match placeholder="Enter names or email address">
                     </md-contact-chips>
                 </md-content>
             </md-tab>
-            </md-tab>
-            <md-tab label=" policy">
-            </md-tab>
+           
             <md-tab label="administrators" layout="column">
             
                 <md-content class=" pad8" flex layout="column" style="min-height:494px;">
                     <div flex="20">
-                        <md-contact-chips class="ContactChips" ng-model="account.selectedAdmins" md-contacts="users" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match placeholder="Who Can Sign">
+                        <md-contact-chips class="ContactChips" ng-model="account.selectedAdmins" md-contacts="users" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match placeholder="Enter names or email address">
                         </md-contact-chips>
                     </div>
                     <div flex style="max-height: 359px;overflow: scroll;">
                         <md-list>
                             <md-list-item ng-repeat="user in account.selectedAdmins" layout="row">
-                                <div class="md-contact-avatar" flex="10">
+                                <div class="md-contact-avatar" flex="10" style="min-width:52px">
                                     <img ng-src="{{user.thumbnailUrl}}" width="50px" alt="">
                                 </div>
                                 <p flex="75"> {{ user.fullName }} </p>
@@ -53,6 +51,8 @@
                         </md-list>
                     </div>
                 </md-content>
+            </md-tab>
+             <md-tab label=" policy">
             </md-tab>
     </div>
     <!--  -->
