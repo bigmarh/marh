@@ -1,7 +1,8 @@
 <md-dialog aria-label="Add User" style="min-height:600px;" layout="column">
-    <md-toolbar class="md-accent inset " layout="row" layout-align="space-between"><span flex>Account Assistant</span> <a flex ng-click="hide()" class="pull-right" style="text-align:right"> X</a></md-toolbar>
-    <div class="md-primary" flex layout="column">
-        <md-tabs md-border-bottom md-dynamic-height flex>
+    <md-toolbar class="md-accent inset " layout="row" layout-align="space-between">
+        <h5>Account Assistant</h5> <a flex ng-click="hide()" class="pull-right" style="text-align:right"> X</a></md-toolbar>
+    <div class="md-primary">
+        <md-tabs md-border-bottom>
             <md-tab label="intro">
                 <md-content flex>
                     Welcome to Account Assistant. Please add a name and so on and so forth
@@ -26,7 +27,7 @@
             </md-tab>
             <md-tab label=" policy">
             </md-tab>
-            <md-tab label="administrators">
+            <md-tab label="administrators" layout="column">
                 <!--      <md-autocomplete
                   md-selected-item="selectedItem"
                    md-search-text="searchText"
@@ -36,15 +37,26 @@
                   placeholder="Choose Administrators">
         <span md-highlight-text="searchText" md-highlight-flags="^i">{{user.fullName}}</span>
       </md-autocomplete> -->
-                <md-content flex class=" pad8" layout="column">
-                    <md-contact-chips flex class="ContactChips" ng-model="selectedAdmins" md-contacts="users" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match placeholder="Who Can Sign">
-                    </md-contact-chips>
-                    <div>
-                        <md-list flex>
+                <md-content class=" pad8" flex layout="column" style="min-height:494px;">
+                    <div flex="20">
+                        <md-contact-chips class="ContactChips" ng-model="selectedAdmins" md-contacts="users" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match placeholder="Who Can Sign">
+                        </md-contact-chips>
+                    </div>
+                    <div flex style="max-height: 359px;overflow: scroll;">
+                        <md-list>
                             <md-list-item ng-repeat="user in selectedAdmins" layout="row">
-                                <div class="md-contact-avatar" flex><img ng-src="{{user.thumbnailUrl}}" alt=""></div>
-                                <p flex> {{ user.fullName }} </p>
-                                <md-checkbox class="md-secondary" ng-model="topping.wanted"></md-checkbox>
+                                <div class="md-contact-avatar" flex="10">
+                                    <img ng-src="{{user.thumbnailUrl}}" width="50px" alt="">
+                                </div>
+                                <p flex="75"> {{ user.fullName }} </p>
+                                <div flex>
+                                    <div>
+                                        <select placeholder="Pick" ng-init="user.access = 'edit'" ng-model="user.access">
+                                            <option value="edit">Can Edit</option>
+                                            <option value="view">Can View</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </md-list-item>
                         </md-list>
                     </div>
