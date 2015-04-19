@@ -1,7 +1,13 @@
-require('angular/angular');
-require('angular-route/angular-route');
-require('angular-resource/angular-resource');
-require('ui-router/release/angular-ui-router');
+require('angular/angular.min');
+require('angular-route/angular-route.min');
+require('angular-resource/angular-resource.min');
+require('ui-router/release/angular-ui-router.min');
+require('angular-filter/dist/angular-filter.min');
+require('angular-animate/angular-animate');
+require('angular-aria/angular-aria.min');
+require('angular-messages/angular-messages.min');
+require('./Helpers/angular-material-edge.js');
+
 
 //Load bitcoin Libraries
 var bitcore = window.bitcore = require('bitcore');

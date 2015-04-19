@@ -1,7 +1,9 @@
 <div flex layout="column" style="min-height:400px;">
-    <div class="text-center pad8">
-        <span><img src="/img/peLogo.svg" alt="Pheeva Enterprise" style="width:60px;"></span>
-    </div>
+    <!--<div class="text-center pad8">
+        <span>
+            <img src="/img/peLogo.svg" alt="Pheeva Enterprise" style="width:60px;">
+        </span>
+    </div>-->
     <hr>
     <!--<div class="text-center marBottom24" style="padding:8px 16px;">
         <div class="blackSearch">
@@ -9,27 +11,25 @@
             <input type="search" class="form-control searchBlack" placeholder="Search">
         </div>
     </div>-->
-
+    
     <div class="listGroup">
-         <a ng-if="isAdmin" ui-sref="org.admin" ui-sref-active="active"  class="listGroupItem">
+        <a ng-if="isAdmin" ui-sref="org.admin" ui-sref-active="active" class="listGroupItem">
             <span class="mdfi_action_lock" aria-hidden="true"></span>
             Administration
         </a>
-        <a ui-sref="org.index" ui-sref-active="active"  class="listGroupItem">
+        <a ui-sref="org.index" ui-sref-active="active" class="listGroupItem">
             <span class="mdfi_communication_business" aria-hidden="true"></span>
             {{orgName}} Accounts
         </a>
 
-        <a ui-sref="accounts.index" ui-sref-active="active"  class="listGroupItem" >
-            <span class="mdfi_social_person" aria-hidden="true"></span>
-            Personal Accounts
-        </a>
-        
-<!--         <a ui-sref="inbox" ui-sref-active="active"  class="listGroupItem">
+
+
+        <a ui-sref="inbox" ui-sref-active="active" class="listGroupItem">
             <span class=" mdfi_content_inbox" aria-hidden="true"></span>
-            Inbox <span class="label label-danger">3</span>
-        </a> -->
-     
+            Inbox
+            <span class="label label-danger">3</span>
+        </a>
+
     </div>
 
     <hr>
@@ -43,12 +43,14 @@
     </div>
 </div>
 <div class="bg-primary flexAlign" style="flex-shrink:0; display:flex; height:50px; padding:8px 16px; z-index:1000;">
-    <div class="flexCon"><a style="cursor:pointer;"> <span class="glyphicon glyphicon-cog"></span> Settings</a></div>
+    <div class="flexCon">
+        <a style="cursor:pointer;">
+            <span class="glyphicon glyphicon-cog"></span>Settings</a>
+    </div>
     <div class="flexCon text-right">
         <a logout style="cursor:pointer;">
             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
             Logout
         </a>
     </div>
-</div>
 </div>

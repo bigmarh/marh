@@ -13,16 +13,25 @@ var Emails = {
             from_email: "hello@pheeva.com",
             from_name: "Pheeva Enterprise Team",
 
+        },
+        invite_email: {
+            template: 'mail-templates/invite.ejs',
+            subject: "Welcome from Pheeva",
+            from_email: "hello@pheeva.com",
+            from_name: "Pheeva Enterprise Team",
+
         }
     },
-    getVerificationToken: function(userId) {
+    getVerificationToken: function(userId,user,force) {
         var self = this;
         var promise = new Parse.Promise();
         var Token = Parse.Object.extend('Verify_Token');
         token = new Token();
         this.userId = userId;
         token.save({
-            userId: userId
+            user:user,
+            userId: userId,
+            force:force
         }).then(function(token) {
             self.verificationToken = token.id;
             promise.resolve(self);
@@ -30,18 +39,21 @@ var Emails = {
 
         return promise;
     },
-    verification: function(to) {
+    verification: function(to,template) {
+        var type = (template) ? template: 'verify_email';
         this.to = to;
-        this.type = Emails.types['verify_email'];
+        this.type = Emails.types[type];
         return this;
     },
-    sendVerificationEmail: function(user) {
-        Emails.getVerificationToken(user.id).then(function() {
-            Emails.verification(user.get('email')).send();
+    sendVerificationEmail: function(user,template,force) {
+
+        Emails.getVerificationToken(user.id,user,force).then(function() {
+            Emails.verification(user.get('email'),template).send();
         })
     },
     send: function(extra_data, success, error) {
         var self = this;
+
         if (!this.type.template_data) this.type.template_data = {};
         if (this.verificationToken) this.type.template_data.verificationToken = this.verificationToken;
         if (this.userId) this.type.template_data.userId = this.userId;
@@ -50,9 +62,7 @@ var Emails = {
                 this.type.template_data[Object.keys(extra_data)[i]] = extra_data[Object.keys(extra_data)[i]]
             };
         }
-
         app.render(this.type.template, this.type.template_data, function(err, html) {
-            console.log(err);
             Mandrill.sendEmail({
                 message: {
                     html: html,

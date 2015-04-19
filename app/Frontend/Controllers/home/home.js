@@ -14,7 +14,7 @@ module.exports = function(app, Parse) {
                 Parse.User.logIn($scope.userObj.email,$scope.userObj.password, {
                     success: function(user) {
                         // Do stuff after successful login.
-                        window.location = "/app"
+                        //window.location = "/app"
 
                     },
                     error: function(user, error) {

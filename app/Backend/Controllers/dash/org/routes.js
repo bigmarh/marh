@@ -24,6 +24,25 @@ module.exports = function(stateProvider, Parse, resolvers) {
         })
         .state('org.admin', {
             url: '/admin',
+            resolve: {
+                getOrg: ['OrgService', '$q', function(Org, $q) {
+                    var deferred = $q.defer();
+                    Org.getCurrent().then(function(org) {
+                        Org.getUsers().then(function(users) {
+                            users = users.map(function(user) {
+                                return user.attributes;
+                            });
+
+                            deferred.resolve({
+                                org:org,
+                                users: users
+                            });
+                        });
+                    });
+
+                    return deferred.promise
+                }]
+            },
             views: {
                 'content@org': {
                     templateUrl: 'views/dash/content/org/admin.html',

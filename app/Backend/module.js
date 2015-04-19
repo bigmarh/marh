@@ -1,6 +1,6 @@
 module.exports = function(app, Parse) {
 
- 
+
     //controller
     require('./Controllers')(app, Parse);
     //directives
@@ -12,8 +12,8 @@ module.exports = function(app, Parse) {
     require('./run_app')(app, Parse);
     //Load styles
     require('./styles')
-
     
+
 
 
 }
