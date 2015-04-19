@@ -20,7 +20,7 @@
             <md-tab label="signees">
                 </md-content>
                 <md-content flex class=" pad8 ">
-                    <md-contact-chips class="ContactChips" ng-model="selectedUsers" md-contacts="users" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match placeholder="Who Can Sign">
+                    <md-contact-chips class="ContactChips" ng-model="account.selectedSignees" md-contacts="users" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match placeholder="Who Can Sign">
                     </md-contact-chips>
                 </md-content>
             </md-tab>
@@ -28,23 +28,15 @@
             <md-tab label=" policy">
             </md-tab>
             <md-tab label="administrators" layout="column">
-                <!--      <md-autocomplete
-                  md-selected-item="selectedItem"
-                   md-search-text="searchText"
-                  md-selected-item-change="selectedItemChange(user)"
-                  md-items="user in users"
-                  md-item-text="user.fullName"
-                  placeholder="Choose Administrators">
-        <span md-highlight-text="searchText" md-highlight-flags="^i">{{user.fullName}}</span>
-      </md-autocomplete> -->
+            
                 <md-content class=" pad8" flex layout="column" style="min-height:494px;">
                     <div flex="20">
-                        <md-contact-chips class="ContactChips" ng-model="selectedAdmins" md-contacts="users" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match placeholder="Who Can Sign">
+                        <md-contact-chips class="ContactChips" ng-model="account.selectedAdmins" md-contacts="users" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match placeholder="Who Can Sign">
                         </md-contact-chips>
                     </div>
                     <div flex style="max-height: 359px;overflow: scroll;">
                         <md-list>
-                            <md-list-item ng-repeat="user in selectedAdmins" layout="row">
+                            <md-list-item ng-repeat="user in account.selectedAdmins" layout="row">
                                 <div class="md-contact-avatar" flex="10">
                                     <img ng-src="{{user.thumbnailUrl}}" width="50px" alt="">
                                 </div>
