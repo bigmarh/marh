@@ -13,7 +13,7 @@
 
             <h4>Users:</h4>
             <hr>
-            <div flex ng-repeat="user in users" class="fadeIn animated">
+            <div flex ng-repeat="user in users | orderBy:'createdAt'" class="fadeIn animated">
                 <div flex layout="row">
                     <div>
                         <img ng-src="{{user.image.url ||'https://i2.wp.com/i.vimeocdn.com/portrait/default-blue_300x300.png'}}" class='img-circle pad8 icon50' alt="" /> {{user.fullName}}

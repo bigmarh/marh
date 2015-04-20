@@ -55,6 +55,7 @@ module.exports = function(app, Parse) {
                 return !$scope.account.signees.length || !$scope.account.name;
             }
             $scope.save = function(){
+                console.log($scope.account);
                 $scope.hide();
             }
             $scope.hide = function() {
