@@ -8,66 +8,19 @@
     </md-toolbar>
     <md-tabs md-border-bottom flex>
         <md-tab label="intro">
-            <md-content flex>
-                Welcome to Account Assistant. Please add a name and so on and so forth
-            </md-content>
+           <ng-include src="'/views/popups/dialogs/partials_addAccount/intro_tab.html'" scope="" onload=""></ng-include>
         </md-tab>
         <md-tab label="name">
-            <md-content flex>
-                <h3>What Name Would you like to call this?</h3>
-                <md-input-container>
-                    <label>Name</label>
-                    <input ng-model="account.name">
-                </md-input-container>
-            </md-content>
+            <ng-include src="'/views/popups/dialogs/partials_addAccount/name_tab.html'" scope="" onload=""></ng-include>
         </md-tab>
         <md-tab label="signees">
-            </md-content>
-            <md-content flex class=" pad8 ">
-                <md-contact-chips  class="ContactChips" ng-model="account.signees" md-contacts="ctrl.querySearch($query)" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" md-require-match="true" placeholder="Enter names or email address">
-                </md-contact-chips>
-                <p>How many signatures are required?</p>
-            </md-content>
-            
-            <md-content layout="row" layout-padding ng-show="account.signees.length">
-                <md-slider flex="25" min="0" step="1" max="{{account.signees.length}}" ng-init="account.requiredSignatures = 1" md-discrete ng-model="account.requiredSignatures" aria-label="red" id="red-slider" class>
-                </md-slider>
-                <div flex="75" layout="row">
-                <md-input-container md-no-float>
-                    <input type="text" ng-model="account.requiredSignatures" style="width:40px"  aria-controls="red-slider"> 
-                    </md-input-container>
-                    <span class="signeesTotal"> of {{account.signees.length}} signees</span>
-                </div>
-            </md-content>
+            <ng-include src="'/views/popups/dialogs/partials_addAccount/signees_tab.html'" scope="" onload=""></ng-include>
         </md-tab>
         <md-tab label=" policy">
-            <ng-include src="'/views/popups/dialogs/partials_addAccount/policy.html'" scope="" onload=""></ng-include>
+            <ng-include src="'/views/popups/dialogs/partials_addAccount/policy_tab.html'" scope="" onload=""></ng-include>
         </md-tab>
         <md-tab label="administrators" layout="column">
-            <md-content class=" pad8" flex layout="column">
-                <div flex="20">
-                    <md-contact-chips class="ContactChips" ng-model="account.admins" md-contacts="ctrl.querySearch($query)" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" filter-selected="true" md-require-match="true" placeholder="Enter names or email address">
-                    </md-contact-chips>
-                </div>
-                <div flex style="max-height: 359px;overflow: scroll;">
-                    <md-list>
-                        <md-list-item ng-repeat="user in account.admins" layout="row">
-                            <div flex="10" style="min-width:52px">
-                                <img ng-src="{{user.thumbnailUrl || 'https://i2.wp.com/i.vimeocdn.com/portrait/default-blue_300x300.png' }}" class="md-avatar" width="50px" alt="">
-                            </div>
-                            <p flex="75"> {{ user.fullName }} </p>
-                            <div flex>
-                                <div>
-                                    <select placeholder="Pick" ng-init="user.access = 'edit'" ng-model="user.access">
-                                        <option value="edit">Can Edit</option>
-                                        <option value="view">Can View</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </md-list-item>
-                    </md-list>
-                </div>
-            </md-content>
+         <ng-include src="'/views/popups/dialogs/partials_addAccount/administrators_tab.html'" scope="" onload=""></ng-include>
         </md-tab>
         <!--  -->
 </md-dialog>
