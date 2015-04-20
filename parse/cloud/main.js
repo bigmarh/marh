@@ -49,6 +49,7 @@ Parse.Cloud.define('org_AddUser', function(req, res) {
             "username": username.toString('base64'),
             "password": password.toString('base64'),
             "email": email,
+            "jobTitle":body.title || "",
             "fullName": body.firstName + " " + body.lastName,
             "domain": body.domain,
             "authorized_by":Parse.User.current()
