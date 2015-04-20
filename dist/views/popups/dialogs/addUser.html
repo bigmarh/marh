@@ -2,8 +2,8 @@
 
 
     <md-content>
-        <div role="button" tabindex="0" ng-click="hide()" class="close pull-right" aria-label="Close"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAATElEQVR42mNgIBcEBQX9J1oOJADD2BRjyP0HAmwSyGIggGISuia8ivFpwqkYmzPwBQRWxXg1oTsDV0DgDQ2cmmAS2DyIUw5faCDLAQCLaJ2x1IMFrQAAAABJRU5ErkJggg==" width="12" height="12" class="gwt-Image" alt="Close image">
-        </div>
+        <!--<div role="button" tabindex="0" ng-click="hide()" class="close pull-right" aria-label="Close"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAATElEQVR42mNgIBcEBQX9J1oOJADD2BRjyP0HAmwSyGIggGISuia8ivFpwqkYmzPwBQRWxXg1oTsDV0DgDQ2cmmAS2DyIUw5faCDLAQCLaJ2x1IMFrQAAAABJRU5ErkJggg==" width="12" height="12" class="gwt-Image" alt="Close image">
+        </div>-->
         <div class="pad8">Add User</div>
         <form name="$outletForm" ng-submit="addUser()">
             <div layout layout-sm="column">
@@ -27,7 +27,7 @@
                 </md-input-container>
             </div>
             <div flex layout="column">
-                <p flex ng-class="{'ng-hide':showPass}">A temporary password will be assigned. <!-- - <a ng-click="showPass = 1">Set Password</a> -->
+                <p ng-class="{'ng-hide':showPass}">A temporary password will be assigned. <!-- - <a ng-click="showPass = 1">Set Password</a> -->
                 </p>
                 <div ng-class="{'ng-hide':!showPass}">
                     <md-input-container flex>
@@ -38,13 +38,13 @@
                     <a ng-click="showPass = 0; fields.password= ''">Auto Generate</a>
                 </div>
             </div>
-            <div>
-
-                <md-input-container>
-                    <md-button ng-disabled="$outletForm.$invalid">
-                        Add User
-                    </md-button>
-                </md-input-container>
+            <div layout="row" layout-align="end">
+               <md-button class="md-primary" ng-click="hide()" aria-label="Close">
+                    Cancel
+                </md-button> 
+                <md-button class="md-primary" ng-disabled="$outletForm.$invalid">
+                    Add User
+                </md-button>
             </div>
         </form>
     </md-content>

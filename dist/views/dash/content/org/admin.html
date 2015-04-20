@@ -8,32 +8,41 @@
         </div>
 
         <div ng-if="users.length" flex>
-            <a ng-click="createUser($event,false)"> Add User</a>
-            <a ng-click="createAccount($event,false)">Add New Account</a>
+            <div layout="row" >
+                <h3 flex>Users:</h3>
 
-            <h4>Users:</h4>
-            <hr>
-            <div flex ng-repeat="user in users" class="fadeIn animated">
+                <md-button class="md-primary md-raised" ng-click="createUser($event,false)"> Add User</md-button>
+                <md-button class="md-primary md-raised"ng-click="createAccount($event,false)">Add New Account</md-button>
+            </div>
+
+            
+            <md-divider></md-divider>
+           <!-- <div flex ng-repeat="user in users" class="fadeIn animated">
                 <div flex layout="row">
                     <div>
-                        <img ng-src="{{user.image.url ||'https://i2.wp.com/i.vimeocdn.com/portrait/default-blue_300x300.png'}}" class='img-circle pad8 icon50' alt="" /> {{user.fullName}}
+                        3<img ng-src="{{user.image.url ||'https://i2.wp.com/i.vimeocdn.com/portrait/default-blue_300x300.png'}}" class='img-circle pad8 icon50' alt="" /> {{user.fullName}}
                     </div>
                 </div>
-                <hr>
-            </div>
+                <md-divider></md-divider>
+            </div>-->
+            <md-list-item flex ng-repeat="user in users" class="fadeIn animated">
+                <img ng-src="{{user.image.url ||'https://i2.wp.com/i.vimeocdn.com/portrait/default-blue_300x300.png'}}" class='img-circle pad8 icon50' alt="" />
+                <div class="md-list-item-text">
+                  <p>{{user.fullName}}</p>
+                </div>
+                <md-divider md-inset ng-if="!$last"></md-divider>
+            </md-list-item>
             <h4>Accounts:</h4>
-            <hr>
+            <md-divider></md-divider>
             <div ng-repeat="account in accounts | orderBy:'createdAt'" class="fadeIn animated">
                 <div flex layout="row">
-
                     <div flex>{{account.name}}</div>
                     <div flex>{{account.createdAt | date:'short'}}</div>
                  <!--    <div flex>{{account.accountNum}}</div> -->
                     <div flex="50"><small>{{account.address ||  "Account Not Active"}}</small>
                     </div>
-
                 </div>
-                <hr>
+                <md-divider></md-divider>
 
             </div>
         </div>
