@@ -9,7 +9,7 @@ Parse.Cloud.define("account_buildAddress", function(req,res){
 				var keychainObj = {
 					owner: org.id,
 					type:"org",
-					xpub: org.get('xpub');
+					xpub: org.get('xpub')
 				};
 				keychain.push(keychainObj);
 			})

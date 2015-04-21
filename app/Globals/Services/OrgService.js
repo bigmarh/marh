@@ -24,6 +24,11 @@ module.exports = function(app, Parse) {
             setCurrent: function(org) {
                 Org.currentOrg = org;
             },
+            setAccountBalance: function(address) {
+                Accounts.currentAccount.fullObj.set('balance', address.balance);
+                Accounts.currentAccount.fullObj.set('confirmedBalance', address.balance - address.unconfirmed_balance);
+                Accounts.currentAccount.fullObj.save();
+            },
             getCurrent: function() {
                 var deferred = $q.defer();
                 var query = new Parse.Query('Organization');
@@ -43,7 +48,12 @@ module.exports = function(app, Parse) {
                 Org.currentOrg.relation("users").query().find({
                     success: function(users) {
                         Org.users = users;
-                        deferred.resolve(users);
+
+                        deferred.resolve(users.map(function(user) {
+                            user.attributes.id = user.id;
+                            user.attributes.createdAt = user.createdAt
+                            return user.attributes;
+                        }));
                     },
                     error: function(error) {
                         alert("Error: " + error.code + " " + error.message);
@@ -120,6 +130,7 @@ module.exports = function(app, Parse) {
                 query.equalTo('objectId', id);
                 query.first().then(function(account) {
                     account.attributes.id = account.id;
+                    account.attributes.fullObj = account;
                     deferred.resolve(account.attributes);
                 })
 

@@ -158,7 +158,7 @@ module.exports = function(app, Parse) {
                     Transaction.previewTrans(current);
                 },
                   buildTransactionArray: function(txs, address) {
-              
+              console.log(txs,address)
                 var transactions = {};
                 txs.map(function(tx) {
                     var newTrans = {};
@@ -179,6 +179,7 @@ module.exports = function(app, Parse) {
                     newTrans.to = [];
                     newTrans.value = 0;
                     tx.outputs.map(function(output) {
+
                         for (a in output.addresses) {
                             if (output.addresses[a] != address && newTrans.type == "spend") {
                                 newTrans.to.push({

@@ -49,9 +49,9 @@ module.exports = function(stateProvider, Parse, resolvers) {
                     return Org.getAccount($stateParams.account);
 
                 }],
-                getBalanceAndTransactions: ['OrgService', 'BlockCypher', '$stateParams',
-                    function(org, BlockCypher, $stateParams) {
-                        return true;//return BlockCypher.getAddress();
+                getBalanceAndTransactions: ['OrgService', 'BlockCypher', '$stateParams','getAccount',
+                    function(org, BlockCypher, $stateParams,getAccount) {
+                        return BlockCypher.getAddress(getAccount.address);
                     }
                 ]
             },

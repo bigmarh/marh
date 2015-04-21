@@ -26,7 +26,7 @@
 
                 <div flex class="cell amount" ng-mouseover="decimals = ($root.BTCunit =='BTC') ? 6: ($root.BTCunit == 'mBTC') ? 4 : 2 " ng-mouseleave="decimals = 1">
                     {{tx.type == 'spend'? '-':''}}
-                    <span ng-show="cashValue">{{tx.value | balance}}</span><span ng-hide="cashValue">{{tx.value | convertCurrency:$root.BTCunit | number:decimals}} {{$root.BTCunit}}</span>
+                    <span>{{tx.value | balance | number}}</span>
                 </div>
             </div>
             <!-- tableRow -->

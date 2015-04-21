@@ -6,10 +6,9 @@ module.exports = function(app, Parse) {
                 if (!Accounts.currentAccount.get('balance')) Accounts.fillWallet($state.params.address, 10 * 1e5);
 
                 var address = getBalanceAndTransactions;
-                Accounts.currentAccount.set('balance', address.balance);
-                Accounts.currentAccount.set('confirmedBalance', address.balance - address.unconfirmed_balance);
-                Accounts.currentAccount.save();
-                Accounts.currentAccount.txs = Accounts.buildTransactionArray(address.txs, $state.params.address);
+                Org.setAccountBalance(address);
+               
+                Accounts.currentAccount.txs = Accounts.buildTransactionArray(address.txs,address);
                 $scope.account = Accounts.currentAccount;
                 $scope.loadSend = function(account) {
                     $rootScope.$broadcast('openSend', {

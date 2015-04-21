@@ -7,16 +7,10 @@ module.exports = function(app, Parse) {
             $scope.currency = currency;
             Org.currentOrg = Parse.User.current().get('org');
             Org.getAccounts().then(function(accounts) {
-                $scope.accounts = accounts.map(function(account) {
-                    account.attributes.createdAt = account.createdAt
-                    return account.attributes;
-                });
+                $scope.accounts = accounts;
             })
             Org.getUsers().then(function(users) {
-                $scope.users = users.map(function(user) {
-                    user.attributes.createdAt = user.createdAt
-                    return user.attributes;
-                });
+                $scope.users = users;
                  $scope.checked = true;
             })
 
