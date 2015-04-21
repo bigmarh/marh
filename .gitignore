@@ -2,3 +2,4 @@ node_modules/
 parse/config
 lastSign/cloud/config
 lastSign/config
+dist/bundle.js

@@ -3,19 +3,18 @@
         <div layout="row">
             <h2 flex>Inbox</h2>
             <div layout="row" layout-align="end center">
-                <i class="mdfi_content_archive"></i> <a href="" style="margin-right:16px"> Archives</a> <br>
-              <!--  <strong>Categories:</strong>
+                <md-button class="">Archives</md-button>
+              <!--  <i class="mdfi_content_archive" style="font-size:20px;"></i> <a href="" style="margin-right:16px"> Archives</a>
+              <strong>Categories:</strong>
                 <a flex ng-click="search.type = ''" title="All"> All </a>
                 <a flex ng-click="search.type = 'm'" title="Message"> Message </a>
                 <a flex ng-click="search.type = 'i'" title="Invoice"> Invoice </a>
                 <a flex ng-click="search.type = 's'" title="Signature" style="margin-right:16px"> Multi-Sign </a>-->
-
-                    <strong >Compose:</strong> <a href="" ng-click="loadCompose()"> Message</a> <!-- <a href="" ng-click="loadInvoice()">Invoice</a>-->
+                   <!-- <i class="mdfi_image_edit"></i>
+                   <a href="" > Compose</a> <a href="" ng-click="loadInvoice()">Invoice</a>--> <md-button class="" ng-click="loadCompose()">Compose</md-button>
             </div>
         </div>
-        <div class="colSubNav" style="margin-bottom:32px;">
-            
-        </div>
+        <md-divider style="margin-bottom:32px;"></md-divider>
 
 
         <div layout="row">
@@ -28,19 +27,19 @@
                         <md-list layout="column">
                             <md-item ng-repeat="message in value | filter:search.type" ui-sref-active="active">
                                 <md-item-content layout="row">
-                                    <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
+                                    <div class="md-tile-content md-body-1" ui-sref="inbox.message({id:message.id})" layout="row" flex>
                                         <span class="messageIcons"><i ng-class="{mdfi_action_receipt:key=='i'}"></i>
                                         </span>
                                         <span>
                                             <strong>David@pheeva.com</strong>
                                         </span>
-                                        <span style="overflow:hidden; height:18px; padding-left:8px;" flex>Subject {{message.id}}  from someone who needs to get money signed</span>
+                                        <span style="overflow:hidden; height:20px; padding-left:8px;" flex>Subject {{message.id}}  from someone who needs to get money signed</span><span style="padding-left:8px;">Feb 12, 2015</span>
 
                                     </div>
                                 </md-item-content>
                                 <md-divider></md-divider>
                             </md-item>
-                            <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
+                           <!-- <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
                                 <md-item-content layout="row">
                                     <div class="md-tile-content" ui-sref="inbox.message({id:message.id})" layout="row" flex>
                                         <span class="messageIcons"><i ng-class="{mdfi_communication_message:key=='m'}"></i>
@@ -48,7 +47,7 @@
                                         <span>
                                             <strong>David@pheeva.com</strong>
                                         </span>
-                                        <span style="overflow:hidden; height:18px; padding-left:8px;" flex>Subject {{message.id}}  from someone who needs to get money signed</span><span style="padding-left:8px;">Feb 12, 2015</span>
+                                        <span style="overflow:hidden; height:20px; padding-left:8px;" flex>Subject {{message.id}}  from someone who needs to get money signed</span><span style="padding-left:8px;">Feb 12, 2015</span>
                                     </div>
                                 </md-item-content>
                                 <md-divider></md-divider>
@@ -61,13 +60,13 @@
                                         <span>
                                             <strong>David@pheeva.com</strong>
                                         </span>
-                                        <span style="overflow:hidden; height:18px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed
+                                        <span style="overflow:hidden; height:20px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed
                                             <span style="padding-left:8px;">Feb 12, 2015</span>
                                         </span>
                                     </div>
                                 </md-item-content>
                                 <md-divider></md-divider>
-                            </md-item>
+                            </md-item>-->
                         </md-list>
                     </section>
                 </md-content>

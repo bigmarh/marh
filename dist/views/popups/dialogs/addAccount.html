@@ -1,11 +1,7 @@
-<md-dialog aria-label="Add User" style="min-height:600px;" layout="column">
-    <md-toolbar class="md-accent inset " layout="row" layout-align="space-between">
-        <h5 flex="75">Account Assistant</h5>
-        <div flex>
-            <button ng-click="save()" ng-disabled="checkAccount()" style="text-align:right"> Save</button>
-            <a ng-click="hide()" style="text-align:right"> Cancel</a>
-        </div>
-    </md-toolbar>
+<md-dialog aria-label="Add User" style="min-height:600px; width:50%;" layout="column">
+        <h3 style="margin:0;padding:24px;">Account Assistant</h3>
+        
+    <md-divider></md-divider>
     <md-tabs md-border-bottom flex>
         <md-tab label="intro">
            <ng-include src="'/views/popups/dialogs/partials_addAccount/intro_tab.html'" scope="" onload=""></ng-include>
@@ -22,5 +18,11 @@
         <md-tab label="administrators" layout="column">
          <ng-include src="'/views/popups/dialogs/partials_addAccount/administrators_tab.html'" scope="" onload=""></ng-include>
         </md-tab>
+    </md-tabs>
+    <div layout="row" layout-align="end center" layout-margin>
+            <md-button ng-click="hide()">Cancel</md-button>
+            <md-button ng-click="save()" ng-disabled="checkAccount()"> Save</md-button>
+            
+        </div>
         <!--  -->
 </md-dialog>

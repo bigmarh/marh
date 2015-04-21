@@ -1,16 +1,17 @@
 module.exports = function(app, Parse) {
-    app.controller('userAccountCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'UserService',
-        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, User) {
-            if (!Accounts.currentAccount)
-                $scope.account = Parse.Object.extend('Account');
+    app.controller('userAccountCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'UserService','Account',
+        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, User,Account) {
+       
+            $scope.admins = [];
             $scope.account = {
                 signees: [],
-                admins: [],
+                admins: {},
                 policy:{
                     global:{
-                        "dailyLimit":1000,"transactionLimit":500
+                        "dailyLimit":1000,
+                        "transactionLimit":500
                     },
-                    users:{}
+                    user:{}
                 }
             }
             var self = this;
@@ -29,17 +30,18 @@ module.exports = function(app, Parse) {
             /**
              * Search for contacts.
              */
-            function querySearch(query) {
+            function querySearch(query,signees) {
                     var results = query ?
-                        $scope.users.filter(createFilterFor(query)) : [];
+                        $scope.users.filter(createFilterFor(query,signees)) : [];
                     return results;
                 }
                 /**
                  * Create filter function for a query string
                  */
-            function createFilterFor(query) {
+            function createFilterFor(query,signees) {
                 var lowercaseQuery = angular.lowercase(query);
                 return function filterFn(contact) {
+                    if(!contact.payload && signees) return false;
                     return (contact.fullName.toLowerCase().indexOf(lowercaseQuery) != -1) || (contact.email.toLowerCase().indexOf(lowercaseQuery) != -1);
                 };
             }
@@ -55,8 +57,7 @@ module.exports = function(app, Parse) {
                 return !$scope.account.signees.length || !$scope.account.name;
             }
             $scope.save = function(){
-                console.log($scope.account);
-                $scope.hide();
+                Account.saveNew($scope.account);
             }
             $scope.hide = function() {
                 $mdDialog.hide();

@@ -4,7 +4,7 @@
     <md-content>
         <!--<div role="button" tabindex="0" ng-click="hide()" class="close pull-right" aria-label="Close"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAATElEQVR42mNgIBcEBQX9J1oOJADD2BRjyP0HAmwSyGIggGISuia8ivFpwqkYmzPwBQRWxXg1oTsDV0DgDQ2cmmAS2DyIUw5faCDLAQCLaJ2x1IMFrQAAAABJRU5ErkJggg==" width="12" height="12" class="gwt-Image" alt="Close image">
         </div>-->
-        <div class="pad8">Add User</div>
+        <h3>Add User</h3>
         <form name="$outletForm" ng-submit="addUser()">
             <div layout layout-sm="column">
                 <md-input-container flex>
@@ -29,7 +29,7 @@
                     <label>Username</label>
                     <input required ng-model="fields.username">
                 </md-input-container>
-                <md-input-container flex layout-align="end">
+                <md-input-container layout-align="end">
                     <span>@{{fields.domain}}</span>
                 </md-input-container>
             </div>
@@ -46,10 +46,10 @@
                 </div>
             </div>
             <div layout="row" layout-align="end">
-               <md-button class="md-primary" ng-click="hide()" aria-label="Close">
+               <md-button class="" ng-click="hide()" aria-label="Close">
                     Cancel
                 </md-button> 
-                <md-button class="md-primary" ng-disabled="$outletForm.$invalid">
+                <md-button class="" ng-disabled="$outletForm.$invalid">
                     Add User
                 </md-button>
             </div>

@@ -1,5 +1,6 @@
 var app = require('cloud/app.js');
 var Email = require('cloud/modules/email.js');
+require('cloud/modules/index');
 var required = require('cloud/bitcore.js');
 var bitcore = required('bitcore');
 var Buffer = require('buffer').Buffer;
@@ -7,7 +8,6 @@ var _ = require('underscore');
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 // For example:
 
-//Org
 Parse.Cloud.define('orgExists', function(req, res) {
     Parse.Cloud.useMasterKey()
     var query = new Parse.Query('Org');

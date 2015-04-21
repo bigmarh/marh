@@ -865,18 +865,19 @@ module.exports = function(app, Parse) {
 
 },{}],"/Users/Pheeva/Sites/sendsimple/app/Backend/Controllers/dash/org/userAccount.js":[function(require,module,exports){
 module.exports = function(app, Parse) {
-    app.controller('userAccountCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'UserService',
-        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, User) {
-            if (!Accounts.currentAccount)
-                $scope.account = Parse.Object.extend('Account');
+    app.controller('userAccountCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'UserService','Account',
+        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, User,Account) {
+       
+            $scope.admins = [];
             $scope.account = {
                 signees: [],
-                admins: [],
+                admins: {},
                 policy:{
                     global:{
-                        "dailyLimit":1000,"transactionLimit":500
+                        "dailyLimit":1000,
+                        "transactionLimit":500
                     },
-                    users:{}
+                    user:{}
                 }
             }
             var self = this;
@@ -895,17 +896,18 @@ module.exports = function(app, Parse) {
             /**
              * Search for contacts.
              */
-            function querySearch(query) {
+            function querySearch(query,signees) {
                     var results = query ?
-                        $scope.users.filter(createFilterFor(query)) : [];
+                        $scope.users.filter(createFilterFor(query,signees)) : [];
                     return results;
                 }
                 /**
                  * Create filter function for a query string
                  */
-            function createFilterFor(query) {
+            function createFilterFor(query,signees) {
                 var lowercaseQuery = angular.lowercase(query);
                 return function filterFn(contact) {
+                    if(!contact.payload && signees) return false;
                     return (contact.fullName.toLowerCase().indexOf(lowercaseQuery) != -1) || (contact.email.toLowerCase().indexOf(lowercaseQuery) != -1);
                 };
             }
@@ -921,8 +923,7 @@ module.exports = function(app, Parse) {
                 return !$scope.account.signees.length || !$scope.account.name;
             }
             $scope.save = function(){
-                console.log($scope.account);
-                $scope.hide();
+                Account.saveNew($scope.account);
             }
             $scope.hide = function() {
                 $mdDialog.hide();
@@ -2998,14 +2999,159 @@ var cssify = require('cssify');
 	//cssify.byUrl('//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css');
 	require('../../style/angular-csp.css')
 	require('../../style/animate.css')
-	
 	cssify.byUrl('style.css');
 	
 	//require('../style/style.less')
 
 
 
-},{"../../style/angular-csp.css":"/Users/Pheeva/Sites/sendsimple/style/angular-csp.css","../../style/animate.css":"/Users/Pheeva/Sites/sendsimple/style/animate.css","cssify":"/Users/Pheeva/Sites/sendsimple/node_modules/cssify/browser.js"}],"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/AccountsService.js":[function(require,module,exports){
+},{"../../style/angular-csp.css":"/Users/Pheeva/Sites/sendsimple/style/angular-csp.css","../../style/animate.css":"/Users/Pheeva/Sites/sendsimple/style/animate.css","cssify":"/Users/Pheeva/Sites/sendsimple/node_modules/cssify/browser.js"}],"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/Account.js":[function(require,module,exports){
+module.exports = function(app, Parse) {
+    app.service('Account', ['$http', 'UtilService', '$rootScope', '$q', 'WalletService', '$timeout', '$messages', function($http, util, $rootScope, $q, Wallet, $timeout, $messages) {
+        var Account = {
+            current: {},
+            saveNew: function(account) {
+                if (!account.signees.length) return $messages.error('Must have a least one signee');
+                if (!account.name) return $messages.error('Must have a name');
+
+                Account
+                    .new()
+                    .setAccess(account.admins)
+                    .setExtraData(account)
+                    .setPolicy(account.policy)
+                    .then(Account.getKeychain)
+                    .then(Account.save)
+            },
+            new: function() {
+                var acct = Parse.Object.extend('Account');
+                var newAccount = new acct();
+                this.current = newAccount;
+                return this;
+            },
+            setAccess: function(admins) {
+
+                //set admin access to account
+                var groupACL = new Parse.ACL();
+                var orgName = Parse.User.current().get('domain').replace(/\./g, '_');
+                var adminTitle = orgName + "_Administrators";
+                groupACL.setRoleWriteAccess(adminTitle, true);
+                groupACL.setRoleReadAccess(adminTitle, true);
+                if (Object.keys(admins).length) {
+                    // we are sending this message to.
+                    for (var i = 0; i < Object.keys(admins).length; i++) {
+                        var keys = Object.keys(admins);
+                        var admin = admins[keys[i]];
+                        if (admin.access == "view" || admin.access == "edit") groupACL.setReadAccess(keys[i], true);
+                        if (admin.access == "edit") groupACL.setReadAccess(keys[i], true);
+                    }
+                }
+                this.current.setACL(groupACL);
+                return this;
+            },
+            setPolicy: function(policyObj) {
+                var self = this;
+                var deferred = $q.defer();
+                var Policy = Parse.Object.extend('Policy');
+                var pol = new Policy();
+                var ACL = new Parse.ACL();
+                ACL.setPublicReadAccess(true);
+                pol.setACL(ACL);
+                pol.save(policyObj).then(function(p) {
+                    Parse.Cloud.run("registerLastSign", {
+                        policyId: p.id
+                    }).then(function(results) {
+                        self.current.set('lastSign', {
+                            "__type": "Pointer",
+                            "className": "LastSign",
+                            "objectId": results.lastSign
+                        });
+                        results.accountObj = self;
+                        deferred.resolve(results);
+                    })
+                }, $messages.log)
+
+                return deferred.promise;
+
+            },
+            setExtraData: function(account) {
+                this.current.set('createdBy', Parse.User.current());
+                this.current.set('org', Parse.User.current().get('org'));
+                for (var i = 0; i < Object.keys(account).length; i++) {
+                    var keys = Object.keys(account);
+                    if (keys[i] == "admins" || keys[i] == "policy") continue;
+                    this.current.set(keys[i], account[keys[i]]);
+                }
+                return this;
+
+            },
+            getKeychain: function(lastSign) {
+                console.log(lastSign);
+                var deferred = $q.defer();
+                var current = lastSign.accountObj.current;
+                var keychain = [];
+
+                var signees = current.get('signees').map(function(signee) {
+                    keychain.push({
+                        owner: signee.email,
+                        type: "user",
+                        xpub: signee.xpub,
+                        path:""
+                    })
+                    return;
+                })
+
+
+
+                function addLastSign() {
+                    var lsKeychain = {
+                        owner: lastSign.lastSign,
+                        xpub: lastSign.xpubkey,
+                        type: "lastSign",
+                        path:"0/0/0"
+                    }
+
+                    keychain.push(lsKeychain);
+                    addOrg();
+                }
+
+                function addOrg() {
+                    Parse.User.current().get('org').fetch().then(function(org) {
+                        var keychainObj = {
+                            owner: org.id,
+                            type: "org",
+                            xpub: org.get('xpub'),
+                            path:""
+                        };
+                        keychain.push(keychainObj);
+                        done();
+                    })
+
+                }
+                function done() {
+                    if (keychain.length == signees.length + 2) {
+                        deferred.resolve(keychain);
+                    }
+                    else{
+                        $messages.error("There was an issue with creating the keychain");
+                    }
+                }
+
+                addLastSign();
+                return deferred.promise;
+            },
+            save: function(result) {
+                console.log("Made it to Save");
+                var address = Wallet.createMultisig(Accounts.getPublicKeys(result), type, account.requiredSignatures).toString();
+
+                console.log(address);
+            }
+        }
+
+        return Account;
+    }])
+}
+
+},{}],"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/AccountsService.js":[function(require,module,exports){
 (function (Buffer){
 var required = require('../helpers/bitcore');
 var bitcore = required('bitcore');
@@ -3562,7 +3708,7 @@ module.exports = function(app, Parse) {
                 },
                 signToSigns: function (tosigns,xpriv) {
                     return tosigns.map(function(tosign) {
-                        return bitcore.crypto.ECDSA.sign(new Buffer(tosign,'hex'), bitcore.HDPrivateKey(xpriv).derive('m').privateKey).toString("hex");
+                        return bitcore.crypto.ECDSA.sign(new Buffer(tosign,'hex'), bitcore.HDPrivateKey(xpriv).derive("m/0'").privateKey).toString("hex");
                     })
                 },
                 sendTrans: function(options) {
@@ -3988,6 +4134,7 @@ module.exports = function(app, Parse) {
                         title: "Encrypted Passcode",
                         content: encPass
                     }]);
+                    org.set('xpub', payload.get('xpub'));
                     org.set('key_activated', false);
                     org.set('payload', payload);
                     org.save();
@@ -4315,6 +4462,7 @@ module.exports = function(app, Parse) {
                             title: "Encrypted Passcode",
                             content: encPass
                         }]);
+                        user.set('xpub',payload.get('xpub'));
                         user.set('user-key_activated', false);
                         user.set('payload', payload);
 
@@ -4907,9 +5055,10 @@ module.exports = function(app, Parse){
 	require('./GoogleService')(app, Parse);
 	require('./OrgService')(app, Parse);
 	require('./UserService')(app, Parse);
+	require('./Account')(app, Parse);
 
 }
-},{"./AccountsService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/AccountsService.js","./AppService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/AppService.js","./BlockCypherService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/BlockCypherService.js","./GoogleService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/GoogleService.js","./LastSign":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/LastSign.js","./OrgService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/OrgService.js","./TransactionService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/TransactionService.js","./UserService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/UserService.js","./UtilService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/UtilService.js","./WalletService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/WalletService.js","./messages":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/messages.js"}],"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/messages.js":[function(require,module,exports){
+},{"./Account":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/Account.js","./AccountsService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/AccountsService.js","./AppService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/AppService.js","./BlockCypherService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/BlockCypherService.js","./GoogleService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/GoogleService.js","./LastSign":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/LastSign.js","./OrgService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/OrgService.js","./TransactionService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/TransactionService.js","./UserService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/UserService.js","./UtilService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/UtilService.js","./WalletService":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/WalletService.js","./messages":"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/messages.js"}],"/Users/Pheeva/Sites/sendsimple/app/Globals/Services/messages.js":[function(require,module,exports){
 module.exports = function(app, Parse) {
     app.factory('$messages', ['$state', '$http', '$resource', '$rootScope',
         function($state, $http, $resource, $rootScope) {
@@ -31044,8 +31193,6 @@ var cssify = require('cssify');
 	//Load styles
 	require('../../style/angular-csp.css')
 	require('../../style/animate.css')
-	
-	
 	cssify.byUrl('style.css');
 	//require('../style/style.less')
 
