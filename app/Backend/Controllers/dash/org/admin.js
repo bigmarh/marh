@@ -11,7 +11,7 @@ module.exports = function(app, Parse) {
             })
             Org.getUsers().then(function(users) {
                 $scope.users = users;
-                 $scope.checked = true;
+                $scope.checked = true;
             })
 
 

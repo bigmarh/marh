@@ -157,8 +157,7 @@ module.exports = function(app, Parse) {
                 startSend: function(current) {
                     Transaction.previewTrans(current);
                 },
-                  buildTransactionArray: function(txs, address) {
-              console.log(txs,address)
+            buildTransactionArray: function(txs, address) {
                 var transactions = {};
                 txs.map(function(tx) {
                     var newTrans = {};
