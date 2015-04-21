@@ -1,14 +1,18 @@
 <h2 class="">Transactions</h2>
-    <div class="transactions">
-        <div class="tableRow tableHeader" layout="row">
-            <div flex class="cell date">Date</div>
-            <div flex class="cell description">Description</div>
+<md-divider style="margin-bottom:32px;"></md-divider>
+<div class="fadeIn animated">
+    <md-list layout="column">
+        <md-item>
+            <md-item-content layout="row" layout-align="space-between" class="md-tile-content md-body-2">
 
-            <div flex class="cell amount" ng-init="cashValue = true" ng-click="cashValue = !cashValue">Amount</div>
-        </div>
-        <div class="tableBody">
-            <!-- tableRow -->
-            <div class="tableRow" ng-repeat="tx in account.txs track by tx.tx_hash" layout="row" layout-align="space-between">
+                <div flex class="cell">Customer</div>
+                <div flex class="cell description">Description</div>
+
+                <div class="cell amount" ng-init="cashValue = true" ng-click="cashValue = !cashValue">Amount</div>
+            </md-item-content>
+        </md-item>
+        <md-item>
+            <md-item-content ng-repeat="tx in account.txs track by tx.tx_hash" layout="row" layout-align="space-between">
                 <div flex class="cell">
                     {{ tx.confirmed | date:'short'}}
                     <div ng-if="!tx.confirmed" class="md-raised md-warn md-button md-mini md-default-theme">
@@ -20,15 +24,20 @@
                     <div>
                         {{$root.createDescription(tx)}}
                     </div>
-                    <small><a class="pull-right" target="_blank" href="https://live.blockcypher.com/bcy/tx/{{tx.tx_hash}}">detail</a></small>
+                    <small><a class="pull-right" target="_blank" href="https://live.blockcypher.com/bcy/tx/{{tx.tx_hash}}">detail</a>
+                    </small>
 
                 </div>
 
-                <div flex class="cell amount" ng-mouseover="decimals = ($root.BTCunit =='BTC') ? 6: ($root.BTCunit == 'mBTC') ? 4 : 2 " ng-mouseleave="decimals = 1">
+                <div class="cell amount" ng-mouseover="decimals = ($root.BTCunit =='BTC') ? 6: ($root.BTCunit == 'mBTC') ? 4 : 2 " ng-mouseleave="decimals = 1">
                     {{tx.type == 'spend'? '-':''}}
-                    <span ng-show="cashValue">{{tx.value | balance}}</span><span ng-hide="cashValue">{{tx.value | convertCurrency:$root.BTCunit | number:decimals}} {{$root.BTCunit}}</span>
+                    <span ng-show="cashValue">{{tx.value | balance}}</span>
+                    <span ng-hide="cashValue">{{tx.value | convertCurrency:$root.BTCunit | number:decimals}} {{$root.BTCunit}}</span>
                 </div>
-            </div>
-            <!-- tableRow -->
-        </div>
-    </div>
+            </md-item-content>
+            <md-divider ng-if="!$last"></md-divider>
+        </md-item>
+        </md-item-content>
+        </md-item>
+    </md-list>
+</div>
