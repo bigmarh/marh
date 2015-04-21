@@ -17,6 +17,7 @@ module.exports = function(app, Parse) {
                     user.attributes.createdAt = user.createdAt
                     return user.attributes;
                 });
+                 $scope.checked = true;
             })
 
 

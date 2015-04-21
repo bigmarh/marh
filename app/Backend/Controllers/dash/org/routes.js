@@ -43,23 +43,22 @@ module.exports = function(stateProvider, Parse, resolvers) {
             }
         })
         .state('org.one', {
-            url: '/a/:address',
+            url: '/a/:account',
             resolve: {
-                getAccount: ['AccountsService', '$stateParams', function(Accounts, $stateParams) {
-                    Accounts.currentAccount = Accounts.accounts['Org'][$stateParams.address];
-                    return Accounts.currentAccount || Accounts.getAccount($stateParams.address);
+                getAccount: ['AccountsService', '$stateParams','OrgService', function(Accounts, $stateParams,Org) {
+                    return Org.getAccount($stateParams.account);
 
                 }],
                 getBalanceAndTransactions: ['OrgService', 'BlockCypher', '$stateParams',
                     function(org, BlockCypher, $stateParams) {
-                        return BlockCypher.getAddress($stateParams.address);
+                        return true;//return BlockCypher.getAddress();
                     }
                 ]
             },
             views: {
                 'content@org': {
                     templateUrl: 'views/dash/content/org/one.html',
-                    controller: 'oneCtrl'
+                    controller: 'oneOrgCtrl'
                 }
             }
         }).state('org.transfer', {

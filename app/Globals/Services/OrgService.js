@@ -114,12 +114,27 @@ module.exports = function(app, Parse) {
 
                 return deferred.promise;
             },
+            getAccount: function(id) {
+                var deferred = $q.defer();
+                var query = new Parse.Query('Account');
+                query.equalTo('objectId', id);
+                query.first().then(function(account) {
+                    account.attributes.id = account.id;
+                    deferred.resolve(account.attributes);
+                })
+
+                return deferred.promise;
+            },
             getAccounts: function(loadOrg) {
                 var deferred = $q.defer();
                 Org.currentOrg.relation("accounts").query().find({
                     success: function(accounts) {
                         Org.accounts = accounts;
-                        deferred.resolve(accounts);
+                        deferred.resolve(accounts.map(function(account) {
+                            account.attributes.id = account.id;
+                            account.attributes.createdAt = account.createdAt
+                            return account.attributes;
+                        }));
                     },
                     error: function(error) {
                         alert("Error: " + error.code + " " + error.message);

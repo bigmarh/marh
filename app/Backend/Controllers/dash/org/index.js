@@ -10,16 +10,12 @@ module.exports = function(app, Parse) {
             };
             Org.currentOrg = Parse.User.current().get('org');
             Org.getAccounts().then(function(accounts) {
-                $scope.accounts = accounts.map(function(account) {
-                    account.attributes.createdAt = account.createdAt
-                    return account.attributes;
-                });
+                $scope.checked = true;
+                $scope.accounts = accounts;
             })
       
 
-            $scope.hasAccount = function(){
-                return Object.keys($scope.accounts).length;
-            }    
+  
 
             $scope.loadCredit = function(data) {
                 Util.launchLB({

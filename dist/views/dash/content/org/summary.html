@@ -1,7 +1,8 @@
-<div ng-if="!hasAccount()">
+
+<div ng-if="!accounts.length && checked">
         You have no organization accounts. Talk to your company administrator
 </div>
-<div ng-if="hasAccount()">
+<div ng-if="accounts.length">
     <div class="colSubNav">
         <div class="subNav" layout="row">
             <div ng-include="'../views/dash/content/account/partials/orgNav.html'" scope="" onload="" flex></div>

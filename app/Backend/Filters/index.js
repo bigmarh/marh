@@ -20,11 +20,7 @@ module.exports = function(app, Parse) {
         }).filter('balance', ['$rootScope',
             function(root) {
                 return function(number, unit) {
-                    
-                    if (!unit) return root.currency.symbol_native + (number / 1e8 * root.spot_rate).toFixed(2);
-                    if (isNaN(unit)) return number / 100000000 * root.spot_rate;
-                    num = parseFloat(number / unit);
-                    return (num) ? Math.floor(num * 100000) / 100000 : "----";
+                    return (number/100).toFixed(2);
                 }
             }
         ]).filter('account', [function() {

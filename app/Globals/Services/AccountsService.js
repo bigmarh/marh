@@ -77,14 +77,14 @@ module.exports = function(app, Parse) {
                     }
                 });
             },
-            getAccount: function(address) {
+            getAccount: function(id) {
                 var deferred = $q.defer();
                 var query = new Parse.Query('Accounts');
-                query.equalTo('address', address)
+                query.equalTo('objectId', id);
                 query.first().then(function(account) {
                     if (account) {
-                        Accounts.currentAccount = account;
-                        deferred.resolve(account);
+                        Accounts.currentAccount = account.attributes;
+                        deferred.resolve(account.attributes);
                     } else {
                         deferred.resolve(false);
                     }
