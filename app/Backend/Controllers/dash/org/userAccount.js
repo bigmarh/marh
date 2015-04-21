@@ -63,6 +63,7 @@ module.exports = function(app, Parse) {
             }
             $scope.successAccount = function(account) {
                 var newAccount = account.attributes;
+                newAccount.createdAt = new Date();
                 newAccount.fullObj = account;
                 $rootScope.$broadcast('add_CompanyAccount', {
                     account: newAccount

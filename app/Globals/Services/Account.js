@@ -9,7 +9,7 @@ module.exports = function(app, Parse) {
                 Account.error = account.error;
                 Account
                     .new()
-                    .setAccess(account.admins)
+                    .setAccess(account.admins,account.signees)
                     .setExtraData(account)
                     .setPolicy(account.policy)
                     .then(Account.getKeychain)
@@ -21,7 +21,7 @@ module.exports = function(app, Parse) {
                 this.current = newAccount;
                 return this;
             },
-            setAccess: function(admins) {
+            setAccess: function(admins,signees) {
 
                 //set admin access to account
                 var groupACL = new Parse.ACL();
@@ -36,6 +36,12 @@ module.exports = function(app, Parse) {
                         var admin = admins[keys[i]];
                         if (admin.access == "view" || admin.access == "edit") groupACL.setReadAccess(keys[i], true);
                         if (admin.access == "edit") groupACL.setReadAccess(keys[i], true);
+                    }
+                }
+                if (signees.length) {
+                    // we are sending this message to.
+                    for (i in signees) {
+                        groupACL.setReadAccess(signees[i].id, true);
                     }
                 }
                 this.current.setACL(groupACL);
@@ -154,7 +160,9 @@ module.exports = function(app, Parse) {
                 Account.current.set('balance', 0);
                 Account.current.set('unconfirmedBalance', 0);
                 Account.current.save().then(function(account) {
-                    Org.addAccount(account,Account.success);
+                    Org.addAccount(account,function(){
+                        Account.success(account);
+                    });
                 }, Account.error);
 
 

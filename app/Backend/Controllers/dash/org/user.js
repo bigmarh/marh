@@ -15,13 +15,11 @@ module.exports = function(app, Parse) {
             $scope.addUser = function() {
 
                 User.addNew($scope.fields, function(user) {
-                    if (!Org.firstUser) {
-                        var newUser = user.attributes;
-                        newUser.fullObj = user;
-                        $rootScope.$broadcast('add_CompanyUser', {
-                            user: newUser
-                        })
-                    }
+                    var newUser = user.attributes;
+                    newUser.fullObj = user;
+                    $rootScope.$broadcast('add_CompanyUser', {
+                        user: newUser
+                    })
                     $scope.hide();
                 })
             }

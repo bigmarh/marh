@@ -8,7 +8,13 @@ module.exports = function(app, Parse) {
             $scope.first = {
                 password: 1234567890
             };
-            $scope.accounts = Accounts.accounts['Org'];
+            Org.currentOrg = Parse.User.current().get('org');
+            Org.getAccounts().then(function(accounts) {
+                $scope.accounts = accounts.map(function(account) {
+                    account.attributes.createdAt = account.createdAt
+                    return account.attributes;
+                });
+            })
       
 
             $scope.hasAccount = function(){

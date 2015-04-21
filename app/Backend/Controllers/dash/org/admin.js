@@ -5,6 +5,7 @@ module.exports = function(app, Parse) {
             //reset current account
             Accounts.currentAccount = {};
             $scope.currency = currency;
+            Org.currentOrg = Parse.User.current().get('org');
             Org.getAccounts().then(function(accounts) {
                 $scope.accounts = accounts.map(function(account) {
                     account.attributes.createdAt = account.createdAt
@@ -48,6 +49,7 @@ module.exports = function(app, Parse) {
                 $scope.$safeApply();
             })
             $rootScope.$on('add_CompanyAccount', function(event, options) {
+                console.log(options.account);
                 $scope.accounts.push(options.account);
                 $scope.$safeApply();
             })
