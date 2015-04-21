@@ -9,10 +9,10 @@
 
         <div ng-if="users.length" flex>
             <div layout="row" >
-                <h2 flex>Users:</h2>
+                <h2 flex>Users</h2>
 
-                <md-button class="" ng-click="createUser($event,false)"> Add User</md-button>
-                <md-button class=""ng-click="createAccount($event,false)">Add New Account</md-button>
+                <md-button class="md-primary" ng-click="createUser($event,false)"> Add User</md-button>
+                <md-button class="md-primary"ng-click="createAccount($event,false)">Add New Account</md-button>
             </div>
 
             
@@ -21,23 +21,23 @@
                 <md-list-item flex ng-repeat="user in users" class="fadeIn animated">
                     <img ng-src="{{user.image.url ||'https://i2.wp.com/i.vimeocdn.com/portrait/default-blue_300x300.png'}}" class='icon50 md-avatar' alt="" />
                     <div class="md-list-item-text">
-                      <p>{{user.fullName}}</p>
+                      <p class="md-body-1">{{user.fullName}}</p>
                     </div>
                     <md-divider ng-if="!$last"></md-divider>
                 </md-list-item>
                 
             </md-list>
-            <h2>Accounts:</h2>
-            <md-divider></md-divider>
+            <h2>Accounts</h2>
+            <md-divider style=" margin-bottom:32px;"></md-divider>
             <div ng-repeat="account in accounts | orderBy:'createdAt'" class="fadeIn animated">
-                <div flex layout="row">
+                <div class="md-tile-content md-body-1" flex layout="row">
                     <div flex>{{account.name}}</div>
                     <div flex>{{account.createdAt | date:'short'}}</div>
                  <!--    <div flex>{{account.accountNum}}</div> -->
-                    <div flex="50"><small>{{account.address ||  "Account Not Active"}}</small>
+                    <div flex="50">{{account.address ||  "Account Not Active"}}
                     </div>
                 </div>
-                <md-divider></md-divider>
+                <md-divider ng-if="!$last"></md-divider>
 
             </div>
         </div>

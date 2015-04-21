@@ -1,22 +1,25 @@
-<div ng-if="!hasAccount()">
-        You have no organization accounts. Talk to your company administrator
-</div>
-<div ng-if="hasAccount()">
-    <div class="colSubNav">
-        <div class="subNav" layout="row">
-            <div ng-include="'../views/dash/content/account/partials/orgNav.html'" scope="" onload="" flex></div>
-            <!--<a href="" class="btn btn-primary" ng-click="newAccount=true"><span class="glyphicon glyphicon-plus"></span>  Add Account</a>-->
+<div class="centerCard">
+    <md-content class="md-padding">
+        <div ng-if="!hasAccount()">
+            You have no organization accounts. Talk to your company administrator
         </div>
-    </div>
-    <section>
-        <div class="colTitle">
-            <h1 class="flexCon mar0">Summary</h1>
+        <div ng-if="hasAccount()">
+            <div>
+                <div class="subNav" layout="row">
+                    <h2 flex>Summary</h2>
+                    <div  layout="row" layout-align="end center" ng-include="'../views/dash/content/account/partials/orgNav.html'" scope="" onload="" flex></div>
+                </div>
+            </div>
+            <md-divider style="margin-bottom:32px;"></md-divider>
+            <section>
+
+                <div class="colSummary">
+                    <div ng-include="'../views/dash/content/account/partials/transactions.html'" scope="" onload="">
+
+                    </div>
+                    <!-- transactions -->
+                </div>
+            </section>
         </div>
-        <div class="colSummary">
-           <div ng-include="'../views/dash/content/account/partials/transactions.html'" scope="" onload="">
-               
-           </div>
-            <!-- transactions -->
-        </div>
-    </section>
+    </md-content>
 </div>
