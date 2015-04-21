@@ -1,17 +1,4 @@
 <div flex layout="column" style="min-height:400px;">
-    <!--<div class="text-center pad8">
-        <span>
-            <img src="/img/peLogo.svg" alt="Pheeva Enterprise" style="width:60px;">
-        </span>
-    </div>-->
-    <hr>
-    <!--<div class="text-center marBottom24" style="padding:8px 16px;">
-        <div class="blackSearch">
-            <span class=" mdfi_action_search"></span>
-            <input type="search" class="form-control searchBlack" placeholder="Search">
-        </div>
-    </div>-->
-    
     <div class="listGroup">
         <a ng-if="isAdmin" ui-sref="org.admin" ui-sref-active="active" class="listGroupItem">
             <span class="mdfi_action_lock" aria-hidden="true"></span>
@@ -27,12 +14,11 @@
         <a ui-sref="inbox" ui-sref-active="active" class="listGroupItem">
             <span class=" mdfi_content_inbox" aria-hidden="true"></span>
             Inbox
-            <span class="label label-danger">3</span>
+            <small>( 3 )</small>
         </a>
 
     </div>
 
-    <hr>
 
     <div class="listGroup" ng-class="{'ng-hide':userApps.length < 1}">
         <p class="pad8 padSides15 mar0">APPS</p>
@@ -42,15 +28,12 @@
         </a>
     </div>
 </div>
-<div class="bg-primary flexAlign" style="flex-shrink:0; display:flex; height:50px; padding:8px 16px;">
-    <div class="flexCon">
-        <a style="cursor:pointer;">
-            <span class="glyphicon glyphicon-cog"></span>Settings</a>
-    </div>
-    <div class="flexCon text-right">
-        <a logout style="cursor:pointer;">
-            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-            Logout
-        </a>
-    </div>
+<div layout="row" layout-align="space-around center">
+    <md-button>
+        <span class="glyphicon glyphicon-cog"></span>Settings</md-button>
+
+    <md-button>
+        <span logout>Logout</span>
+    </md-button>
+
 </div>

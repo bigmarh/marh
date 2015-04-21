@@ -17,20 +17,21 @@
 @success: 					#26A25A;
 
 // STYLES
-
+ 
 @colBorderBottom: solid 1px rgba(0, 0, 0, 0.27);
 
 //////////////////////////////////////////////
-
+	@import "lamar.less";
+	@import "angular-material.less";
 @import "mdfi.less";
 
-html, body {
+/*html, body {
   font-family: 'Roboto', sans-serif;
-  font-size:14px;
+ // font-size:14px;
   height:100%;
   margin: 0px;
   padding: 0px;
-}
+}*/
 
 md-toolbar{
 	min-height: 44px;
@@ -43,9 +44,13 @@ md-toolbar{
 	}
 }
 
+md-divider {
+  border-top-color: rgba(0,0,0,0.12);
+}
+
 // COLUMNS
 	.colContent{
-		background:#e9e9e9;
+		//background:#e9e9e9;
 		overflow-y: scroll;
 		padding-bottom: 64px;
 	}
@@ -105,6 +110,9 @@ md-toolbar{
 }
 .pad2432{
 	padding: 24px 32px;
+}
+.pad24{
+	padding: 24px;
 }
 .pad32{
 	padding: 32px; 
@@ -204,6 +212,5 @@ md-toolbar{
 		padding: 8px;
 	}
 
-	@import "lamar.less";
-	@import "angular-material.less";
+
 	/////////////////////

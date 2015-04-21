@@ -1,20 +1,20 @@
- <div class="transactions fadeIn animated">
-                <div class="tableRow tableHeader noBorderTop">
-                    <div class="flexCon cell description"> {{Org.domain}} Account(s)</div>
-                    <div class="cell amount">Balance</div>
-                </div>
-                <!-- tableRow -->
-                <div ng-if="account.address" class="tableRow blink" ng-repeat="(address, account) in accounts  | orderObjectBy:'number'" ui-sref="org.one({account:account.id})" title="{{account.type}}">
-                    <div class="flexCon cell description caps">
-                        {{account.name}}
-                    </div>
-                    <div class="cell amount">{{account.balance | balance}}</div>
-                </div>
-                <div ng-if="!account.address" class="tableRow blink" ng-repeat="(address, account) in accounts  | orderObjectBy:'number'" title="Org">
-                    <div class="flexCon cell description caps">
-                        {{account.name}}
-                    </div>
-                    <div class="cell amount">Not Activated</div>
-                </div>
-                <!-- tableRow -->
-            </div>
+<div class="transactions fadeIn animated">
+    <div class="tableRow tableHeader noBorderTop">
+        <div class="flexCon cell description"> {{Org.domain}} Account(s)</div>
+        <div class="cell amount">Balance</div>
+    </div>
+    <!-- tableRow -->
+    <div ng-if="account.address" class="tableRow blink" ng-repeat="(address, account) in accounts  | orderObjectBy:'number'" ui-sref="org.one({account:account.id})" title="{{account.type}}">
+        <div class="flexCon cell description caps">
+            {{account.name}}
+        </div>
+        <div class="cell amount">{{account.balance | balance}}</div>
+    </div>
+    <div ng-if="!account.address" class="tableRow blink" ng-repeat="(address, account) in accounts  | orderObjectBy:'number'" title="Org">
+        <div class="flexCon cell description caps">
+            {{account.name}}
+        </div>
+        <div class="cell amount">Not Activated</div>
+    </div>
+    <!-- tableRow -->
+</div>

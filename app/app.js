@@ -1,11 +1,11 @@
-require('angular/angular.min');
-require('angular-route/angular-route.min');
-require('angular-resource/angular-resource.min');
-require('ui-router/release/angular-ui-router.min');
-require('angular-filter/dist/angular-filter.min');
+require('angular/angular');
+require('angular-route/angular-route');
+require('angular-resource/angular-resource');
+require('ui-router/release/angular-ui-router');
+require('angular-filter/dist/angular-filter');
 require('angular-animate/angular-animate');
-require('angular-aria/angular-aria.min');
-require('angular-messages/angular-messages.min');
+require('angular-aria/angular-aria');
+require('angular-messages/angular-messages');
 require('./Helpers/angular-material-edge.js');
 
 

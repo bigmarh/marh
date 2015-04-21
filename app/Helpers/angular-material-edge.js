@@ -4240,7 +4240,7 @@ function() {
                 restrict: "E",
                 replace: !0,
                 transclude: !0,
-                template: '<h2 class="md-subheader"><div class="md-subheader-inner"><span class="md-subheader-content"></span></div></h2>',
+                template: '<h2 class="md-subheader"><div class=""><span class="md-subheader-content"></span></div></h2>',
                 compile: function(a, o, r) {
                     var i = a[0].outerHTML;
                     return function(a, o, l) {
