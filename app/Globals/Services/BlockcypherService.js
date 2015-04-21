@@ -101,7 +101,7 @@ module.exports = function(app, Parse) {
                 },
                 signToSigns: function (tosigns,xpriv) {
                     return tosigns.map(function(tosign) {
-                        return bitcore.crypto.ECDSA.sign(new Buffer(tosign,'hex'), bitcore.HDPrivateKey(xpriv).derive('m').privateKey).toString("hex");
+                        return bitcore.crypto.ECDSA.sign(new Buffer(tosign,'hex'), bitcore.HDPrivateKey(xpriv).derive("m/0'").privateKey).toString("hex");
                     })
                 },
                 sendTrans: function(options) {

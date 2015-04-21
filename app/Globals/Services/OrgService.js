@@ -206,6 +206,7 @@ module.exports = function(app, Parse) {
                         title: "Encrypted Passcode",
                         content: encPass
                     }]);
+                    org.set('xpub', payload.get('xpub'));
                     org.set('key_activated', false);
                     org.set('payload', payload);
                     org.save();

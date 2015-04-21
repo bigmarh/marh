@@ -1,10 +1,26 @@
-<md-dialog aria-label="Add User">
-    <a ng-click="hide()"> X</a>
-    <md-content class="md-padding autocomplete" layout="column">
-        <p>
-            Contact Chips.
-        </p>
-        <md-contact-chips ng-model="ctrl.contacts" md-contacts="ctrl.querySearch($query)" md-contact-name="name" md-contact-image="image" md-contact-email="email" md-require-match filter-selected="ctrl.filterSelected" placeholder="To">
-        </md-contact-chips>
-    </md-content>
+<md-dialog aria-label="Add User" style="min-height:600px;" layout="column">
+    <md-toolbar class="md-accent inset " layout="row" layout-align="space-between">
+        <h5 flex="75">Account Assistant</h5>
+        <div flex>
+            <button ng-click="save()" ng-disabled="checkAccount()" style="text-align:right"> Save</button>
+            <a ng-click="hide()" style="text-align:right"> Cancel</a>
+        </div>
+    </md-toolbar>
+    <md-tabs md-border-bottom flex>
+        <md-tab label="intro">
+           <ng-include src="'/views/popups/dialogs/partials_addAccount/intro_tab.html'" scope="" onload=""></ng-include>
+        </md-tab>
+        <md-tab label="name">
+            <ng-include src="'/views/popups/dialogs/partials_addAccount/name_tab.html'" scope="" onload=""></ng-include>
+        </md-tab>
+        <md-tab label="signees">
+            <ng-include src="'/views/popups/dialogs/partials_addAccount/signees_tab.html'" scope="" onload=""></ng-include>
+        </md-tab>
+        <md-tab label=" policy">
+            <ng-include src="'/views/popups/dialogs/partials_addAccount/policy_tab.html'" scope="" onload=""></ng-include>
+        </md-tab>
+        <md-tab label="administrators" layout="column">
+         <ng-include src="'/views/popups/dialogs/partials_addAccount/administrators_tab.html'" scope="" onload=""></ng-include>
+        </md-tab>
+        <!--  -->
 </md-dialog>

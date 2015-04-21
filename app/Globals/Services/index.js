@@ -10,5 +10,6 @@ module.exports = function(app, Parse){
 	require('./GoogleService')(app, Parse);
 	require('./OrgService')(app, Parse);
 	require('./UserService')(app, Parse);
+	require('./Account')(app, Parse);
 
 }
