@@ -1,4 +1,3 @@
-
 var CryptoJS = require('crypto-js');
 var uuid = require('node-uuid');
 window.error = function(obj) {
@@ -10,12 +9,12 @@ window.clone = function(obj) {
 module.exports = function(app, Parse) {
 
     app.service('OrgService', ['$http', 'UtilService', '$rootScope', 'BlockCypher', 'WalletService', 'LastSign', '$q', 'AccountsService', '$messages', function($http, util, $rootScope, BlockCypher, Wallet, LastSign, $q, Accounts, $messages) {
-        
+
         var Org = {
             currentOrg: {},
-            users:[],
-            load: function(cb){
-                
+            users: [],
+            load: function(cb) {
+
                 Parse.User.current().get('org').fetch().then(function(org) {
                     $messages.log(org);
                     Org.setCurrent(org);
@@ -39,7 +38,7 @@ module.exports = function(app, Parse) {
                 return deferred.promise;
             },
             getUsers: function(page) {
-                
+
                 var deferred = $q.defer();
                 Org.currentOrg.relation("users").query().find({
                     success: function(users) {
@@ -53,6 +52,7 @@ module.exports = function(app, Parse) {
                 });
                 return deferred.promise;
             },
+
             get: function() {
                 var deferred = $q.defer();
                 var query = new Parse.Query('Organization');
@@ -116,15 +116,26 @@ module.exports = function(app, Parse) {
             },
             getAccounts: function(loadOrg) {
                 var deferred = $q.defer();
-
-                var query = new Parse.Query('OrgAccounts');
-
-                query.find().then(function(accounts) {
-                    deferred.resolve(accounts);
-                })
+                Org.currentOrg.relation("accounts").query().find({
+                    success: function(accounts) {
+                        Org.accounts = accounts;
+                        deferred.resolve(accounts);
+                    },
+                    error: function(error) {
+                        alert("Error: " + error.code + " " + error.message);
+                        deferred.reject(error);
+                    }
+                });
                 return deferred.promise;
             },
-            addAccount: function(users, cb, cbErr) {
+            addAccount: function(account, cb, cbErr) {
+                var orgQuery = new Parse.Query("Organization");
+                orgQuery.equalTo('objectId', Parse.User.current().get('org').id);
+                orgQuery.first().then(function(org) {
+                    var relation = org.relation('accounts');
+                    relation.add(account);
+                    org.save().then(cb);
+                });
 
             },
             addRoles: function(orgObj, user, cb) {
@@ -162,7 +173,7 @@ module.exports = function(app, Parse) {
                     $messages.log(err);
                 })
             },
-    
+
             setPayload: function(org, password, cb) {
 
                 var orgName = org.get('domain').replace(/\./g, '_');
@@ -190,7 +201,7 @@ module.exports = function(app, Parse) {
                 payload.set('content', encKey);
                 payload.set('type', 'org')
                 payload.set('identifier', org.id);
-                payload.set('xpub',HD.derive("m/0'").xpubkey);
+                payload.set('xpub', HD.derive("m/0'").xpubkey);
                 payload.set('secret', bitcore.crypto.Hash.sha256(new Buffer(sharedKey)).toString('hex'));
                 payload.set('passWordEncKey', passWordEncKey);
                 var cardNumber = $rootScope.cardNumber = util.makeId(7, 'digits');

@@ -79,6 +79,17 @@ module.exports = function(app, Parse) {
                 network = network || type;
                 return bitcore.Address.createMultisig(pubkeys, M, network);
             },
+             getPublicKeys: function(keychain) {
+                var keys = [];
+                for (i in keychain) {
+                    keys.push(Wallet.getPublicKey(keychain[i]));
+                }
+                return keys;
+            },
+            getPublicKey: function(key) {
+                var key = bitcore.HDPublicKey(key.xpub).derive('m' + key.path).publicKey.toString();
+                return key;
+            },
             encryptKey: function(key, secret, address) {
                 return CryptoJS.AES.encrypt(key, secret).toString();
             },

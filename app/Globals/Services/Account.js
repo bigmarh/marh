@@ -1,11 +1,12 @@
 module.exports = function(app, Parse) {
-    app.service('Account', ['$http', 'UtilService', '$rootScope', '$q', 'WalletService', '$timeout', '$messages', function($http, util, $rootScope, $q, Wallet, $timeout, $messages) {
+    app.service('Account', ['$http', 'UtilService', '$rootScope', '$q','OrgService', 'WalletService', '$timeout', '$messages', function($http, util, $rootScope, $q,Org, Wallet, $timeout, $messages) {
         var Account = {
             current: {},
             saveNew: function(account) {
                 if (!account.signees.length) return $messages.error('Must have a least one signee');
                 if (!account.name) return $messages.error('Must have a name');
-
+                Account.success = account.success;
+                Account.error = account.error;
                 Account
                     .new()
                     .setAccess(account.admins)
@@ -40,6 +41,18 @@ module.exports = function(app, Parse) {
                 this.current.setACL(groupACL);
                 return this;
             },
+            setSignees: function(signees) {
+                var clonedSignees = JSON.parse(JSON.stringify(signees));
+                Account.current.unset('signees');
+                clonedSignees.map(function(signee) {
+                    Account.current.addUnique('signees', {
+                        "__type": "Pointer",
+                        "className": "_User",
+                        "objectId": signee.id
+                    });
+                })
+                return this;
+            },
             setPolicy: function(policyObj) {
                 var self = this;
                 var deferred = $q.defer();
@@ -70,6 +83,7 @@ module.exports = function(app, Parse) {
                 this.current.set('org', Parse.User.current().get('org'));
                 for (var i = 0; i < Object.keys(account).length; i++) {
                     var keys = Object.keys(account);
+                    if (typeof account[keys[i]] == 'function') continue;
                     if (keys[i] == "admins" || keys[i] == "policy") continue;
                     this.current.set(keys[i], account[keys[i]]);
                 }
@@ -77,7 +91,6 @@ module.exports = function(app, Parse) {
 
             },
             getKeychain: function(lastSign) {
-                console.log(lastSign);
                 var deferred = $q.defer();
                 var current = lastSign.accountObj.current;
                 var keychain = [];
@@ -87,7 +100,7 @@ module.exports = function(app, Parse) {
                         owner: signee.email,
                         type: "user",
                         xpub: signee.xpub,
-                        path:""
+                        path: ""
                     })
                     return;
                 })
@@ -99,7 +112,7 @@ module.exports = function(app, Parse) {
                         owner: lastSign.lastSign,
                         xpub: lastSign.xpubkey,
                         type: "lastSign",
-                        path:"0/0/0"
+                        path: "/0/0/0"
                     }
 
                     keychain.push(lsKeychain);
@@ -112,18 +125,18 @@ module.exports = function(app, Parse) {
                             owner: org.id,
                             type: "org",
                             xpub: org.get('xpub'),
-                            path:""
+                            path: ""
                         };
                         keychain.push(keychainObj);
                         done();
                     })
 
                 }
+
                 function done() {
                     if (keychain.length == signees.length + 2) {
                         deferred.resolve(keychain);
-                    }
-                    else{
+                    } else {
                         $messages.error("There was an issue with creating the keychain");
                     }
                 }
@@ -131,11 +144,20 @@ module.exports = function(app, Parse) {
                 addLastSign();
                 return deferred.promise;
             },
-            save: function(result) {
-                console.log("Made it to Save");
-                var address = Wallet.createMultisig(Accounts.getPublicKeys(result), type, account.requiredSignatures).toString();
+            save: function(keychain) {
+                //Add one Signature for last sign
+                Account.current.increment('requiredSignatures');
+                var address = Wallet.createMultisig(Wallet.getPublicKeys(keychain), type, Account.current.get('requiredSignatures')).toString();
+                Account.setSignees(Account.current.get('signees'));
+                Account.current.set('address', address);
+                Account.current.set('keychain', keychain);
+                Account.current.set('balance', 0);
+                Account.current.set('unconfirmedBalance', 0);
+                Account.current.save().then(function(account) {
+                    Org.addAccount(account,Account.success);
+                }, Account.error);
 
-                console.log(address);
+
             }
         }
 

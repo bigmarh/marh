@@ -530,15 +530,25 @@ module.exports = function(app, Parse) {
 
 },{}],"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./app/Backend/Controllers/dash/org/admin.js":[function(require,module,exports){
 module.exports = function(app, Parse) {
-    app.controller('adminCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', '$messages', 'getOrg',
-        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, $messages, getOrg) {
-             
+    app.controller('adminCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', '$messages',
+        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, $messages) {
+
             //reset current account
             Accounts.currentAccount = {};
             $scope.currency = currency;
-            $scope.accounts = false;
-            $scope.users =  getOrg.users;
-           
+            Org.getAccounts().then(function(accounts) {
+                $scope.accounts = accounts.map(function(account) {
+                    account.attributes.createdAt = account.createdAt
+                    return account.attributes;
+                });
+            })
+            Org.getUsers().then(function(users) {
+                $scope.users = users.map(function(user) {
+                    user.attributes.createdAt = user.createdAt
+                    return user.attributes;
+                });
+            })
+
 
             $scope.loadRequest = function(data) {
                 Util.launchLB({
@@ -548,28 +558,28 @@ module.exports = function(app, Parse) {
             }
 
             $scope.createUser = function(ev) {
-                    $mdDialog.show({
-                        controller: 'userCtrl',
-                        templateUrl: '/views/popups/dialogs/addUser.html',
-                        targetEvent: ev,
-                    });
+                $mdDialog.show({
+                    controller: 'userCtrl',
+                    templateUrl: '/views/popups/dialogs/addUser.html',
+                    targetEvent: ev,
+                });
             }
-             $scope.createAccount = function(ev) {
-                    $mdDialog.show({
-                        controller: 'userAccountCtrl as ctrl',
-                        templateUrl: '/views/popups/dialogs/addAccount.html',
-                        targetEvent: ev,
-                    });
+            $scope.createAccount = function(ev) {
+                $mdDialog.show({
+                    controller: 'userAccountCtrl as ctrl',
+                    templateUrl: '/views/popups/dialogs/addAccount.html',
+                    targetEvent: ev,
+                });
             }
-       
 
 
-            $rootScope.$on('updateCompanyAccounts', function(event, options) {
-                $scope.accounts.push(options.account);
-                $scope.$safeApply();
-            })
+
             $rootScope.$on('add_CompanyUser', function(event, options) {
                 $scope.users.push(options.user);
+                $scope.$safeApply();
+            })
+            $rootScope.$on('add_CompanyAccount', function(event, options) {
+                $scope.accounts.push(options.account);
                 $scope.$safeApply();
             })
 
@@ -718,26 +728,6 @@ module.exports = function(stateProvider, Parse, resolvers) {
         })
         .state('org.admin', {
             url: '/admin',
-            resolve: {
-                getOrg: ['OrgService', '$q', function(Org, $q) {
-                    var deferred = $q.defer();
-                    Org.getCurrent().then(function(org) {
-                        Org.getUsers().then(function(users) {
-                            users = users.map(function(user) {
-                                user.attributes.createdAt = user.createdAt
-                                return user.attributes;
-                            });
-
-                            deferred.resolve({
-                                org:org,
-                                users: users
-                            });
-                        });
-                    });
-
-                    return deferred.promise
-                }]
-            },
             views: {
                 'content@org': {
                     templateUrl: 'views/dash/content/org/admin.html',
@@ -865,19 +855,19 @@ module.exports = function(app, Parse) {
 
 },{}],"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./app/Backend/Controllers/dash/org/userAccount.js":[function(require,module,exports){
 module.exports = function(app, Parse) {
-    app.controller('userAccountCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'UserService','Account',
-        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, User,Account) {
-       
+    app.controller('userAccountCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'UserService', 'Account', '$messages',
+        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, User, Account, $messages) {
+
             $scope.admins = [];
             $scope.account = {
                 signees: [],
                 admins: {},
-                policy:{
-                    global:{
-                        "dailyLimit":1000,
-                        "transactionLimit":500
+                policy: {
+                    global: {
+                        "dailyLimit": 1000,
+                        "transactionLimit": 500
                     },
-                    user:{}
+                    user: {}
                 }
             }
             var self = this;
@@ -891,39 +881,49 @@ module.exports = function(app, Parse) {
                 return user.attributes
             })
 
-       
+
 
             /**
              * Search for contacts.
              */
-            function querySearch(query,signees) {
+            function querySearch(query, signees) {
                     var results = query ?
-                        $scope.users.filter(createFilterFor(query,signees)) : [];
+                        $scope.users.filter(createFilterFor(query, signees)) : [];
                     return results;
                 }
                 /**
                  * Create filter function for a query string
                  */
-            function createFilterFor(query,signees) {
+            function createFilterFor(query, signees) {
                 var lowercaseQuery = angular.lowercase(query);
                 return function filterFn(contact) {
-                    if(!contact.payload && signees) return false;
+                    if (!contact.payload && signees) return false;
                     return (contact.fullName.toLowerCase().indexOf(lowercaseQuery) != -1) || (contact.email.toLowerCase().indexOf(lowercaseQuery) != -1);
                 };
             }
 
-            self.getMaxSigns = function(){
+            self.getMaxSigns = function() {
                 var req = [];
-                for (var i = 0; i = $scope.account.signees.length ; i++) {
-                        req.push(i);
+                for (var i = 0; i = $scope.account.signees.length; i++) {
+                    req.push(i);
                 };
                 return req;
             }
-            $scope.checkAccount = function(){
+            $scope.checkAccount = function() {
                 return !$scope.account.signees.length || !$scope.account.name;
             }
-            $scope.save = function(){
+            $scope.save = function() {
+                $scope.account.success = $scope.successAccount;
+                $scope.account.error = $messages.error;
                 Account.saveNew($scope.account);
+            }
+            $scope.successAccount = function(account) {
+                var newAccount = account.attributes;
+                newAccount.fullObj = account;
+                $rootScope.$broadcast('add_CompanyAccount', {
+                    account: newAccount
+                })
+                $scope.hide();
             }
             $scope.hide = function() {
                 $mdDialog.hide();
@@ -3007,13 +3007,14 @@ var cssify = require('cssify');
 
 },{"../../style/angular-csp.css":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./style/angular-csp.css","../../style/animate.css":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./style/animate.css","cssify":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/cssify/browser.js"}],"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./app/Globals/Services/Account.js":[function(require,module,exports){
 module.exports = function(app, Parse) {
-    app.service('Account', ['$http', 'UtilService', '$rootScope', '$q', 'WalletService', '$timeout', '$messages', function($http, util, $rootScope, $q, Wallet, $timeout, $messages) {
+    app.service('Account', ['$http', 'UtilService', '$rootScope', '$q','OrgService', 'WalletService', '$timeout', '$messages', function($http, util, $rootScope, $q,Org, Wallet, $timeout, $messages) {
         var Account = {
             current: {},
             saveNew: function(account) {
                 if (!account.signees.length) return $messages.error('Must have a least one signee');
                 if (!account.name) return $messages.error('Must have a name');
-
+                Account.success = account.success;
+                Account.error = account.error;
                 Account
                     .new()
                     .setAccess(account.admins)
@@ -3048,6 +3049,18 @@ module.exports = function(app, Parse) {
                 this.current.setACL(groupACL);
                 return this;
             },
+            setSignees: function(signees) {
+                var clonedSignees = JSON.parse(JSON.stringify(signees));
+                Account.current.unset('signees');
+                clonedSignees.map(function(signee) {
+                    Account.current.addUnique('signees', {
+                        "__type": "Pointer",
+                        "className": "_User",
+                        "objectId": signee.id
+                    });
+                })
+                return this;
+            },
             setPolicy: function(policyObj) {
                 var self = this;
                 var deferred = $q.defer();
@@ -3078,6 +3091,7 @@ module.exports = function(app, Parse) {
                 this.current.set('org', Parse.User.current().get('org'));
                 for (var i = 0; i < Object.keys(account).length; i++) {
                     var keys = Object.keys(account);
+                    if (typeof account[keys[i]] == 'function') continue;
                     if (keys[i] == "admins" || keys[i] == "policy") continue;
                     this.current.set(keys[i], account[keys[i]]);
                 }
@@ -3085,7 +3099,6 @@ module.exports = function(app, Parse) {
 
             },
             getKeychain: function(lastSign) {
-                console.log(lastSign);
                 var deferred = $q.defer();
                 var current = lastSign.accountObj.current;
                 var keychain = [];
@@ -3095,7 +3108,7 @@ module.exports = function(app, Parse) {
                         owner: signee.email,
                         type: "user",
                         xpub: signee.xpub,
-                        path:""
+                        path: ""
                     })
                     return;
                 })
@@ -3107,7 +3120,7 @@ module.exports = function(app, Parse) {
                         owner: lastSign.lastSign,
                         xpub: lastSign.xpubkey,
                         type: "lastSign",
-                        path:"0/0/0"
+                        path: "/0/0/0"
                     }
 
                     keychain.push(lsKeychain);
@@ -3120,18 +3133,18 @@ module.exports = function(app, Parse) {
                             owner: org.id,
                             type: "org",
                             xpub: org.get('xpub'),
-                            path:""
+                            path: ""
                         };
                         keychain.push(keychainObj);
                         done();
                     })
 
                 }
+
                 function done() {
                     if (keychain.length == signees.length + 2) {
                         deferred.resolve(keychain);
-                    }
-                    else{
+                    } else {
                         $messages.error("There was an issue with creating the keychain");
                     }
                 }
@@ -3139,11 +3152,20 @@ module.exports = function(app, Parse) {
                 addLastSign();
                 return deferred.promise;
             },
-            save: function(result) {
-                console.log("Made it to Save");
-                var address = Wallet.createMultisig(Accounts.getPublicKeys(result), type, account.requiredSignatures).toString();
+            save: function(keychain) {
+                //Add one Signature for last sign
+                Account.current.increment('requiredSignatures');
+                var address = Wallet.createMultisig(Wallet.getPublicKeys(keychain), type, Account.current.get('requiredSignatures')).toString();
+                Account.setSignees(Account.current.get('signees'));
+                Account.current.set('address', address);
+                Account.current.set('keychain', keychain);
+                Account.current.set('balance', 0);
+                Account.current.set('unconfirmedBalance', 0);
+                Account.current.save().then(function(account) {
+                    Org.addAccount(account,Account.success);
+                }, Account.error);
 
-                console.log(address);
+
             }
         }
 
@@ -3926,7 +3948,6 @@ module.exports = function(app, Parse) {
 
 },{"../../config":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./app/config.js","../helpers/bitcore":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./app/Globals/helpers/bitcore.js","crypto-js":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/crypto-js/index.js","node-uuid":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/node-uuid/uuid.js"}],"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./app/Globals/Services/OrgService.js":[function(require,module,exports){
 (function (Buffer){
-
 var CryptoJS = require('crypto-js');
 var uuid = require('node-uuid');
 window.error = function(obj) {
@@ -3938,12 +3959,12 @@ window.clone = function(obj) {
 module.exports = function(app, Parse) {
 
     app.service('OrgService', ['$http', 'UtilService', '$rootScope', 'BlockCypher', 'WalletService', 'LastSign', '$q', 'AccountsService', '$messages', function($http, util, $rootScope, BlockCypher, Wallet, LastSign, $q, Accounts, $messages) {
-        
+
         var Org = {
             currentOrg: {},
-            users:[],
-            load: function(cb){
-                
+            users: [],
+            load: function(cb) {
+
                 Parse.User.current().get('org').fetch().then(function(org) {
                     $messages.log(org);
                     Org.setCurrent(org);
@@ -3967,7 +3988,7 @@ module.exports = function(app, Parse) {
                 return deferred.promise;
             },
             getUsers: function(page) {
-                
+
                 var deferred = $q.defer();
                 Org.currentOrg.relation("users").query().find({
                     success: function(users) {
@@ -3981,6 +4002,7 @@ module.exports = function(app, Parse) {
                 });
                 return deferred.promise;
             },
+
             get: function() {
                 var deferred = $q.defer();
                 var query = new Parse.Query('Organization');
@@ -4044,15 +4066,26 @@ module.exports = function(app, Parse) {
             },
             getAccounts: function(loadOrg) {
                 var deferred = $q.defer();
-
-                var query = new Parse.Query('OrgAccounts');
-
-                query.find().then(function(accounts) {
-                    deferred.resolve(accounts);
-                })
+                Org.currentOrg.relation("accounts").query().find({
+                    success: function(accounts) {
+                        Org.accounts = accounts;
+                        deferred.resolve(accounts);
+                    },
+                    error: function(error) {
+                        alert("Error: " + error.code + " " + error.message);
+                        deferred.reject(error);
+                    }
+                });
                 return deferred.promise;
             },
-            addAccount: function(users, cb, cbErr) {
+            addAccount: function(account, cb, cbErr) {
+                var orgQuery = new Parse.Query("Organization");
+                orgQuery.equalTo('objectId', Parse.User.current().get('org').id);
+                orgQuery.first().then(function(org) {
+                    var relation = org.relation('accounts');
+                    relation.add(account);
+                    org.save().then(cb);
+                });
 
             },
             addRoles: function(orgObj, user, cb) {
@@ -4090,7 +4123,7 @@ module.exports = function(app, Parse) {
                     $messages.log(err);
                 })
             },
-    
+
             setPayload: function(org, password, cb) {
 
                 var orgName = org.get('domain').replace(/\./g, '_');
@@ -4118,7 +4151,7 @@ module.exports = function(app, Parse) {
                 payload.set('content', encKey);
                 payload.set('type', 'org')
                 payload.set('identifier', org.id);
-                payload.set('xpub',HD.derive("m/0'").xpubkey);
+                payload.set('xpub', HD.derive("m/0'").xpubkey);
                 payload.set('secret', bitcore.crypto.Hash.sha256(new Buffer(sharedKey)).toString('hex'));
                 payload.set('passWordEncKey', passWordEncKey);
                 var cardNumber = $rootScope.cardNumber = util.makeId(7, 'digits');
@@ -4875,6 +4908,17 @@ module.exports = function(app, Parse) {
                 M = num || 2;
                 network = network || type;
                 return bitcore.Address.createMultisig(pubkeys, M, network);
+            },
+             getPublicKeys: function(keychain) {
+                var keys = [];
+                for (i in keychain) {
+                    keys.push(Wallet.getPublicKey(keychain[i]));
+                }
+                return keys;
+            },
+            getPublicKey: function(key) {
+                var key = bitcore.HDPublicKey(key.xpub).derive('m' + key.path).publicKey.toString();
+                return key;
             },
             encryptKey: function(key, secret, address) {
                 return CryptoJS.AES.encrypt(key, secret).toString();
@@ -37005,7 +37049,7 @@ UChar.udata={
 }(this));
 
 },{}],"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/bip39/wordlists/en.json":[function(require,module,exports){
-module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=[
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=[
   "abandon",
   "ability",
   "able",
@@ -53957,7 +54001,7 @@ if (typeof window === 'object') {
 }
 
 },{}],"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/bitcore/node_modules/elliptic/package.json":[function(require,module,exports){
-module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
   "name": "elliptic",
   "version": "0.16.0",
   "description": "EC cryptography",
@@ -62297,7 +62341,7 @@ module.exports.WordArray = X64WordArray
 
 
 },{"./word-array":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/bitcore/node_modules/sha512/lib/word-array.js"}],"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/bitcore/package.json":[function(require,module,exports){
-module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
   "name": "bitcore",
   "version": "0.9.3",
   "description": "A pure and powerful JavaScript Bitcoin library.",
@@ -84070,7 +84114,7 @@ module.exports = function evp(password, salt, keyLen) {
 };
 }).call(this,require("buffer").Buffer)
 },{"buffer":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/watchify/node_modules/browserify/node_modules/buffer/index.js","create-hash":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/watchify/node_modules/browserify/node_modules/crypto-browserify/node_modules/create-hash/browser.js"}],"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/watchify/node_modules/browserify/node_modules/crypto-browserify/node_modules/browserify-sign/node_modules/parse-asn1/aesid.json":[function(require,module,exports){
-module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={"2.16.840.1.101.3.4.1.1": "aes-128-ecb",
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={"2.16.840.1.101.3.4.1.1": "aes-128-ecb",
 "2.16.840.1.101.3.4.1.2": "aes-128-cbc",
 "2.16.840.1.101.3.4.1.3": "aes-128-ofb",
 "2.16.840.1.101.3.4.1.4": "aes-128-cfb",
@@ -86718,7 +86762,7 @@ function findPrime(bits, gen) {
 
 }
 },{"bn.js":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/watchify/node_modules/browserify/node_modules/crypto-browserify/node_modules/diffie-hellman/node_modules/bn.js/lib/bn.js","miller-rabin":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/watchify/node_modules/browserify/node_modules/crypto-browserify/node_modules/diffie-hellman/node_modules/miller-rabin/lib/mr.js","randombytes":"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/watchify/node_modules/browserify/node_modules/crypto-browserify/node_modules/randombytes/browser.js"}],"/Users/lamarwilson/LoveWillApps/Seedlings/simplesend./node_modules/watchify/node_modules/browserify/node_modules/crypto-browserify/node_modules/diffie-hellman/lib/primes.json":[function(require,module,exports){
-module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
     "modp1": {
         "gen": "02",
         "prime": "ffffffffffffffffc90fdaa22168c234c4c6628b80dc1cd129024e088a67cc74020bbea63b139b22514a08798e3404ddef9519b3cd3a431b302b0a6df25f14374fe1356d6d51c245e485b576625e7ec6f44c42e9a63a3620ffffffffffffffff"
