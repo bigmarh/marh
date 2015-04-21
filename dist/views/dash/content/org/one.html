@@ -1,15 +1,21 @@
-<div class="colSubNav">
-    <div class="subNav">
-        <div flex ng-include="'../views/dash/content/account/partials/orgNav.html'" scope="" onload=""></div>
-    </div>
-</div>
-<div class="colTitle caps">
-    <h2 class="flexCon mar0">{{account.name}} <br><small>{{account.type}}</small></h2>
-</div>
-<div class="colBalance bg-primaryLight">
-    <div flex ng-include="'../views/dash/content/account/partials/creditLine.html'" scope="" onload=""></div>
-</div>
-<div class="colTransactions">
-    <div flex ng-include="'../views/dash/content/account/partials/one-transactions.html'" scope="" onload=""></div>
-    <!-- transactions -->
+
+<div class="centerCard">
+    <md-content class="md-padding">
+        <div layout="row" layout-align="space-between">
+            <h2 class="caps">{{account.name}}
+                <small>{{account.type}}</small>
+            </h2>
+            <div ng-include="'../views/dash/content/account/partials/orgNav.html'" scope="" onload=""></div>
+        </div>
+        <md-divider style="margin-bottom:16px;"></md-divider>
+        <div class="colBalance bg-primaryLight">
+            <div flex ng-include="'../views/dash/content/account/partials/creditLine.html'" scope="" onload=""></div>
+        </div>
+        <md-divider style="margin-bottom:32px; margin-top:16px;"></md-divider>
+        <div class="colTransactions">
+            <div flex ng-include="'../views/dash/content/account/partials/one-transactions.html'" scope="" onload=""></div>
+            <!-- transactions -->
+        </div>
+    </md-content>
+
 </div>

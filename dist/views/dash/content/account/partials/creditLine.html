@@ -1,15 +1,11 @@
 <div layout="row" layout-align="space-between" flex>
-<div class="moneyBalance">
-    <span class="text-big">{{account.balance | balance | number:2}}</span>
-    <br>
-    <small>Credit Balance</small>
-</div>
-<div>
-	<div>
-    <a href="" class="btn btnAqua" ng-click="loadSend(account)">Send</a>
-    <a href="" class="btn btn-primary" ng-click="loadRequest(account)">Request</a>
-</div>
-    <a href="" class="btn btn-primary btn-lg" ng-click="loadCredit(account)">Get More Credits</a>
-</div>
-</div>
 
+    <div class="moneyBalance">
+        <span class="text-big">${{account.balance | balance | number:2}}</span>
+        <br>
+        <small>Current Account Balance</small>
+    </div>
+    <div>
+        <md-button class="md-primary" href="" ng-click="loadCredit(account)">Get More Credits</md-button>
+    </div>
+</div>

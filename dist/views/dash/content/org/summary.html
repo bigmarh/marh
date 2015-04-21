@@ -1,14 +1,13 @@
-
 <div class="centerCard">
     <md-content class="md-padding">
         <div ng-if="!accounts.length && checked">
             You have no organization accounts. Talk to your company administrator
         </div>
-       <div ng-if="accounts.length">
+        <div ng-if="accounts.length">
             <div>
-                <div class="subNav" layout="row">
-                    <h2 flex>Summary</h2>
-                    <div  layout="row" layout-align="end center" ng-include="'../views/dash/content/account/partials/orgNav.html'" scope="" onload="" flex></div>
+                <div class="subNav" layout="row" layout-align="space-between">
+                    <h2>Summary</h2>
+                    <div layout="row" layout-align="end center" ng-include="'../views/dash/content/account/partials/orgNav.html'" scope="" onload="" flex></div>
                 </div>
             </div>
             <md-divider style="margin-bottom:32px;"></md-divider>
