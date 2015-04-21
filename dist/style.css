@@ -2443,6 +2443,12 @@ a.listGroupItem {
 .pad8 {
   padding: 8px;
 }
+.signeesTotal {
+  padding-top: 6px;
+  display: inline-block;
+  vertical-align: bottom;
+  padding-bottom: 26px;
+}
 .colContent {
   position: relative;
 }

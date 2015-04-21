@@ -724,6 +724,7 @@ module.exports = function(stateProvider, Parse, resolvers) {
                     Org.getCurrent().then(function(org) {
                         Org.getUsers().then(function(users) {
                             users = users.map(function(user) {
+                                user.attributes.createdAt = user.createdAt
                                 return user.attributes;
                             });
 
@@ -866,22 +867,63 @@ module.exports = function(app, Parse) {
 module.exports = function(app, Parse) {
     app.controller('userAccountCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'UserService',
         function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, User) {
+            if (!Accounts.currentAccount)
+                $scope.account = Parse.Object.extend('Account');
+            $scope.account = {
+                signees: [],
+                admins: [],
+                policy:{
+                    global:{
+                        "dailyLimit":1000,"transactionLimit":500
+                    },
+                    users:{}
+                }
+            }
+            var self = this;
+            self.querySearch = querySearch;
 
-            $scope.selectedUsers = [];
-            $scope.selectedAdmins = [];
             $scope.users = Org.users.map(function(user) {
-                user.attributes.value = user;
-                user.attributes.display = user.attributes.fullName;
+                user.attributes.id = user.id;
+                user.attributes.fullObj = user;
                 user.attributes.subtitle = Org.currentOrg.get('domain');
                 user.attributes.thumbnailUrl = (user.image && user.image.url) || "https://i2.wp.com/i.vimeocdn.com/portrait/default-blue_300x300.png";
                 return user.attributes
             })
 
-            $scope.selectedItemChange = function(user){
-                console.log(user);
-                $scope.selectedAdmins.push(user);
+       
+
+            /**
+             * Search for contacts.
+             */
+            function querySearch(query) {
+                    var results = query ?
+                        $scope.users.filter(createFilterFor(query)) : [];
+                    return results;
+                }
+                /**
+                 * Create filter function for a query string
+                 */
+            function createFilterFor(query) {
+                var lowercaseQuery = angular.lowercase(query);
+                return function filterFn(contact) {
+                    return (contact.fullName.toLowerCase().indexOf(lowercaseQuery) != -1) || (contact.email.toLowerCase().indexOf(lowercaseQuery) != -1);
+                };
             }
 
+            self.getMaxSigns = function(){
+                var req = [];
+                for (var i = 0; i = $scope.account.signees.length ; i++) {
+                        req.push(i);
+                };
+                return req;
+            }
+            $scope.checkAccount = function(){
+                return !$scope.account.signees.length || !$scope.account.name;
+            }
+            $scope.save = function(){
+                console.log($scope.account);
+                $scope.hide();
+            }
             $scope.hide = function() {
                 $mdDialog.hide();
             };
@@ -25794,7 +25836,7 @@ function() {
                 restrict: "E",
                 replace: !0,
                 transclude: !0,
-                template: '<h2 class="md-subheader"><div class="md-subheader-inner"><span class="md-subheader-content"></span></div></h2>',
+                template: '<h2 class="md-subheader"><div class=""><span class="md-subheader-content"></span></div></h2>',
                 compile: function(a, o, r) {
                     var i = a[0].outerHTML;
                     return function(a, o, l) {
@@ -26407,7 +26449,7 @@ function() {
                     menuClass: "@?mdMenuClass"
                 },
                 template: function(e, t) {
-                    return t.$mdAutocompleteTemplate = e.html(), '          <md-autocomplete-wrap role="listbox">            <md-input-container ng-if="floatingLabel">              <label>{{floatingLabel}}</label>              <input type="text"                  id="fl-input-{{$mdAutocompleteCtrl.id}}"                  name="{{name}}"                  autocomplete="off"                  ng-disabled="isDisabled"                  ng-model="$mdAutocompleteCtrl.scope.searchText"                  ng-keydown="$mdAutocompleteCtrl.keydown($event)"                  ng-blur="$mdAutocompleteCtrl.blur()"                  ng-focus="$mdAutocompleteCtrl.focus()"                  aria-owns="ul-{{$mdAutocompleteCtrl.id}}"                  aria-label="{{floatingLabel}}"                  aria-autocomplete="list"                  aria-haspopup="true"                  aria-activedescendant=""                  aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>                            </md-input-container>            <input type="text"                id="input-{{$mdAutocompleteCtrl.id}}"                name="{{name}}"                ng-if="!floatingLabel"                autocomplete="off"                ng-disabled="isDisabled"                ng-model="$mdAutocompleteCtrl.scope.searchText"                ng-keydown="$mdAutocompleteCtrl.keydown($event)"                ng-blur="$mdAutocompleteCtrl.blur()"                ng-focus="$mdAutocompleteCtrl.focus()"                placeholder="{{placeholder}}"                aria-owns="ul-{{$mdAutocompleteCtrl.id}}"                aria-label="{{placeholder}}"                aria-autocomplete="list"                aria-haspopup="true"                aria-activedescendant=""                aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>            <button                type="button"                tabindex="-1"                ng-if="$mdAutocompleteCtrl.scope.searchText && !isDisabled"                ng-click="$mdAutocompleteCtrl.clear()">              <md-icon md-svg-icon="cancel"></md-icon>              <span class="md-visually-hidden">Clear</span>            </button>            <md-progress-linear                ng-if="$mdAutocompleteCtrl.loading"                md-mode="indeterminate"></md-progress-linear>            <ul role="presentation"                class="md-autocomplete-suggestions {{menuClass || \'\'}}"                id="ul-{{$mdAutocompleteCtrl.id}}"                ng-mouseenter="$mdAutocompleteCtrl.listEnter()"                ng-mouseleave="$mdAutocompleteCtrl.listLeave()"                ng-mouseup="$mdAutocompleteCtrl.mouseUp()">              <li ng-repeat="(index, item) in $mdAutocompleteCtrl.matches"                  ng-class="{ selected: index === $mdAutocompleteCtrl.index }"                  ng-hide="$mdAutocompleteCtrl.hidden"                  ng-click="$mdAutocompleteCtrl.select(index)"                  md-autocomplete-list-item-template="contents"                  md-autocomplete-list-item="$mdAutocompleteCtrl.itemName">              </li>            </ul>          </md-autocomplete-wrap>          <aria-status              class="md-visually-hidden"              role="status"              aria-live="assertive">            <p ng-repeat="message in $mdAutocompleteCtrl.messages">{{message.display}}</p>          </aria-status>'
+                    return t.$mdAutocompleteTemplate = e.html(), '          <md-autocomplete-wrap role="listbox">            <md-input-container ng-if="floatingLabel">              <label>{{floatingLabel}}</label>              <input type="text"                  id="fl-input-{{$mdAutocompleteCtrl.id}}"                  name="{{name}}"                  autocomplete="off"                  ng-disabled="isDisabled"                  ng-model="$mdAutocompleteCtrl.scope.searchText"                  ng-keydown="$mdAutocompleteCtrl.keydown($event)"                  ng-blur="$mdAutocompleteCtrl.blur()"                  ng-focus="$mdAutocompleteCtrl.focus()"                  aria-owns="ul-{{$mdAutocompleteCtrl.id}}"                  aria-label="{{floatingLabel}}"                  aria-autocomplete="list"                  aria-haspopup="true"                  aria-activedescendant=""                  aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>                            </md-input-container>            <input type="text"                id="input-{{$mdAutocompleteCtrl.id}}"                name="fake_{{name}}"                ng-if="!floatingLabel"                autocomplete="off"                ng-disabled="isDisabled"                ng-model="$mdAutocompleteCtrl.scope.searchText"                ng-keydown="$mdAutocompleteCtrl.keydown($event)"                ng-blur="$mdAutocompleteCtrl.blur()"                ng-focus="$mdAutocompleteCtrl.focus()"                placeholder="{{placeholder}}"                aria-owns="ul-{{$mdAutocompleteCtrl.id}}"                aria-label="{{placeholder}}"                aria-autocomplete="list"                aria-haspopup="true"                aria-activedescendant=""                aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>            <button                type="button"                tabindex="-1"                ng-if="$mdAutocompleteCtrl.scope.searchText && !isDisabled"                ng-click="$mdAutocompleteCtrl.clear()">              <md-icon md-svg-icon="cancel"></md-icon>              <span class="md-visually-hidden">Clear</span>            </button>            <md-progress-linear                ng-if="$mdAutocompleteCtrl.loading"                md-mode="indeterminate"></md-progress-linear>            <ul role="presentation"                class="md-autocomplete-suggestions {{menuClass || \'\'}}"                id="ul-{{$mdAutocompleteCtrl.id}}"                ng-mouseenter="$mdAutocompleteCtrl.listEnter()"                ng-mouseleave="$mdAutocompleteCtrl.listLeave()"                ng-mouseup="$mdAutocompleteCtrl.mouseUp()">              <li ng-repeat="(index, item) in $mdAutocompleteCtrl.matches"                  ng-class="{ selected: index === $mdAutocompleteCtrl.index }"                  ng-hide="$mdAutocompleteCtrl.hidden"                  ng-click="$mdAutocompleteCtrl.select(index)"                  md-autocomplete-list-item-template="contents"                  md-autocomplete-list-item="$mdAutocompleteCtrl.itemName">              </li>            </ul>          </md-autocomplete-wrap>          <aria-status              class="md-visually-hidden"              role="status"              aria-live="assertive">            <p ng-repeat="message in $mdAutocompleteCtrl.messages">{{message.display}}</p>          </aria-status>'
                 }
             }
         }
@@ -26545,7 +26587,7 @@ function() {
             var t = this.getChipBuffer();
             switch (e.keyCode) {
                 case this.$mdConstant.KEY_CODE.ENTER:
-                    if (this.$scope.requireMatch || !t) break;
+                    if (this.$scope.requireMatch  || this.requireMatch|| !t) break;
                     e.preventDefault(), this.appendChip(t), this.resetChipBuffer();
                     break;
                 case this.$mdConstant.KEY_CODE.BACKSPACE:
@@ -26584,6 +26626,11 @@ function() {
             var t = this.items.length - 1;
             return 0 == t ? -1 : e == t ? e - 1 : e
         }, e.prototype.appendChip = function(e) {
+            if(typeof e == 'string') e = {
+                email:e,
+                fullName:e,
+                thumbnailUrl:"https://i2.wp.com/i.vimeocdn.com/portrait/default-blue_300x300.png"
+            };
             this.items.indexOf(e) + 1 || (this.useMdOnAppend && this.mdOnAppend && (e = this.mdOnAppend({
                 $chip: e
             })), this.items.push(e))
@@ -26749,7 +26796,7 @@ function() {
             }
         }
         angular.module("material.components.chips").directive("mdContactChips", e);
-        var t = '<md-chips class="md-contact-chips"    ng-model="$mdContactChipsCtrl.contacts"          md-require-match="$mdContactChipsCtrl.requireMatch"          md-autocomplete-snap>          <md-autocomplete              md-menu-class="md-contact-chips-suggestions"              md-selected-item="$mdContactChipsCtrl.selectedItem"              md-search-text="$mdContactChipsCtrl.searchText"              md-items="item in $mdContactChipsCtrl.queryContact($mdContactChipsCtrl.searchText)" md-item-text="$mdContactChipsCtrl.mdContactName" md-no-cache="$mdContactChipsCtrl.filterSelected"              md-autoselect              placeholder="{{$mdContactChipsCtrl.contacts.length == 0 ?                  $mdContactChipsCtrl.placeholder : $mdContactChipsCtrl.secondaryPlaceholder}}">            <div class="md-contact-suggestion">              <img                   ng-src="{{item[$mdContactChipsCtrl.contactImage]}}"                  alt="{{item[$mdContactChipsCtrl.contactName]}}" />              <span class="md-contact-name" md-highlight-text="$mdContactChipsCtrl.searchText">                {{item[$mdContactChipsCtrl.contactName]}}              </span>              <span class="md-contact-email" >{{item[$mdContactChipsCtrl.contactEmail]}}</span>            </div>          </md-autocomplete>          <md-chip-template>            <div class="md-contact-avatar">              <img                   ng-src="{{$chip[$mdContactChipsCtrl.contactImage]}}"                  alt="{{$chip[$mdContactChipsCtrl.contactName]}}" />            </div>            <div class="md-contact-name">              {{$chip[$mdContactChipsCtrl.contactName]}}            </div>          </md-chip-template>      </md-chips>';
+        var t = '<md-chips class="md-contact-chips"    ng-model="$mdContactChipsCtrl.contacts"          md-require-match="$mdContactChipsCtrl.requireMatch"          md-autocomplete-snap>          <md-autocomplete              md-menu-class="md-contact-chips-suggestions"              md-selected-item="$mdContactChipsCtrl.selectedItem"              md-search-text="$mdContactChipsCtrl.searchText"              md-items="item in $mdContactChipsCtrl.queryContact($mdContactChipsCtrl.searchText)" md-item-text="$mdContactChipsCtrl.mdContactName" md-no-cache="$mdContactChipsCtrl.filterSelected"              md-autoselect              placeholder="{{$mdContactChipsCtrl.contacts.length == 0 ?                  $mdContactChipsCtrl.placeholder : $mdContactChipsCtrl.secondaryPlaceholder}}">            <div class="md-contact-suggestion">              <img                   ng-src="{{item[$mdContactChipsCtrl.contactImage]}}"                  alt="{{item[$mdContactChipsCtrl.contactName]}}" />              <span class="md-contact-name" md-highlight-text="$mdContactChipsCtrl.searchText">                {{item[$mdContactChipsCtrl.contactName]}}              </span>              <span class="md-contact-email" >{{item[$mdContactChipsCtrl.contactEmail]}}</span>            </div>          </md-autocomplete>          <md-chip-template>            <div class="md-contact-avatar">              <img                   ng-src="{{$chip[$mdContactChipsCtrl.contactImage]}}"                  alt="{{$chip[$mdContactChipsCtrl.contactName]}}" />            </div>            <div class="md-contact-name">{{$chip[$mdContactChipsCtrl.contactName]}}</div></md-chip-template></md-chips>';
 
         e.$inject = ["$mdTheming"]
     }(),
@@ -26845,7 +26892,8 @@ function() {
                     active: "=?mdActive",
                     disabled: "=?ngDisabled",
                     select: "&?mdOnSelect",
-                    deselect: "&?mdOnDeselect"
+                    deselect: "&?mdOnDeselect",
+                    attention:"&?needsAttention"
                 },
                 link: e
             }
@@ -27128,7 +27176,7 @@ function() {
                     stretchTabs: "@?mdStretchTabs"
                 },
                 transclude: !0,
-                template: '        <md-tabs-wrapper ng-class="{ \'md-stretch-tabs\': $mdTabsCtrl.shouldStretchTabs() }">          <md-tab-data ng-transclude></md-tab-data>          <md-prev-button              tabindex="-1"              role="button"              aria-label="Previous Page"              aria-disabled="{{!$mdTabsCtrl.canPageBack()}}"              ng-class="{ \'md-disabled\': !$mdTabsCtrl.canPageBack() }"              ng-if="$mdTabsCtrl.shouldPaginate()"              ng-click="$mdTabsCtrl.previousPage()">            <md-icon md-svg-icon="tabs-arrow"></md-icon>          </md-prev-button>          <md-next-button              tabindex="-1"              role="button"              aria-label="Next Page"              aria-disabled="{{!$mdTabsCtrl.canPageForward()}}"              ng-class="{ \'md-disabled\': !$mdTabsCtrl.canPageForward() }"              ng-if="$mdTabsCtrl.shouldPaginate()"              ng-click="$mdTabsCtrl.nextPage()">            <md-icon md-svg-icon="tabs-arrow"></md-icon>          </md-next-button>          <md-tabs-canvas              tabindex="0"              aria-activedescendant="tab-item-{{$mdTabsCtrl.tabs[$mdTabsCtrl.focusIndex].id}}"              ng-focus="$mdTabsCtrl.redirectFocus()"              ng-class="{ \'md-paginated\': $mdTabsCtrl.shouldPaginate() }"              ng-keydown="$mdTabsCtrl.keydown($event)"              role="tablist">            <md-pagination-wrapper                ng-class="{ \'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs() }"                md-tab-scroll="$mdTabsCtrl.scroll($event)">              <md-tab-item                  tabindex="-1"                  class="md-tab"                  style="max-width: {{ tabWidth ? tabWidth + \'px\' : \'none\' }}"                  ng-repeat="tab in $mdTabsCtrl.tabs"                  role="tab"                  aria-controls="tab-content-{{tab.id}}"                  aria-selected="{{tab.isActive()}}"                  aria-disabled="{{tab.scope.disabled || \'false\'}}"                  ng-click="$mdTabsCtrl.select(tab.getIndex())"                  ng-class="{                      \'md-active\':    tab.isActive(),                      \'md-focused\':   tab.hasFocus(),                      \'md-disabled\':  tab.scope.disabled                  }"                  ng-disabled="tab.scope.disabled"                  md-swipe-left="$mdTabsCtrl.nextPage()"                  md-swipe-right="$mdTabsCtrl.previousPage()"                  md-label-template="tab.label"></md-tab-item>              <md-ink-bar ng-hide="noInkBar"></md-ink-bar>            </md-pagination-wrapper>            <div class="md-visually-hidden md-dummy-wrapper">              <md-dummy-tab                  tabindex="-1"                  id="tab-item-{{tab.id}}"                  role="tab"                  aria-controls="tab-content-{{tab.id}}"                  aria-selected="{{tab.isActive()}}"                  aria-disabled="{{tab.scope.disabled || \'false\'}}"                  ng-focus="$mdTabsCtrl.hasFocus = true"                  ng-blur="$mdTabsCtrl.hasFocus = false"                  ng-repeat="tab in $mdTabsCtrl.tabs"                  md-label-template="tab.label"></md-dummy-tab>            </div>          </md-tabs-canvas>        </md-tabs-wrapper>        <md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent">          <md-tab-content              id="tab-content-{{tab.id}}"              role="tabpanel"              aria-labelledby="tab-item-{{tab.id}}"              md-tab-data="tab"              md-swipe-left="$mdTabsCtrl.incrementSelectedIndex(1)"              md-swipe-right="$mdTabsCtrl.incrementSelectedIndex(-1)"              ng-if="$mdTabsCtrl.hasContent"              ng-repeat="(index, tab) in $mdTabsCtrl.tabs"               ng-class="{                \'md-no-transition\': $mdTabsCtrl.lastSelectedIndex == null,                \'md-active\':        tab.isActive(),                \'md-left\':          tab.isLeft(),                \'md-right\':         tab.isRight(),                \'md-no-scroll\':     dynamicHeight              }"></md-tab-content>        </md-tabs-content-wrapper>      ',
+                template: '<md-tabs-wrapper ng-class="{ \'md-stretch-tabs\': $mdTabsCtrl.shouldStretchTabs() }">          <md-tab-data ng-transclude></md-tab-data>          <md-prev-button              tabindex="-1"              role="button"              aria-label="Previous Page"              aria-disabled="{{!$mdTabsCtrl.canPageBack()}}"              ng-class="{ \'md-disabled\': !$mdTabsCtrl.canPageBack() }"              ng-if="$mdTabsCtrl.shouldPaginate()"              ng-click="$mdTabsCtrl.previousPage()">            <md-icon md-svg-icon="tabs-arrow"></md-icon>          </md-prev-button>          <md-next-button              tabindex="-1"              role="button"              aria-label="Next Page"              aria-disabled="{{!$mdTabsCtrl.canPageForward()}}"              ng-class="{ \'md-disabled\': !$mdTabsCtrl.canPageForward() }"              ng-if="$mdTabsCtrl.shouldPaginate()"              ng-click="$mdTabsCtrl.nextPage()">            <md-icon md-svg-icon="tabs-arrow"></md-icon>          </md-next-button>          <md-tabs-canvas              tabindex="0"              aria-activedescendant="tab-item-{{$mdTabsCtrl.tabs[$mdTabsCtrl.focusIndex].id}}"              ng-focus="$mdTabsCtrl.redirectFocus()"              ng-class="{ \'md-paginated\': $mdTabsCtrl.shouldPaginate() }"              ng-keydown="$mdTabsCtrl.keydown($event)"              role="tablist">            <md-pagination-wrapper                ng-class="{ \'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs() }"                md-tab-scroll="$mdTabsCtrl.scroll($event)">              <md-tab-item                  tabindex="-1"                  class="md-tab"                  style="max-width: {{ tabWidth ? tabWidth + \'px\' : \'none\' }}"                  ng-repeat="tab in $mdTabsCtrl.tabs"                  role="tab"                  aria-controls="tab-content-{{tab.id}}"                  aria-selected="{{tab.isActive()}}"                  aria-disabled="{{tab.scope.disabled || \'false\'}}"                  ng-click="$mdTabsCtrl.select(tab.getIndex())"                  ng-class="{                      \'md-active\':    tab.isActive(),                      \'md-focused\':   tab.hasFocus(),                      \'md-disabled\':  tab.scope.disabled                  }"                  ng-disabled="tab.scope.disabled"                  md-swipe-left="$mdTabsCtrl.nextPage()"                  md-swipe-right="$mdTabsCtrl.previousPage()"                  md-label-template="tab.label"></md-tab-item>              <md-ink-bar ng-hide="noInkBar"></md-ink-bar>            </md-pagination-wrapper>            <div class="md-visually-hidden md-dummy-wrapper">              <md-dummy-tab                  tabindex="-1"                  id="tab-item-{{tab.id}}"                  role="tab"                  aria-controls="tab-content-{{tab.id}}"                  aria-selected="{{tab.isActive()}}"                  aria-disabled="{{tab.scope.disabled || \'false\'}}"                  ng-focus="$mdTabsCtrl.hasFocus = true"                  ng-blur="$mdTabsCtrl.hasFocus = false"                  ng-repeat="tab in $mdTabsCtrl.tabs"                  md-label-template="tab.label"></md-dummy-tab>            </div>          </md-tabs-canvas>        </md-tabs-wrapper>        <md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent">          <md-tab-content              id="tab-content-{{tab.id}}"              role="tabpanel"              aria-labelledby="tab-item-{{tab.id}}"              md-tab-data="tab"              md-swipe-left="$mdTabsCtrl.incrementSelectedIndex(1)"              md-swipe-right="$mdTabsCtrl.incrementSelectedIndex(-1)"              ng-if="$mdTabsCtrl.hasContent"              ng-repeat="(index, tab) in $mdTabsCtrl.tabs"               ng-class="{                \'md-no-transition\': $mdTabsCtrl.lastSelectedIndex == null,                \'md-active\':        tab.isActive(),                \'md-left\':          tab.isLeft(),                \'md-right\':         tab.isRight(),                \'md-no-scroll\':     dynamicHeight              }"></md-tab-content>        </md-tabs-content-wrapper>      ',
                 controller: "MdTabsController",
                 controllerAs: "$mdTabsCtrl",
                 link: function(t, n, a) {

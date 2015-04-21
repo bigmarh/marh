@@ -1,19 +1,20 @@
 <div class="centerCard">
     <md-content class="md-padding">
-        <div layout-align="row">
-            <h1>Inbox</h1>
+        <div layout="row">
+            <h2 flex>Inbox</h2>
+            <div layout="row" layout-align="end center">
+                <i class="mdfi_content_archive"></i> <a href="" style="margin-right:16px"> Archives</a> <br>
+              <!--  <strong>Categories:</strong>
+                <a flex ng-click="search.type = ''" title="All"> All </a>
+                <a flex ng-click="search.type = 'm'" title="Message"> Message </a>
+                <a flex ng-click="search.type = 'i'" title="Invoice"> Invoice </a>
+                <a flex ng-click="search.type = 's'" title="Signature" style="margin-right:16px"> Multi-Sign </a>-->
+
+                    <strong >Compose:</strong> <a href="" ng-click="loadCompose()"> Message</a> <!-- <a href="" ng-click="loadInvoice()">Invoice</a>-->
+            </div>
         </div>
         <div class="colSubNav" style="margin-bottom:32px;">
-            <div flex class="pad8">
-                <i class="mdfi_content_archive"></i> <a href="" style="margin-right:32px"> Archives</a>
-                <strong>Categories:</strong>
-                <a flex class="text-center pad8 cursorP" ng-click="search.type = ''" title="All"> All </a>
-                <a flex class="text-center pad8 cursorP" ng-click="search.type = 'm'" title="Message"> Message </a>
-                <a flex class="text-center pad8 cursorP" ng-click="search.type = 'i'" title="Invoice"> Invoice </a>
-                <a flex class="text-center pad8 cursorP" ng-click="search.type = 's'" title="Signature" style="margin-right:32px"> Multi-Sign </a>
-
-                    <strong >Compose:</strong> <a href="" ng-click="loadCompose()"> Message</a>  <a href="" ng-click="loadInvoice()">Invoice</a>
-            </div>
+            
         </div>
 
 
@@ -36,7 +37,6 @@
                                         <span style="overflow:hidden; height:18px; padding-left:8px;" flex>Subject {{message.id}}  from someone who needs to get money signed</span>
 
                                     </div>
-                                    
                                 </md-item-content>
                                 <md-divider></md-divider>
                             </md-item>
@@ -48,14 +48,10 @@
                                         <span>
                                             <strong>David@pheeva.com</strong>
                                         </span>
-                                        <span style="overflow:hidden; height:18px; padding-left:8px;" flex>Subject {{message.id}}  from someone who needs to get money signed</span>
-
+                                        <span style="overflow:hidden; height:18px; padding-left:8px;" flex>Subject {{message.id}}  from someone who needs to get money signed</span><span style="padding-left:8px;">Feb 12, 2015</span>
                                     </div>
-
                                 </md-item-content>
                                 <md-divider></md-divider>
-                                
-
                             </md-item>
                             <md-item ng-repeat="message in value | filter:search.type" class="bg-white pad8" ui-sref-active="active" style="margin-bottom:2px; margin-right: 16px;">
                                 <md-item-content layout="row">
@@ -68,16 +64,13 @@
                                         <span style="overflow:hidden; height:18px; padding-left:8px;" flex>Subject {{message.id}}from someone who needs to get money signed
                                             <span style="padding-left:8px;">Feb 12, 2015</span>
                                         </span>
-
                                     </div>
-                                    
                                 </md-item-content>
                                 <md-divider></md-divider>
                             </md-item>
                         </md-list>
                     </section>
                 </md-content>
-
             </div>
             <div style="overflow:hidden; height:600px; overflow-y:scroll;" flex="{{$root.showMessage}}">
                 <div ui-view="message" class=""></div>

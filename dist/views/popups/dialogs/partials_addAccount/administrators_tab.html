@@ -1,0 +1,24 @@
+   <md-content class=" pad8" flex layout="column">
+                <div flex="20">
+                    <md-contact-chips class="ContactChips" ng-model="account.admins" md-contacts="ctrl.querySearch($query)" md-contact-name="fullName" md-contact-image="thumbnailUrl" md-contact-email="email" filter-selected="true" md-require-match="true" placeholder="Enter names or email address">
+                    </md-contact-chips>
+                </div>
+                <div flex style="max-height: 359px;overflow: scroll;">
+                    <md-list>
+                        <md-list-item ng-repeat="user in account.admins" layout="row">
+                            <div flex="10" style="min-width:52px">
+                                <img ng-src="{{user.thumbnailUrl || 'https://i2.wp.com/i.vimeocdn.com/portrait/default-blue_300x300.png' }}" class="md-avatar" width="50px" alt="">
+                            </div>
+                            <p flex="75"> {{ user.fullName }} </p>
+                            <div flex>
+                                <div>
+                                    <select placeholder="Pick" ng-init="user.access = 'edit'" ng-model="user.access">
+                                        <option value="edit">Can Edit</option>
+                                        <option value="view">Can View</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </div>
+            </md-content>

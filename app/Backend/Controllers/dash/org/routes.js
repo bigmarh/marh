@@ -30,6 +30,7 @@ module.exports = function(stateProvider, Parse, resolvers) {
                     Org.getCurrent().then(function(org) {
                         Org.getUsers().then(function(users) {
                             users = users.map(function(user) {
+                                user.attributes.createdAt = user.createdAt
                                 return user.attributes;
                             });
 
