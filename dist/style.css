@@ -11958,6 +11958,10 @@ ul.methods > li:first-child > *:first-child {
   margin: 0px;
   padding: 0px;
 }*/
+.highLight:hover {
+  background: rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
 md-toolbar {
   min-height: 44px;
 }
