@@ -8,7 +8,7 @@
             <md-divider></md-divider>
         </md-item>
         <md-item ng-if="account.address" ng-repeat="(address, account) in accounts  | orderObjectBy:'number'" ui-sref="org.one({account:account.id})" title="{{account.type}}">
-            <md-item-content layout="row" layout-align="space-between" class="md-tile-content md-body-1">
+            <md-item-content layout="row" layout-align="space-between" class="highLight md-tile-content md-body-1">
                 <div> {{account.name}} </div>
                 <div>${{account.balance | balance | number:2}}</div>
             </md-item-content>

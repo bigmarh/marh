@@ -11,22 +11,19 @@
                 <div class="cell amount" ng-init="cashValue = true" ng-click="cashValue = !cashValue">Amount</div>
             </md-item-content>
         </md-item>
-        <md-item>
-            <md-item-content ng-repeat="tx in account.txs track by tx.tx_hash" layout="row" layout-align="space-between">
-                <div flex class="cell">
+        <md-item ng-repeat="tx in account.txs track by tx.tx_hash">
+            <md-item-content  layout="row" layout-align="space-between" class="highLight md-tile-content md-body-1">
+                <div flex>
                     {{ tx.confirmed | date:'short'}}
                     <div ng-if="!tx.confirmed" class="md-raised md-warn md-button md-mini md-default-theme">
                         Pending
                     </div>
                 </div>
                 <div flex class="description" layout="column" layout-align="start">
-
                     <div>
                         {{$root.createDescription(tx)}}
                     </div>
-                    <small><a class="pull-right" target="_blank" href="https://live.blockcypher.com/bcy/tx/{{tx.tx_hash}}">detail</a>
-                    </small>
-
+                    <small><a target="_blank" href="https://live.blockcypher.com/bcy/tx/{{tx.tx_hash}}">detail</a></small>
                 </div>
 
                 <div class="cell amount" ng-mouseover="decimals = ($root.BTCunit =='BTC') ? 6: ($root.BTCunit == 'mBTC') ? 4 : 2 " ng-mouseleave="decimals = 1">
@@ -34,7 +31,8 @@
                     <span>${{tx.value | balance | number:2}}</span>
                 </div>
             </md-item-content>
-            <md-divider ng-if="!$last"></md-divider>
+            <md-divider></md-divider>
+            
         </md-item>
         </md-item-content>
         </md-item>
