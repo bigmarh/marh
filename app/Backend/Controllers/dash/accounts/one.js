@@ -10,11 +10,7 @@ module.exports = function(app, Parse) {
                
                 Accounts.currentAccount.txs = Accounts.buildTransactionArray(address.txs,address);
                 $scope.account = Accounts.currentAccount;
-                $scope.loadSend = function(account) {
-                    $rootScope.$broadcast('openSend', {
-                        fromAccount: account
-                    })
-                }
+
 
                           $rootScope.createDescription = function(tx) {
                     var message = "";

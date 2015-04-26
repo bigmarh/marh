@@ -46,7 +46,7 @@ module.exports = function(stateProvider, Parse, resolvers) {
             url: '/a/:account',
             resolve: {
                 getAccount: ['AccountsService', '$stateParams','OrgService', function(Accounts, $stateParams,Org) {
-                    return Org.getAccount($stateParams.account);
+                    return Accounts.currentAccount =  Org.getAccount($stateParams.account);
 
                 }],
                 getBalanceAndTransactions: ['OrgService', 'BlockCypher', '$stateParams','getAccount',

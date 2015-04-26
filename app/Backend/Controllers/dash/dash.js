@@ -1,6 +1,6 @@
 module.exports = function(app, Parse) {
-    app.controller('dashCtrl', ['$scope', "$rootScope", '$state', 'WalletService', '$timeout', 'AccountsService', 'AppService', 'BlockCypher','UtilService','$messages',
-        function($scope, $rootScope, $state, Wallet, $timeout, Accounts, App, BlockCypher,Util,$messages) {
+    app.controller('dashCtrl', ['$scope', "$rootScope", '$state', 'WalletService', '$timeout', 'AccountsService', 'AppService', 'BlockCypher', 'UtilService', '$messages','$mdDialog',
+        function($scope, $rootScope, $state, Wallet, $timeout, Accounts, App, BlockCypher, Util, $messages,$mdDialog) {
             Accounts.setupSockets(function(send) {
                 for (i in Accounts.addresses) {
                     var addr = Accounts.addresses[i];
@@ -19,6 +19,14 @@ module.exports = function(app, Parse) {
             $scope.logOut = function() {
                 $rootScope.$broadcast('logout');
             }
+            $scope.loadSend = function(account,ev) {
+                Accounts.currentAccount = account;
+                $mdDialog.show({
+                    controller: 'sendCtrl',
+                    templateUrl: '/views/popups/inserts/send.html',
+                    targetEvent: ev,
+                });
+            }
             $scope.loadRequest = function(account) {
                 Accounts.currentAccount = account;
                 Util.launchLB({
@@ -26,6 +34,7 @@ module.exports = function(app, Parse) {
                 })
             }
 
+            
             $rootScope.cycleUnits = function() {
                 var units = ['bits', 'mBTC', 'BTC'];
                 var currentIndex = units.indexOf($rootScope.BTCunit);
