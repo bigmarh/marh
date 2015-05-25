@@ -67,7 +67,7 @@ module.exports = function(stateProvider, Parse, resolvers) {
             views: {
                 'content@org': {
                     templateUrl: 'views/dash/content/org/transfer.html',
-                    controller: 'transferCtrl'
+                    controller: 'transferOrgCtrl'
                 }
             }
         }).state('org.billpay', {
