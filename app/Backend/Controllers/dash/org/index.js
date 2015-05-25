@@ -1,6 +1,6 @@
 module.exports = function(app, Parse) {
-    app.controller('orgCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', 'LastSign',
-        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, loadOrg, $mdDialog, LastSign) {
+    app.controller('orgCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog','UserService',
+        function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog,User) {
             $scope.user = Parse.User.current();
         
             //reset current account
@@ -8,10 +8,11 @@ module.exports = function(app, Parse) {
             $scope.first = {
                 password: 1234567890
             };
-            Org.currentOrg = Parse.User.current().get('org');
-            Org.getAccounts().then(function(accounts) {
+
+           User.getAccounts().then(function(accounts) {
                 $scope.checked = true;
                 $scope.accounts = accounts;
+                $scope.$safeApply();
             })
       
 

@@ -5,6 +5,7 @@ module.exports = function(app, Parse) {
             /*  Parse.User.logIn('lamar@pheeva.com','1234').then(function(user){
                         if(user) $state.go('accounts.summary');
                       })*/
+
             $scope.userObj = {
                 email: "lamar@lovewills.us"
             };
@@ -14,7 +15,7 @@ module.exports = function(app, Parse) {
                 Parse.User.logIn($scope.userObj.email,$scope.userObj.password, {
                     success: function(user) {
                         // Do stuff after successful login.
-                        //window.location = "/app"
+                        window.location = "/app"
 
                     },
                     error: function(user, error) {
@@ -24,6 +25,7 @@ module.exports = function(app, Parse) {
 
             }
             $scope.signUp = function() {
+
                 var user = new Parse.User();
                 $scope.userObj.username = $scope.userObj.email.toLowerCase();
                 $scope.userObj.password = "TempPassword";

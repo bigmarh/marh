@@ -4,6 +4,7 @@ module.exports = function(stateProvider, Parse, resolvers) {
             abstract: true,
             resolve: {
                 checkAll: resolvers.checkAll,
+
             },
 
             views: {
@@ -45,12 +46,12 @@ module.exports = function(stateProvider, Parse, resolvers) {
         .state('org.one', {
             url: '/a/:account',
             resolve: {
-                getAccount: ['AccountsService', '$stateParams','OrgService', function(Accounts, $stateParams,Org) {
-                    return Accounts.currentAccount =  Org.getAccount($stateParams.account);
+                getAccount: ['AccountsService', '$stateParams', 'OrgService', function(Accounts, $stateParams, Org) {
+                    return Accounts.currentAccount = Org.getAccount($stateParams.account);
 
                 }],
-                getBalanceAndTransactions: ['OrgService', 'BlockCypher', '$stateParams','getAccount',
-                    function(org, BlockCypher, $stateParams,getAccount) {
+                getBalanceAndTransactions: ['OrgService', 'BlockCypher', '$stateParams', 'getAccount',
+                    function(org, BlockCypher, $stateParams, getAccount) {
                         return BlockCypher.getAddress(getAccount.address);
                     }
                 ]

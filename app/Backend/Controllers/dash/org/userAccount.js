@@ -8,8 +8,8 @@ module.exports = function(app, Parse) {
                 admins: {},
                 policy: {
                     global: {
-                        "dailyLimit": 1000,
-                        "transactionLimit": 500
+                        "dailyLimit": 0,
+                        "transactionLimit": 0
                     },
                     user: {}
                 }

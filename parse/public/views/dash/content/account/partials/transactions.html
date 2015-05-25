@@ -1,20 +1,27 @@
- <div class="transactions fadeIn animated">
-                <div class="tableRow tableHeader noBorderTop">
-                    <div class="flexCon cell description"> {{Org.get('domain')}} Account(s)</div>
-                    <div class="cell amount">Balance</div>
+<div class="fadeIn animated">
+    <md-list layout="column">
+        <md-item>
+            <md-item-content layout="row" layout-align="space-between" class="md-tile-content md-body-2">
+                <div>{{Org.domain}} Account(s)</div>
+                <div>Balance</div>
+            </md-item-content>
+            <md-divider></md-divider>
+        </md-item>
+        <md-item ng-if="account.address" ng-repeat="(address, account) in accounts  | orderObjectBy:'number'" ui-sref="org.one({account:account.id})" title="{{account.type}}">
+            <md-item-content layout="row" layout-align="space-between" class="highLight md-tile-content md-body-1">
+                <div> {{account.name}} </div>
+                <div>${{account.balance | balance | number:2}}</div>
+            </md-item-content>
+            <md-divider></md-divider>
+        </md-item>
+        <md-item ng-if="!account.address" layout="column" ng-repeat="(address, account) in accounts  | orderObjectBy:'number'" title="Org" >
+            <md-item-content layout="row" layout-align="space-between center" class="md-tile-content md-body-1">
+                <div>
+                    {{account.name}}
                 </div>
-                <!-- tableRow -->
-                <div ng-if="account.get('address')" class="tableRow blink" ng-repeat="(address, account) in accounts  | orderObjectBy:'number'" ui-sref="{{(account.get('type') == 'Personal') ? 'accounts' : 'org' }}.one({address:account.get('address')})" title="{{account.get('type')}}">
-                    <div class="flexCon cell description caps">
-                        {{account.get('name')}}
-                    </div>
-                    <div class="cell amount">{{account.get('balance') | balance}}</div>
-                </div>
-                <div ng-if="!account.get('address')" class="tableRow blink" ng-repeat="(address, account) in accounts  | orderObjectBy:'number'" title="Org">
-                    <div class="flexCon cell description caps">
-                        {{account.get('name')}}
-                    </div>
-                    <div class="cell amount">Not Activated</div>
-                </div>
-                <!-- tableRow -->
-            </div>
+                <div>Not Activated</div>
+            </md-item-content>
+            <md-divider></md-divider>
+        </md-item>
+    </md-list>
+</div>

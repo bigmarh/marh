@@ -1,11 +1,13 @@
 <div layout="row" layout-align="space-between" flex>
-<div class="moneyBalance">
-    <span class="text-big">$ 0.00</span>
-    <br>
-    <small>Credit Balance</small>
-</div>
-<div>
-    <a href="" class="btn btn-primary btn-lg" ng-click="loadCredit(account)">Get More Credits</a>
-</div>
-</div>
 
+    <div class="moneyBalance">
+        <span class="text-big">${{account.balance | balance | number:2}}</span>
+        <br>
+        <small>Current Account Balance</small>
+    </div>
+    <div>
+    	 <md-button class="md-primary" href="" ng-click="loadSend(account,$event)">Send</md-button>
+    	  <md-button class="md-primary" href="" ng-click="loadRequest(account)">Request</md-button>
+        <md-button class="md-primary" href="" ng-click="loadCredit(account)">Get More Credits</md-button>
+    </div>
+</div>

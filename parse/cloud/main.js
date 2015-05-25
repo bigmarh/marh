@@ -86,6 +86,15 @@ Parse.Cloud.define('org_AddUser', function(req, res) {
 
 })
 
+Parse.Cloud.define("org_getOrg",function(req,res){
+    Parse.Cloud.useMasterKey();
+    var query =  new Parse.Query('Organization');
+        query.equalTo('objectId',req.params.id);
+        query.select('accounts','users','domain','name');
+        query.first().then(res.success,res.error);
+
+})
+
 
 //Hello
 

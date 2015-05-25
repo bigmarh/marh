@@ -21,7 +21,7 @@ module.exports = function(Parse) {
 
                 //Get Company 
 
-                Org.load();
+               
 
                 function checkForAccount() {
                     if (Parse.User.current().get('payload'))
@@ -31,7 +31,7 @@ module.exports = function(Parse) {
                 }
                 function checkForOrg() {
                     if(!Parse.User.current().get('org')) return window.location = "/register";
-                    next();
+                     Org.load(next);
                 }
 
 

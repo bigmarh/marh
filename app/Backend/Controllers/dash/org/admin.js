@@ -1,7 +1,7 @@
 module.exports = function(app, Parse) {
     app.controller('adminCtrl', ['$scope', '$state', '$rootScope', 'AccountsService', 'WalletService', 'UtilService', 'OrgService', '$mdDialog', '$messages',
         function($scope, $state, $rootScope, Accounts, Wallet, Util, Org, $mdDialog, $messages) {
-
+            $scope.checked = false;
             //reset current account
             Accounts.currentAccount = {};
             $scope.currency = currency;
@@ -12,6 +12,7 @@ module.exports = function(app, Parse) {
             Org.getUsers().then(function(users) {
                 $scope.users = users;
                 $scope.checked = true;
+                console.log("checked");
             })
 
 

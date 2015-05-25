@@ -1,97 +1,27 @@
 <md-card class="bounceInRight animated">
-    <div class="pad8" flex layout="row" layout-align="end center" style="border-bottom:solid 1px rgba(0,0,0,0.1); background:white;">
-			<span class="mdfi_navigation_close" ui-sref="inbox" ng-click="$root.showMessage = 0" style="cursor:pointer;"></span>
+    <!--<div class="" flex layout="row" layout-align="end center" style="background:white;">
+			<span class="mdfi_navigation_close" ui-sref="inbox" ng-click="$root.showMessage = 0" style="cursor:pointer; padding:8px;"></span>
+		</div>-->
+    <md-card-content class="md-body-1">
+        <div layout="row">
+			<span flex><strong>From: </strong> Name/Email</span>
+			<span>Feb 13, 2015</span>
 		</div>
-    <img src="https://material.angularjs.org/img/washedout.png" alt="Washed Out">
-    <md-card-content>
+		<md-divider style="margin-top:16px"></md-divider>
         <h2>{{id}}</h2>
-        <p>
+        <p class="md-body-1">
             The titles of Washed Out's breakthrough song and the first single from Paracosm share the two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
         </p>
-    </md-card-content>
-</md-card>
-
-<md-card class="bounceInRight animated" layout="column">
-	<div class="pad8" flex layout="row" layout-align="end center" style="background:white; border-bottom:solid 1px rgba(0,0,0,0.1);">
-			<span class="mdfi_navigation_close"></span>
-	</div>
-	<md-card-content layout="column">
+        <md-divider style="margin-bottom:16px"></md-divider>
+        <h4>Signers</h4>
+        <p class="md-body-1">
+        	<a href="">Jim Stanley - CEO</a> | <a href="">Earl Draper - CFO</a>
+        </p>
+        <md-divider style="margin-bottom:16px"></md-divider>
 		<div layout="row">
-			<span flex><strong>From: </strong> Name/Email</span>
-			<span><small>Feb 13, 2015</small></span>
-		</div>
-		<div>
-			<p>
-				<strong>Memo:</strong><br>
-				Pay for catered lunch.
-			</p>
-
-			<div layout="row" class="pad16-0 signAvatars">
-				<span>
-			    	<img class="img-circle" src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfa1/v/t1.0-1/c0.8.40.40/p40x40/1794553_10203246814835166_2136122174_n.jpg?oh=b5159d160bcc58eb5f0538bad6c68704&oe=5592583A&__gda__=1431793014_4851285a28b502f7087329005478d137" alt="" style="width:32px">
-			    </span>
-
-			    <span>
-			    	<img class="img-circle" src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfa1/v/t1.0-1/c0.8.40.40/p40x40/1794553_10203246814835166_2136122174_n.jpg?oh=b5159d160bcc58eb5f0538bad6c68704&oe=5592583A&__gda__=1431793014_4851285a28b502f7087329005478d137" alt="" style="width:32px">
-			    </span>
-
-			    <span>
-			    	<img class="img-circle" src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfa1/v/t1.0-1/c0.8.40.40/p40x40/1794553_10203246814835166_2136122174_n.jpg?oh=b5159d160bcc58eb5f0538bad6c68704&oe=5592583A&__gda__=1431793014_4851285a28b502f7087329005478d137" alt="" style="width:32px">
-			    </span>
-
-			    <span class="imgDisabled">
-			    	<img class="img-circle" src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfa1/v/t1.0-1/c0.8.40.40/p40x40/1794553_10203246814835166_2136122174_n.jpg?oh=b5159d160bcc58eb5f0538bad6c68704&oe=5592583A&__gda__=1431793014_4851285a28b502f7087329005478d137" alt="" style="width:32px">
-			    </span>
-
-			</div>			
-		</div>
-	</md-card-content>
-	
-	<div layout"row" flex style="order:3; background:white; padding:8px 16px;border-top:solid 1px rgba(0,0,0,0.1);">
-		<a href="" class="btn btnAqua" style="margin-right:16px;">Sign</a>
-		<a href="" class="pull-right" flex>
-			View Invoice
-		</a>
-	</div>
-
-</md-card>
-
-<md-card class="bounceInRight animated bg-white" layout="column">
-	<div class="pad8" flex layout="row" layout-align="end center" style="border-bottom:solid 1px rgba(0,0,0,0.1);">
-			<span class="mdfi_navigation_close"></span>
-	</div>
-	<div class="pad8" layout="row">
-		<span flex><strong>Invoice: </strong> Invoice #</span>
-		<span><small>Invoice Date</small></span>
-	</div>
-	<div layout="row" class="pad8" style="background:rgba(0,0,0,0.05); margin-bottom:1px;">
-		<span flex>Line Item</span>
-		<span>$0.25</span>
-	</div>
-	<div layout="row" class="pad8" style="background:rgba(0,0,0,0.05); margin-bottom:1px;">
-		<span flex>Line Item</span>
-		<span>$0.25</span>
-	</div>
-	<div layout="row" class="pad8">
-        <div flex="50">
-            
-        </div>
-        <div flex="50" layout="column">
-            <div layout="row">
-                <div flex>SubTotal</div>
-                <div>$0.00</div>
-            </div>
-            <div layout="row">
-                <div flex><strong>Total</strong></div>
-                <div>$0.00</div>
-            </div>
-        </div>
-    </div>
-	<hr>
-	<div class="pad8">	
-		<p>
-			<strong>Memo:</strong><br>
-			Urgent
-		</p>
-	</div>
+			<!--<md-button md-no-ink class="md-primary">View Invoice</md-button>-->
+            <md-button md-no-ink ng-click="$root.showMessage = 0" class="md-primary">Close</md-button>
+       		<md-button ng-disabled="false" class="md-raised md-primary">Approve Payment</md-button>
+       	</div>
+    </md-card-content>
 </md-card>

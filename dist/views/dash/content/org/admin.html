@@ -7,7 +7,7 @@
 
         </div>
 
-        <div ng-if="users.length" flex>
+        <div ng-if="users.length">
             <div layout="row">
                 <h2 flex>Users</h2>
 
@@ -33,7 +33,7 @@
                     <div flex>{{account.name}}</div>
                     <div flex>{{account.createdAt | date:'short'}}</div>
                     <!--    <div flex>{{account.accountNum}}</div> -->
-                    <div flex="50">{{account.address || "Account Not Active"}}
+                    <div flex="50">{{account.slug || "Account Not Active"}}
                     </div>
                 </div>
                 <md-divider ng-if="!$last"></md-divider>

@@ -2,20 +2,43 @@ var CryptoJS = require('crypto-js');
 var uuid = require('node-uuid');
 
 module.exports = function(app, Parse) {
-    app.factory('UserService', ['$state', '$http', '$resource', '$rootScope', 'WalletService', '$messages', 'UtilService',
-        function($state, $http, $resource, $rootScope, Wallet, $messages, util) {
+    app.factory('UserService', ['$state', '$http', '$resource', '$rootScope', 'WalletService', '$messages', 'UtilService', 'OrgService', '$q',
+        function($state, $http, $resource, $rootScope, Wallet, $messages, util, Org, $q) {
             var restrictedAcl = new Parse.ACL(Parse.User.current());
             restrictedAcl.setPublicReadAccess(false);
             restrictedAcl.setPublicWriteAccess(false);
 
             var User = {
-                addNew:function(fields, cb, cbErr){
+                addNew: function(fields, cb, cbErr) {
                     fields.org = Parse.User.current().get('org').id;
                     Parse.Cloud.run('org_AddUser', fields).then(function(user) {
                         cb(user);
                     }, function(err) {
                         $messages.log(err);
                     })
+                },
+                getAccounts: function() {
+
+                    var deferred = $q.defer();
+
+                    var query = new Parse.Query('Account');
+                    query.find({
+                        success: function(accounts) {
+                            
+                            Org.accounts = accounts;
+                            deferred.resolve(accounts.map(function(account) {
+                                account.attributes.id = account.id;
+                                account.attributes.createdAt = account.createdAt
+                                return account.attributes;
+                            }));
+                        },
+                        error: function(error) {
+                            alert("Error: " + error.code + " " + error.message);
+                            $messages.log("Error: " + error.code + " " + error.message);
+                            deferred.reject(error);
+                        }
+                    });
+                    return deferred.promise;
                 },
                 checkRegState: function() {
 
@@ -40,7 +63,7 @@ module.exports = function(app, Parse) {
                         sharedKey: sharedKey,
                         privKey: HD.xprivkey
                     }
-                    
+
                     var passWordEncKey = bitcore.encoding.Base58(bitcore.crypto.Random.getRandomBufferBrowser(18)).toString();
                     var encKey = Wallet.encryptKey(JSON.stringify(payloadObj), "" + obj.password);
                     var encPass = Wallet.encryptKey("" + obj.password, passWordEncKey);
@@ -50,7 +73,7 @@ module.exports = function(app, Parse) {
                     payload.setACL(restrictedAcl);
                     payload.set('content', encKey);
                     payload.set('type', 'personal');
-                    payload.set('xpub',HD.derive("m/0'").xpubkey)
+                    payload.set('xpub', HD.derive("m/0'").xpubkey)
                     payload.set('identifier', user.id);
                     payload.set('secret', bitcore.crypto.Hash.sha256(new Buffer(sharedKey)).toString('hex'));
                     payload.set('passWordEncKey', passWordEncKey);
@@ -65,7 +88,7 @@ module.exports = function(app, Parse) {
                             title: "Encrypted Passcode",
                             content: encPass
                         }]);
-                        user.set('xpub',payload.get('xpub'));
+                        user.set('xpub', payload.get('xpub'));
                         user.set('user-key_activated', false);
                         user.set('payload', payload);
 

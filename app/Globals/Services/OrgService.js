@@ -14,12 +14,22 @@ module.exports = function(app, Parse) {
             currentOrg: {},
             users: [],
             load: function(cb) {
+                var deferred = $q.defer();
+                var org = Parse.User.current().get('org');
 
-                Parse.User.current().get('org').fetch().then(function(org) {
-                    $messages.log(org);
-                    Org.setCurrent(org);
-                    cb && cb();
-                })
+                if (org.get('domain')) {
+                    deferred.resolve(org);
+                } else {
+                    Parse.Cloud.run('org_getOrg', {
+                        id: org.id
+                    }).then(function(org) {
+                        Org.setCurrent(org);
+                        cb && cb();
+                        deferred.resolve(org);
+                    })
+                }
+                return deferred.promise;
+
             },
             setCurrent: function(org) {
                 Org.currentOrg = org;
@@ -137,6 +147,7 @@ module.exports = function(app, Parse) {
                 return deferred.promise;
             },
             getAccounts: function(loadOrg) {
+                console.log("Get Accounts");
                 var deferred = $q.defer();
                 Org.currentOrg.relation("accounts").query().find({
                     success: function(accounts) {

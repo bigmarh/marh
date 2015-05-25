@@ -87,7 +87,9 @@ module.exports = function(app, Parse) {
             setExtraData: function(account) {
                 this.current.set('createdBy', Parse.User.current());
                 this.current.set('org', Parse.User.current().get('org'));
-                 this.current.set('slug', Parse.User.current().get('domain')+":"+account.name);
+                var name = (Parse.User.current().get('domain')+":"+account.name.replace(/\./g, '_')).toLowerCase();
+                var slug = name.split(' ').join('_');
+                this.current.set('slug', slug);
                 for (var i = 0; i < Object.keys(account).length; i++) {
                     var keys = Object.keys(account);
                     if (typeof account[keys[i]] == 'function') continue;
