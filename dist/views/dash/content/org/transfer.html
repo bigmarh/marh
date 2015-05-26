@@ -8,53 +8,45 @@
                 </div>
             </div>
             <md-divider style="margin-bottom:32px;"></md-divider>
-            <md-card style="width:500px;" layout-padding class="">
+            <md-card style="width:500px;" class="">
                 <md-content class="md-default-theme">
-                    <h2>Transfers</h2>
-                    <div layout="row">
-                        <div flex="45" class="">
-                            <h5 class="h5">From Account</h5>
-                            <!--<select name="Account" ng-init="(fromAccount = current.fromAccount || accounts[lastAddress]); " ng-model="fromAccount" class="selectStyle" ng-options="accounts[address] as accounts[address].get('name')   for (address,account) in accounts">
-                        </select>-->
-                            <md-select ng-model="someModel" placeholder="Select account" style="width:100%;">
-                                <md-option name="Account" ng-init="(fromAccount = current.fromAccount || accounts[lastAddress]); " ng-model="fromAccount" class="selectStyle" ng-options="accounts[address] as accounts[address].get('name')   for (address,account) in accounts">{{ account }}</md-option>
-                            </md-select>
-                            <p>
-                                <strong>Current Account Balance:</strong>
-                                <br>
-                                <!--{{fromAccount.get('balance')| convertCurrency:$root.BTCunit | number}} {{$root.BTCunit}}-->
-                            </p>
-                        </div>
+                    <h2 style="padding:20px">Transfer Funds</h2>
+                    <md-divider></md-divider>
+                    <div layout="column" style="padding:20px">
+                        <md-select ng-model="someVal">
+                            <md-select-label>From Account</md-select-label>
+                            <md-option value="1">One</md-option>
+                            <md-option value="2">Two</md-option>
+                        </md-select>
+                        <p class="md-caption" style="margin-top:-7px;">Account Balance: $340,000.00</p>
 
-                        <div flex="45" class="">
-                            <h5 class="h5">To Account</h5>
-                            <!--<select name="Account" ng-init="(toAccount = current.toAccount || accounts[lastAddress]); " ng-model="toAccount" class="selectStyle caps" ng-options="accounts[address] as accounts[address].get('name')   for (address,account) in accounts">
-                        </select>-->
-                            <md-select ng-model="someModel" placeholder="Select account" style="width:100%;">
-                                <md-option name="Account" ng-init="(toAccount = current.toAccount || accounts[lastAddress]); " ng-model="toAccount" class="selectStyle caps" ng-options="accounts[address] as accounts[address].get('name')   for (address,account) in accounts">{{ account }}</md-option>
-                            </md-select>
-                            <p>
-                                <strong>Current Account Balance:</strong>
-                                <br>
-                                <!--{{toAccount.get('balance')| convertCurrency:$root.BTCunit | number}} {{$root.BTCunit}}-->
-                            </p>
+                        <md-select ng-model="someVal">
+                            <md-select-label>To Account</md-select-label>
+                            <md-option value="1">One</md-option>
+                            <md-option value="2">Two</md-option>
+                        </md-select>
+                        <p class="md-caption" style="margin-top:-7px;">Account Balance: $340,000.00</p>
+                        <md-input-container>
+                            <label>Transfer Amount</label>
+                            <input type="text" ng-model="amount" required>
+                        </md-input-container>
+
+                        <div layout="row" layout-align="end end">
+                            <md-button md-no-ink >Cancel</md-button>
+                            <md-button md-no-ink >Transfer</md-button>
                         </div>
                     </div>
+
 
                     <!-- <div>
                     <bit-fiat value=" current.amount" balance="current.fromAccount.get('balance')"></bit-fiat>
 
                 </div>-->
 
-                    <md-input-container>
-                        <label>Transfer Amount</label>
-                        <input type="text" ng-model="amount" required>
-                    </md-input-container>
+
                 </md-content>
 
-            </md-card style="width:500px;" layout-padding>
+            </md-card>
         </div>
     </md-content>
 </div>
-
-
