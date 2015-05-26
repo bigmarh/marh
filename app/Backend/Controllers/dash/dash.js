@@ -25,6 +25,7 @@ module.exports = function(app, Parse) {
                     controller: 'sendCtrl',
                     templateUrl: '/views/popups/inserts/send.html',
                     targetEvent: ev,
+                    clickOutsideToClose:true
                 });
             }
             $scope.loadRequest = function(account) {
