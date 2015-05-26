@@ -11958,6 +11958,9 @@ ul.methods > li:first-child > *:first-child {
   margin: 0px;
   padding: 0px;
 }*/
+.blueText {
+  color: #3f51b5;
+}
 .highLight:hover {
   background: rgba(0, 0, 0, 0.04);
   cursor: pointer;
