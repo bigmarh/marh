@@ -1,4 +1,4 @@
-<md-dialog aria-label="Add User">
+<md-dialog aria-label="Add User" style="min-width:300px;">
     <!-- <md-content>
     
         <button class="btn btnAqua" ng-click="hide()" type="reset" ng-disabled="showPin" flex="45">
@@ -9,16 +9,18 @@
         centered content
     </md-content>-->
 
-    <md-content>
-        <h2 style="padding:20px">Send Funds</h2>
+   
+        <h2 style="padding:20px; padding-bottom:10px;">Send Funds</h2>
         <md-divider></md-divider>
         <div layout="column" style="padding:20px">
-            <md-select ng-model="someVal3">
+            <div flex="100">
+            <md-select ng-model="someVal3" style="width:100%">
                 <md-select-label>From Account</md-select-label>
                 <md-option value="1">One</md-option>
                 <md-option value="2">Two</md-option>
             </md-select>
             <p class="md-caption" style="margin-top:-7px;">Account Balance: $340,000.00</p>
+            </div>
 
             <md-input-container>
                 <label>Recipient Email</label>
@@ -48,5 +50,4 @@
                 </div>-->
 
 
-    </md-content>
 </md-dialog>

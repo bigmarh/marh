@@ -1,9 +1,9 @@
 
 <div class="centerCard">
     <md-content class="md-padding">
-        <div layout="row" layout-align="space-between">
-            <h2 class="caps">{{account.name}}
-                <small>{{account.type}}</small>
+        <div layout="row" layout-align="space-between center">
+            <h2 class="caps">{{account.name}} <br>
+                <small style="font-size:14px;"><strong><span class="blueText">{{account.slug || "Account Not Active"}}</span>  </strong></small>
             </h2>
             <div ng-include="'../views/dash/content/account/partials/orgNav.html'" scope="" onload=""></div>
         </div>
