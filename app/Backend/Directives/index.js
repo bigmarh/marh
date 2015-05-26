@@ -294,7 +294,7 @@ module.exports = function(app, Parse) {
                 controller: ["$scope", "$rootScope", "$state", function($scope, $rootScope, $state) {
                     $scope.logOut = function() {
                         Parse.User.logOut();
-                        gapi.auth.signOut();
+                        //gapi.auth.signOut();
                         localStorage.clear();
                         window.location = "/";
                     }
