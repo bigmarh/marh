@@ -1,0 +1,9 @@
+{
+  "name": "Your app name",
+  "version": "0.0.1",
+  "license": "MIT",
+  "dependencies": {
+    "bitcore-ecies": "^0.10.0",
+    "bitcore": "^0.10.4"
+  }
+}

@@ -1,57 +1,37 @@
-require('angular/angular');
-require('angular-route/angular-route');
-require('angular-resource/angular-resource');
-require('ui-router/release/angular-ui-router');
-require('angular-filter/dist/angular-filter');
-require('angular-animate/angular-animate');
-require('angular-aria/angular-aria');
-require('angular-messages/angular-messages');
-require('./Helpers/angular-material-edge.js');
-
-
 //Load bitcoin Libraries
-var bitcore = window.bitcore = require('bitcore');
 window.bip39 = require('bip39');
+
+var cssify = require('cssify');
+
+//Load styles
+require('../style/angular-csp.css')
+require('../style/animate.css')
+cssify.byUrl('//ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css');
+cssify.byUrl('style.css');
 
 //require parse
 var Parse = require('parse-browserify');
 var config = require("./config");
 Parse.initialize(config.Parse.appId, config.Parse.javascriptKey);
 window.Parse = Parse;
-var defaultModules = function(addOnArray){
-	var def =  ['ui.router','angular.filter', 'Scope.safeApply', 'ngResource','ngMaterial'];
-	if(addOnArray) def = def.concat(addOnArray);
-	return def;
-} 
 
 
 
-	
-var app = angular.module('myapp', defaultModules());
-var appHome = angular.module('home',defaultModules());
-var appRegister = angular.module('register',['ui.router','angular.filter', 'Scope.safeApply', 'ngResource','ngMaterial']);
-[app,appHome,appRegister].map(function(app){
-    require('./Globals')(app, Parse);
-})
 
-appHome.config(require('./Frontend/routes')(Parse));
-app.config(require('./Backend/routes')(Parse));
-appRegister.config(require('./Register/routes')(Parse));
+//Load Registry files
+window.app = {routes:{}};
+//register subsections like frontend back end etc
+require('./layouts/')(m);
+require('./registry.js')(m,Parse,app);
 
-app.config(['$sceDelegateProvider', function($sceDelegateProvider) {
-         $sceDelegateProvider.resourceUrlWhitelist(['self', 
-         	'https://api.blockcypher.com/**'
-         	]);
-}])
-
-
-require('./Backend/module')(app,Parse);
-require('./Frontend/module')(appHome,Parse);
-require('./Register/module')(appRegister,Parse);
+//Add routes
+console.log(app.routes);
+mx.route(app,config.initialRoute,app.routes)
 
 
 
-//helpers
-angular.module('Scope.safeApply', []).run(['$rootScope', require('./helpers/safeApply')]);
+//the controller defines what part of the model is relevant for the current page
+//in our case, there's only one view-model that handles everything
 
 
+//here's the view
