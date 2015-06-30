@@ -3,8 +3,7 @@ module.exports = function(module) {
     module: module.name,
     place: '#content',
     url: "/" + module.name,
-    onEnter: function(args) {},
-    onExit: function(args) {}
+    onEnter: function(args) {}
 
   }
 }

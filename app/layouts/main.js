@@ -21,9 +21,9 @@ module.exports = function(m) {
           'Contacts'
         ),
         m('a', {
-            class: mx.route.current() === 'main.move' ? 'active item' : 'item',
+            class: mx.route.current() === 'main.about' ? 'active item' : 'item',
             onclick: function() {
-              mx.route.go('main.move');
+              mx.route.go('main.about');
             }
           },
           'About'
@@ -53,7 +53,8 @@ module.exports = function(m) {
         m('.ui.hidden.divider'),
         m('.ui.segment', [m('#content')]),
         m('.ui.hidden.divider'),
-        state.view(controller)
+        state.view(controller),
+        m('.extra')
       ),
 
     ];
@@ -65,11 +66,8 @@ module.exports = function(m) {
     place: '#main',
     module: 'main'
   }
-  console.log("mount layout");
-  m.module(document.getElementById("main"), main)
-  console.log("MOunt ended");
 
-  //model
+  m.module(document.getElementById("main"), main)
 
 
 }

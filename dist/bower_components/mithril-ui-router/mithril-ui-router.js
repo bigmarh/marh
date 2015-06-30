@@ -94,8 +94,8 @@
     validators.string(_state_);
 
     // Exit the current state
-    if (currentState) {
-      var onExit = routes[currentState].onExit;
+    if (mx.route.current()) {
+      var onExit = routes[mx.route.current()].onExit;
       if (onExit) {
         onExit();
       }
@@ -145,7 +145,7 @@
         }
       }
     });
-    currentState = _state_;
+    mx.route.current(_state_);
     // Update url
     for (var key in _params_) {
       runningUrl = runningUrl.replace(":" + key, _params_[key]);
@@ -156,9 +156,7 @@
   /**
    * @returns {String} the current state
    */
-  mx.route.current = function() {
-    return currentState;
-  };
+  mx.route.current = m.prop(currentState);
 
   /**
    * @param {string} _key_     The attribute key
@@ -190,14 +188,15 @@
    */
   function $listen() {
 
-    var listener = mx.route.mode === "hash" ? "onhashchange" : "onpopstate";
+    var listener = mx.route.mode === "hash" ? "onhashchange" :
+      "onpopstate";
     window[listener] = function() {
-      console.log("Listener called")
       var url = mx.route.mode === "hash" ?
         window.location[mx.route.mode].substr(1) :
         window.location[mx.route.mode];
       if (url !== currentUrl) {
         var foundState = $findState(url);
+        mx.route.current(foundState.state);
         mx.route.go(foundState.state, foundState.parameters);
       }
     };
@@ -221,7 +220,8 @@
         runningState = '',
         runningUrl = '';
       splitState.forEach(function(partialState) {
-        runningState = runningState ? runningState + '.' + partialState :
+        runningState = runningState ? runningState + '.' +
+          partialState :
           partialState;
         var configurationUrl = routes[runningState].url;
         runningUrl = configurationUrl ? runningUrl + configurationUrl :

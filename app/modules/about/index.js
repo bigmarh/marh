@@ -2,7 +2,7 @@ module.exports = function(m, Parse) {
     try {
         var module = {
             name: __dirname.split('/').pop(),
-            parentName: "main",
+            parentName: "main"
         };
         require('./model')(module);
         require('./vm')(module);

@@ -4,6 +4,7 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
+    "gWatch": "gulp watch",
     "install": "napa",
     "build": "gulp registerModules && browserify  -t brfs app/app.js > dist/bundle.js",
     "start": "npm run build && cd dist && w3",

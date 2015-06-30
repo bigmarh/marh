@@ -1,5 +1,5 @@
-module.exports = function(module) {
-    module.view = function() {
-        return m("div", [], "todo");
-    };
+module.exports = function(app) {
+  app.view = function() {
+    return m("div", m('div', app.vm.address));
+  };
 }

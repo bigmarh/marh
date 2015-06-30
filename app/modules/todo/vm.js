@@ -1,9 +1,13 @@
 module.exports = function(module) {
-    module.vm = (function() {
-        var vm = {}
-        vm.init = function() {
+  module.vm = (function() {
+    var privateKey = new bitcore.PrivateKey();
+    var address = privateKey.toAddress();
 
-        }
-        return vm
-    }())
+    var vm = {}
+    vm.init = function() {
+      this.address = address.toString();
+    }
+
+    return vm
+  }())
 }

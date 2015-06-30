@@ -1,27 +1,82 @@
 var fs = require('fs');
 var path = require('path');
 var gulp = require('gulp');
-var concat = require('gulp-concat');
-var rename = require('gulp-rename');
-var uglify = require('gulp-uglify');
+var browserify = require('browserify');
+var source = require("vinyl-source-stream");
+var watchify = require('watchify');
+var cssify = require('cssify');
+var livereload = require('gulp-livereload');
+var gulpif = require('gulp-if');
+var watch;
+
+gulp.task('browserify-nowatch', function() {
+  watch = false;
+  browserifyShare();
+});
+
+gulp.task('browserify-watch', function() {
+  watch = true;
+  browserifyShare();
+});
+
+function browserifyShare() {
+  var b = browserify({
+    cache: {},
+    packageCache: {},
+    fullPaths: true
+  });
+
+  if (watch) {
+    // if watch is enable, wrap this bundle inside watchify
+
+    b = watchify(b);
+
+    b.on('update', function() {
+      bundleShare(b);
+    });
+  }
+
+  b.add('./app/app.js');
+  b.transform(cssify);
+  bundleShare(b);
+}
+
+function bundleShare(b) {
+  b.bundle()
+    .pipe(source('bundle.js'))
+    .pipe(gulp.dest('./dist'))
+    .pipe(gulpif(watch, livereload()));
+}
+
+
 
 var scriptsPath = './app/modules/';
 
-function getFolders(dir){
-    return fs.readdirSync(dir)
-      .filter(function(file){
-        return fs.statSync(path.join(dir, file)).isDirectory();
-      });
+function getFolders(dir) {
+  return fs.readdirSync(dir)
+    .filter(function(file) {
+      return fs.statSync(path.join(dir, file)).isDirectory();
+    });
 }
 
 gulp.task('registerModules', function() {
-   var folders = getFolders(scriptsPath);
-   var registery = "module.exports = function(m,Parse,app){ \n";
+  var folders = getFolders(scriptsPath);
+  var registery = "module.exports = function(m,Parse,app){ \n";
 
-   var tasks = folders.map(function(folder) {
-      registery += "require('./modules/"+folder+"/index.js')(m,Parse,app); \n";
-   });
-	registery += "}"
-   fs.writeFileSync('./app/registry.js', registery);
-  
+  var tasks = folders.map(function(folder) {
+    registery += "require('./modules/" + folder +
+      "/index.js')(m,Parse,app); \n";
+  });
+  registery += "}"
+  fs.writeFileSync('./app/registry.js', registery);
+
+});
+
+// define the browserify-watch as dependencies for this task
+gulp.task('watch', ['browserify-watch'], function() {
+  // watch other files, for example .less file
+  gulp.watch(scriptsPath, ['registerModules']);
+
+  // Start live reload server
+  livereload.listen(35729);
 });

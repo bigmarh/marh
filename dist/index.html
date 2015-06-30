@@ -19,16 +19,17 @@
     <script src="bower_components/mithril-ui-router/mithril-ui-router.js"></script>
 </head>
 
-<body ng-cloak onload="document.getElementById('main').style.display = 'block'" class=" animated fadeIn">
-    <div  id="main"></div>
+<body  onload="document.getElementById('main').style.display = 'block'" >
+    <div style="display:none"  id="main" class=" animated fadeIn"></div>
 
-    <script src="bundle.js"></script>
+
     <script src="bower_components/bitcore/bitcore.min.js"></script>
     <script src="bower_components/bitcore-ecies/bitcore-ecies.min.js"></script>
     <script type="text/javascript">
     var bitcore = require('bitcore');
     var ECIES = require('bitcore-ecies');
     </script>
+      <script src="bundle.js"></script>
 </body>
 
 </html>
