@@ -4,6 +4,7 @@
   "license": "MIT",
   "dependencies": {
     "bitcore-ecies": "^0.10.0",
-    "bitcore": "^0.10.4"
+    "bitcore": "^0.10.4",
+    "polymer": "~1.0.5"
   }
 }

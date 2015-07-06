@@ -122,10 +122,10 @@
       runningPlace = place || runningPlace;
       runningUrl = url ? runningUrl + url : runningUrl;
       // Set up module(s)
+
       if (!currentState || currentState.indexOf(runningState) === -1 ||
         runningState === _state_) {
         if (place) {
-
           mx.route.$install(place, module);
           if (runningState !== _state_) {
             m.redraw(true);
@@ -133,7 +133,7 @@
         } else if (places) {
           for (var key in places) {
             module = $module(places[key]);
-            place = runningPlace.querySelector(key);
+            place = document.querySelector(key);
             mx.route.$install(place, module);
           }
           if (runningState !== _state_) {
@@ -179,8 +179,7 @@
    * @param module The module to set up
    */
   mx.route.$install = function(place, module) {
-    m.render(place, module.view());
-    //  m.mount(place , module );
+    m.mount(place, module);
   };
 
   /**

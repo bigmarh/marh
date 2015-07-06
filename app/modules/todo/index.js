@@ -5,7 +5,7 @@ module.exports = function(m, Parse) {
       parentName: "main"
     };
     require('./model')(module);
-    require('./vm')(module);
+    require('./vm')(module,Parse);
     require('./controller')(module);
     require('./view')(module);
 

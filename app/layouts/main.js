@@ -1,73 +1,55 @@
-module.exports = function(m) {
+module.exports = function() {
 
   var menu = {}
   menu.view = function(controller) {
+
     return [
       m('.ui.menu',
-        m('a', {
-            class: mx.route.current() === 'main.hello' ? 'active item' : 'item',
+        m('md-button', {
+            class: m.route() === '/todo' ? 'active item' : 'item',
             onclick: function() {
-              mx.route.go('main.hello');
+              m.route("/todo");
             }
           },
-          'Home'
+          'Todo'
         ),
-        m('a', {
-            class: mx.route.current() === 'main.todo' ? 'active item' : 'item',
+        m('md-button', {
+            class: m.route() === '/' ? 'active item' : 'item',
             onclick: function() {
-              mx.route.go('main.todo');
+              m.route('/');
             }
           },
-          'Contacts'
+          'Hello'
         ),
-        m('a', {
-            class: mx.route.current() === 'main.about' ? 'active item' : 'item',
+        m('md-button', {
+            class: m.route() === 'main.about' ? 'active item' : 'item',
             onclick: function() {
-              mx.route.go('main.about');
+              m.route('/new');
             }
           },
-          'About'
+          'About' + m.route()
         )
       )
     ];
   };
 
+  m.mount(document.getElementById('header'), menu);
+
   var state = {};
-  state.view = function() {
+
+  state.view = function(ctrl) {
     return [
       m('.ui.segment',
         m('.ui.hidden.divider'),
-        m('h4', 'State : ' + mx.route.current()),
+        m('h4', 'State : ' + m.route()),
         m('.ui.hidden.divider')
       )
     ]
   }
 
+  m.render(document.getElementById('main'),{view:function(){return m('#content')}})
+  m.mount(document.getElementById('footer'), state);
 
-  var main = {};
-  main.view = function(controller) {
-    return [
-      m('.ui.hidden.divider'),
-      m('.ui.page.grid',
-        menu.view(controller),
-        m('.ui.hidden.divider'),
-        m('.ui.segment', [m('#content')]),
-        m('.ui.hidden.divider'),
-        state.view(controller),
-        m('.extra')
-      ),
-
-    ];
-  };
-
-  app.main = main;
-
-  app.routes.main = {
-    place: '#main',
-    module: 'main'
-  }
-
-  m.module(document.getElementById("main"), main)
 
 
 }
