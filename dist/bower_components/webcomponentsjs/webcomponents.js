@@ -4541,7 +4541,7 @@ if (WebComponents.flags.shadow) {
         return this.convertColonRule(cssText, cssColonHostContextRe, this.colonHostContextPartReplacer);
       },
       convertColonRule: function(cssText, regExp, partReplacer) {
-        return cssText.replace(regExp, function(m, p1, p2, p3) {
+        return cssText.replace(regExp, function( p1, p2, p3) {
           p1 = polyfillHostNoCombinator;
           if (p2) {
             var parts = p2.split(","), r = [];
@@ -5853,7 +5853,7 @@ window.HTMLImports.addModule(function(scope) {
       return r;
     },
     replaceUrls: function(text, urlObj, linkUrl, regexp) {
-      return text.replace(regexp, function(m, pre, url, post) {
+      return text.replace(regexp, function( pre, url, post) {
         var urlPath = url.replace(/["']/g, "");
         if (linkUrl) {
           urlPath = new URL(urlPath, linkUrl).href;

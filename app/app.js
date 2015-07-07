@@ -10,31 +10,61 @@ cssify.byUrl('../style.css');
 var Parse = require('parse-browserify');
 var config = require("./config");
 Parse.initialize(config.Parse.appId, config.Parse.javascriptKey);
-//window.Parse = Parse;
-
-
-
-//Load Registry files
-window.app = {
-  routes: {}
+//build app
+var app = {
+  $layouts: {},
 };
-//register layout sections like header footer etc
-require('./layouts/')(m);
+var emitter = require('events').EventEmitter;
+window.ee = new emitter();
+
+//load layout sections like header footer etc
+require('./layouts/')(app);
 var register = require('./registry.js');
+register.loader(Parse, app);
 
-register.loader(m, Parse, app);
-register.buildRoutes()
+//Register with SPAMS;
+window.$pa = require('./core/SPAMS')(app);
 
-//Add routes
-m.route(document.getElementById('content'), '/', {
-  '/': app.hello,
-  '/todo': app.todo,
-  '/new': {
-    controller: function() {
-      if(Parse.User.current()) m.route('/todo');
+console.log(app)
+
+function appBoil() {
+  //Add routes
+  m.route(document.getElementById('content'), '/', {
+    '/': {
+      view: function() {
+        return "Hello"
+      }
     },
-    view: function() {
-      return m('div', 'This is a test')
+    '/todo': {
+      view: function() {
+        return "Todo"
+      }
+    },
+    '/new': {
+      controller: function() {
+        if (Parse.User.current()) m.route('/');
+        console.log("Called New")
+      },
+      view: function() {
+        return [m('div', 'This is a test'), m("picture-frame", m('img', {
+          src: "https://www.polymer-project.org/images/logos/p-logo-32.png"
+        }))]
+      }
+    },
+    '/new/:id': {
+      controller: function() {
+        console.log("Called New")
+        return {
+          id: m.route.param("id")
+        };
+      },
+      view: function(ctrl) {
+        return [m('div', 'This is a test ' + ctrl.id), m("picture-frame",
+          m(
+            'img', {
+              src: "https://www.polymer-project.org/images/logos/p-logo-32.png"
+            }))]
+      }
     }
-  }
-})
+  })
+}

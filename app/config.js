@@ -1,7 +1,7 @@
 window.type = "bctestnet";
 window.appState = "development";
 module.exports = {
-	initialRoute: "main.todo",
+	initialRoute: "/",
 	Parse: {
 		appName: "Simple Send",
 		appId: "ALBGBqNftuVGOR9vZV1oLbePj8Yid74CvFUosT7W",

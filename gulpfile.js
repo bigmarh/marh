@@ -61,11 +61,23 @@ function getFolders(dir) {
 
 gulp.task('registerModules', function() {
   var folders = getFolders(scriptsPath);
-  var registery = "module.exports = { loader:function(m,Parse,app){ \n";
+  var registery = "module.exports = { loader:function(Parse,app){ \n";
 
   var tasks = folders.map(function(folder) {
     registery += "require('./modules/" + folder +
-      "/index.js')(m,Parse,app); \n";
+      "/index.js')(Parse,app); \n";
+
+    var subFolders = getFolders(scriptsPath + folder + '/' +
+      'modules/');
+    var subRegistry = "module.exports = function(Parse,app) {";
+    var subtasks = subFolders.map(function(folder) {
+      subRegistry += "require('./modules/" + folder +
+        "/index.js')(Parse,app); \n";
+    });
+    subRegistry += "}";
+    fs.writeFileSync(scriptsPath + folder + '/registry.js',
+      subRegistry);
+
   });
   registery += "}, buildRoutes: function(){ console.log('loaded')}}"
   fs.writeFileSync('./app/registry.js', registery);

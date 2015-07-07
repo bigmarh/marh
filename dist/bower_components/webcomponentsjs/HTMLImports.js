@@ -516,7 +516,7 @@ window.HTMLImports.addModule(function(scope) {
       return r;
     },
     replaceUrls: function(text, urlObj, linkUrl, regexp) {
-      return text.replace(regexp, function(m, pre, url, post) {
+      return text.replace(regexp, function( pre, url, post) {
         var urlPath = url.replace(/["']/g, "");
         if (linkUrl) {
           urlPath = new URL(urlPath, linkUrl).href;

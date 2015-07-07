@@ -1,0 +1,6 @@
+{
+  "name": "dashboard",
+  "layout": "main",
+  "description": "Dashboard Backend for Fluent App",
+  "version": "0.0.1"
+}

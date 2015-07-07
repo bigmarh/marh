@@ -1,4 +1,4 @@
-module.exports = function(m){ 
+module.exports = function(app) {
 	// register layouts
-	require('./main.js')(m); 
+	require('./main.js')(app);
 }

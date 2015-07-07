@@ -1,5 +1,8 @@
-module.exports = function() {
+var emitter = require('events').EventEmitter;
 
+module.exports = function(app) {
+  var layoutName = "main";
+  app.$layouts[layoutName] = {};
   var menu = {}
   menu.view = function(controller) {
 
@@ -22,10 +25,13 @@ module.exports = function() {
           'Hello'
         ),
         m('md-button', {
-            class: m.route() === 'main.about' ? 'active item' : 'item',
+            class: m.route() === '/new' ? 'active item' : 'item',
             onclick: function() {
               m.route('/new');
-            }
+            },
+            ondblclick: function() {
+              m.route('/new/52');
+            },
           },
           'About' + m.route()
         )
@@ -33,7 +39,7 @@ module.exports = function() {
     ];
   };
 
-  m.mount(document.getElementById('header'), menu);
+
 
   var state = {};
 
@@ -46,10 +52,15 @@ module.exports = function() {
       )
     ]
   }
+  ee.on('load' + layoutName, function() {
+    m.mount(document.getElementById('header'), menu);
+    m.render(document.getElementById('main'), {
+      view: function() {
+        return m('#content')
+      }
+    });
+    m.mount(document.getElementById('footer'), state);
 
-  m.render(document.getElementById('main'),{view:function(){return m('#content')}})
-  m.mount(document.getElementById('footer'), state);
-
-
+  })
 
 }

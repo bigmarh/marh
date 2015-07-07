@@ -13,7 +13,8 @@
     <meta name="google-signin-requestvisibleactions" content="http://schema.org/AddAction" />
     <!-- <meta name="google-signin-callback" content="signinCallback" /> -->
     <meta name="google-signin-cookiepolicy" content="single_host_origin" />
-
+    <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
+    <link rel="import" href="/bower_components/polymer/polymer.html">
 </head>
 
 <body>
@@ -32,13 +33,13 @@
     var ECIES = require('bitcore-ecies');
     </script>
 
-
       <script src="../bower_components/mithril/mithril.js"></script>
-      <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mithril/0.1.34/mithril.min.js">
-      </script> -->
       <script src="../bower_components/mithril-ui-router/mithril-ui-router.js"></script>
       <script src="../bundle.js"></script>
-
+      <script type="text/javascript">
+        $pa.bootstrap('dashboard')
+      </script>
 </body>
+
 
 </html>
