@@ -17,9 +17,9 @@ module.exports = function(app) {
           'Todo'
         ),
         m('md-button', {
-            class: m.route() === '/' ? 'active item' : 'item',
+            class: m.route() === '/hello' ? 'active item' : 'item',
             onclick: function() {
-              m.route('/');
+              m.route('/hello');
             }
           },
           'Hello'

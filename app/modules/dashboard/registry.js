@@ -1,3 +1,2 @@
-module.exports = function(Parse, app) {
-  require('./modules/hello/index.js')(Parse, app);
+module.exports = function(Parse,app) {require('./modules/hello/index.js')(Parse,app); 
 }
