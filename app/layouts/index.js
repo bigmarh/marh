@@ -1,4 +1,1 @@
-module.exports = function(app) {
-	// register layouts
-	require('./main.js')(app);
-}
+module.exports = function(Parse, app) {}

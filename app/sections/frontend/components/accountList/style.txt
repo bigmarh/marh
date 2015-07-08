@@ -1,0 +1,3 @@
+.editable{
+  width:10px;
+}

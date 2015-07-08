@@ -1,13 +1,15 @@
 //Load bitcoin Libraries
-window.bip39 = require('bip39');
 var cssify = require('cssify');
+var emitter = require('events').EventEmitter;
+window.ee = new emitter();
 window.debug = true;
 window.debugger = function(string, type) {
-    if (!debug) return;
-    if (type) return console[type](string);
-    console.log(string)
-  }
-  //Load styles
+  if (!debug) return;
+  if (type) return console[type](string);
+  console.log(string)
+}
+
+//Load styles
 require('../style/animate.css')
 cssify.byUrl('../style.css');
 
@@ -19,14 +21,16 @@ Parse.initialize(config.Parse.appId, config.Parse.javascriptKey);
 var app = {
   $layouts: {},
 };
-var emitter = require('events').EventEmitter;
-window.ee = new emitter();
 
-//load layout sections like header footer etc
-require('./layouts/')(app);
-var register = require('./registry.js');
-//load section apps
-register.loader(Parse, app);
-
+var SPAMS = require('./core/SPAMS')(Parse, app);
 //Register with SPAMS;
-window.$pa = require('./core/SPAMS')(app);
+window.$pa = {};
+window.$pa.bootstrap = SPAMS.bootstrap;
+window.$pa.helpers = SPAMS.helpers;
+
+var blocks = require('bulk-require')(__dirname, ['sections/**/index.js',
+  'layouts/*.js'
+])
+
+//load blocks
+SPAMS.loadBlocks(blocks);

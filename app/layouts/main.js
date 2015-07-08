@@ -2,19 +2,18 @@ var emitter = require('events').EventEmitter;
 
 module.exports = function(app) {
   var layoutName = "main";
-  app.$layouts[layoutName] = {};
   var menu = {}
   menu.view = function(controller) {
 
     return [
       m('.ui.menu',
         m('md-button', {
-            class: m.route() === '/todo' ? 'active item' : 'item',
+            class: m.route() === '/bitadd' ? 'active item' : 'item',
             onclick: function() {
               m.route("/bitadd");
             }
           },
-          'Todo'
+          'bitadd'
         ),
         m('md-button', {
             class: m.route() === '/hello' ? 'active item' : 'item',

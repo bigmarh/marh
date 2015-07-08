@@ -1,5 +1,6 @@
 module.exports = function(module, app) {
   module.view = function(ctrl) {
+    var changed = false;
     return [
       m("div.animated.slideInLeft#" + module.name + "-view",
         "This is the view for " + module.name, m('h2#bitcoin-address',
@@ -8,6 +9,9 @@ module.exports = function(module, app) {
       m('button', {
         onclick: module.$.updateAddress
       }, "Update Address"),
+      m('button', {
+        onclick: module.$.toggleListView
+      }, "Change Template"),
       m('.counter.pull-right',
         m('span', "previous address:"),
         m('br'),
@@ -16,12 +20,9 @@ module.exports = function(module, app) {
         m('br'),
         m('span', " created:" + module.$.addresses().length)
       ),
-      m.component(app.$cmp.accountList, {
+      m.component(module.$.list(), {
         items: module.$.addresses(),
         template: app.$tmp.accountList,
-        attributes: {
-          style: "max-height:100px; overflow:auto"
-        },
         class: ".address-list"
       })
     ];

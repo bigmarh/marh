@@ -1,4 +1,5 @@
 module.exports = function(Parse, app) {
+
   return function(ctrl, args) {
     if (args.template) {
       return args.template(args);
