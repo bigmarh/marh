@@ -1,40 +1,31 @@
 module.exports = function(module, app) {
-
-  var myComponent = {
-    controller: function(args) {
-      console.log(args);
-      this.items = args.items;
-    },
-    view: function(ctrl, args) {
-      if (args.template) {
-        return args.template(args);
-      }
-      return m('#list', args.items.map(function(address) {
-        return m('li', address);
-      }))
-    }
-  }
-
+  console.log(app)
 
 
   module.view = function(ctrl) {
     return [
       m("div.animated.slideInLeft#" + module.name + "-view",
         "This is the view for " + module.name),
-      m.component({
-        view: function() {
-          return m('div', "Hey Now " + app.$meta.name + "! " +
-            module
-            .$.email)
-        }
-      }),
+      m('div', "Hey Now " + app.$meta.name + "! " + module.$.email),
       m('#bitcoin-address', module.$.address()),
       m('button', {
         onclick: module.$.updateAddress
       }, "Update Address"),
-      m.component(myComponent, {
+      m('.counter.pull-right',
+        m('span', "previous address:"),
+        m('br'),
+        m('button', (module.$.addresses()[module.$.addresses().length - 2] ||
+          'n/a')),
+        m('br'),
+        m('span', " created:" + module.$.addresses().length)
+      ),
+      m.component(app.$cmp.accountList, {
         items: module.$.addresses(),
-        template: app.$templates.accountList
+        template: app.$tmp.accountList,
+        attributes: {
+          style: "max-height:100px; overflow:auto"
+        },
+        class: ".address-list"
       })
     ];
   };
