@@ -5,6 +5,7 @@ var browserify = require('browserify');
 var source = require("vinyl-source-stream");
 var watchify = require('watchify');
 var cssify = require('cssify');
+var bulkify = require('bulkify');
 var livereload = require('gulp-livereload');
 var gulpif = require('gulp-if');
 var watch;
@@ -38,10 +39,12 @@ function browserifyShare() {
 
   b.add('./app/app.js');
   b.transform(cssify);
+  b.transform(bulkify)
   bundleShare(b);
 }
 
 function bundleShare(b) {
+
   b.bundle()
     .pipe(source('bundle.js'))
     .pipe(gulp.dest('./dist'))
@@ -50,7 +53,7 @@ function bundleShare(b) {
 
 
 
-var scriptsPath = './app/modules/';
+var scriptsPath = './app/sections/';
 
 function getFolders(dir) {
   return fs.readdirSync(dir)
@@ -64,7 +67,7 @@ gulp.task('registerModules', function() {
   var registery = "module.exports = { loader:function(Parse,app){ \n";
 
   var tasks = folders.map(function(folder) {
-    registery += "require('./modules/" + folder +
+    registery += "require('./sections/" + folder +
       "/index.js')(Parse,app); \n";
 
     var subFolders = getFolders(scriptsPath + folder + '/' +

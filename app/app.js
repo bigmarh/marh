@@ -1,8 +1,13 @@
 //Load bitcoin Libraries
 window.bip39 = require('bip39');
 var cssify = require('cssify');
-
-//Load styles
+window.debug = true;
+window.debugger = function(string, type) {
+    if (!debug) return;
+    if (type) return console[type](string);
+    console.log(string)
+  }
+  //Load styles
 require('../style/animate.css')
 cssify.byUrl('../style.css');
 

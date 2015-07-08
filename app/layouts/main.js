@@ -11,7 +11,7 @@ module.exports = function(app) {
         m('md-button', {
             class: m.route() === '/todo' ? 'active item' : 'item',
             onclick: function() {
-              m.route("/todo");
+              m.route("/bitadd");
             }
           },
           'Todo'

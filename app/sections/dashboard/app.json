@@ -1,0 +1,10 @@
+module.exports = function() {
+  return {
+    "name": "dashboard",
+    "layout": "main",
+    "rootModule": "hello",
+    "rootPath": "/",
+    "description": "Dashboard Backend for Fluent App",
+    "version": "0.0.1"
+  }
+}
