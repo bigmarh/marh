@@ -4,7 +4,7 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "install": "npm install && cd dist && bower install"
+    "install": "sudo npm install && cd dist && bower install"
   },
   "devDependencies": {
     "browserify": "^10.2.4",
