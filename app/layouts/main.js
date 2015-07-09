@@ -7,7 +7,7 @@ module.exports = function(app) {
 
     return [
       m('.ui.menu',
-        m('md-button', {
+        m('button', {
             class: m.route() === '/bitadd' ? 'active item' : 'item',
             onclick: function() {
               m.route("/bitadd");
@@ -15,7 +15,7 @@ module.exports = function(app) {
           },
           'bitadd'
         ),
-        m('md-button', {
+        m('button', {
             class: m.route() === '/hello' ? 'active item' : 'item',
             onclick: function() {
               m.route('/hello');
@@ -23,7 +23,7 @@ module.exports = function(app) {
           },
           'Hello'
         ),
-        m('md-button', {
+        m('button', {
             class: m.route() === '/new' ? 'active item' : 'item',
             onclick: function() {
               m.route('/new');

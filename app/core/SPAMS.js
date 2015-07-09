@@ -46,6 +46,11 @@ module.exports = function(Parse, app) {
         styleEl.appendChild(text);
         document.getElementsByTagName("head")[0].insertBefore(styleEl,
           document.getElementsByTagName("head")[0].firstChild);
+      },
+      unloadStyle: function(component) {
+        if (document.getElementById(component.id))
+          document.getElementsByTagName("head")[0].removeChild(document.getElementById(
+            component.id));
       }
     },
     currentUserSetup: function() {

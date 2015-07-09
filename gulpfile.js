@@ -53,45 +53,8 @@ function bundleShare(b) {
 
 
 
-var scriptsPath = './app/sections/';
-
-function getFolders(dir) {
-  return fs.readdirSync(dir)
-    .filter(function(file) {
-      return fs.statSync(path.join(dir, file)).isDirectory();
-    });
-}
-
-gulp.task('registerModules', function() {
-  var folders = getFolders(scriptsPath);
-  var registery = "module.exports = { loader:function(Parse,app){ \n";
-
-  var tasks = folders.map(function(folder) {
-    registery += "require('./sections/" + folder +
-      "/index.js')(Parse,app); \n";
-
-    var subFolders = getFolders(scriptsPath + folder + '/' +
-      'modules/');
-    var subRegistry = "module.exports = function(Parse,app) {";
-    var subtasks = subFolders.map(function(folder) {
-      subRegistry += "require('./modules/" + folder +
-        "/index.js')(Parse,app); \n";
-    });
-    subRegistry += "}";
-    fs.writeFileSync(scriptsPath + folder + '/registry.js',
-      subRegistry);
-
-  });
-  registery += "}, buildRoutes: function(){ console.log('loaded')}}"
-  fs.writeFileSync('./app/registry.js', registery);
-
-});
-
 // define the browserify-watch as dependencies for this task
 gulp.task('watch', ['browserify-watch'], function() {
-  // watch other files, for example .less file
-  gulp.watch(scriptsPath, ['registerModules']);
-
   // Start live reload server
   livereload.listen(35729);
 });
