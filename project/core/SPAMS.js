@@ -7,7 +7,6 @@ module.exports = function(Parse, app) {
     bootstrapCalled: false,
     app: {},
     bootstrap: function(appName, element) {
-      console.log("called")
       if (SPAMS.bootstrapCalled) return console.error(
         "Bootrap called more than once.  Please find the problem this could damage your app"
       )
@@ -36,7 +35,6 @@ module.exports = function(Parse, app) {
   window.$pa.core = SPAMS.core;
   window.$location = SPAMS.helpers.location;
   document.addEventListener("DOMContentLoaded", function(event) {
-    console.log("Loaded from html")
     var app = document.documentElement.getAttribute('marh-app');
     if (app) SPAMS.bootstrap(app);
   });
