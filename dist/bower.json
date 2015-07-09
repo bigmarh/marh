@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "homepage": "https://github.com/bigmarh/marh",
   "authors": [
-    "Lamar Wilson <lamar.wilson@gmail.com>"
+    "Lamar Wilson <>"
   ],
   "description": "Seed for marh SPAMS system",
   "main": "index.html",
