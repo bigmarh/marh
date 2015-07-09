@@ -11,7 +11,7 @@ window.debugger = function(string, type) {
 
 //Load styles
 require('../dist/bower_components/materialize/dist/css/materialize.min.css')
-require('../style/animate.css')
+require('../dist/bower_components/animate.css/animate.min.css')
 cssify.byUrl('../style.css');
 
 //require parse
