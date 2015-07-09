@@ -3,4 +3,5 @@ parse/config
 lastSign/cloud/config
 lastSign/config
 dist/bundle.js
+config.js
 .DS_Store
