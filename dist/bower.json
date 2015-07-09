@@ -1,0 +1,28 @@
+{
+  "name": "Marh Seed",
+  "version": "0.0.1",
+  "homepage": "https://github.com/bigmarh/marh",
+  "authors": [
+    "Lamar Wilson <lamar.wilson@gmail.com>"
+  ],
+  "description": "Seed for marh SPAMS system",
+  "main": "index.html",
+  "keywords": [
+    "mithril",
+    "materialize"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "animate.css": "~3.3.0",
+    "hashids": "~1.0.2",
+    "jquery": "~2.1.4",
+    "materialize": "~0.97.0",
+    "mithril": "~0.2.0"
+  }
+}

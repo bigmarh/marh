@@ -4,9 +4,13 @@ module.exports = function(Parse, app) {
     registerApp: function(app) {
       return SPAMS.app = app;
     },
-
+    bootstrapCalled: false,
     app: {},
     bootstrap: function(appName, element) {
+      if (SPAMS.bootstrapCalled) return console.error(
+        "Bootrap called more than once.  Please find the problem this could damage your app"
+      )
+      SPAMS.bootstrapCalled = true;
       var app = SPAMS.app[appName];
       //load layout if specified
       if (app.$meta.layout) ee.emit('load.' + app.$meta.layout);
@@ -30,5 +34,9 @@ module.exports = function(Parse, app) {
   window.$pa.helpers = SPAMS.helpers;
   window.$pa.core = SPAMS.core;
   window.$location = SPAMS.helpers.location;
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var app = document.documentElement.getAttribute('marh-app');
+    if (app) SPAMS.bootstrap(app);
+  });
   return SPAMS;
 }
