@@ -4,21 +4,7 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "gWatch": "gulp watch",
-    "install": "napa",
-    "build": "gulp registerModules && browserify  -t brfs app/app.js > dist/bundle.js",
-    "start": "npm run build && cd dist && w3",
-    "start-hey": "node hey.js",
-    "push": "git push origin master && git push backup master",
-    "watch": "watchify -t node-lessify -t bulkify project/app.js -o dist/bundle.js",
-    "deploy": "cp -R ~/LoveWillApps/Seedlings/simplesend./dist/ ~/LoveWillApps/Seedlings/simplesend./parse/public/ && cd ~/LoveWillApps/Seedlings/simplesend./parse && parse develop 'Simple Send'"
-  },
-  "napa": {
-    "angular": "angular/bower-angular",
-    "angular-route": "angular/bower-angular-route",
-    "angular-resource": "angular/bower-angular-resource",
-    "angular-sanitize": "angular/bower-angular-sanitize",
-    "ui-router": "angular-ui/ui-router"
+
   },
   "devDependencies": {
     "browserify": "^10.2.4",
