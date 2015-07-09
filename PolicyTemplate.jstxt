@@ -1,1 +1,0 @@
-[{"type":"transactionLimit","condition":{"amount":5,"currency":"BTC"},"action":{"type":"deny"}},{"type":"timeLimit","condition":{"period":86400,"amount":50,"currency":"BTC"},"action":{"type":"deny"}}]
