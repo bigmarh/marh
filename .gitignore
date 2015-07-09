@@ -4,4 +4,5 @@ lastSign/cloud/config
 lastSign/config
 dist/bundle.js
 config.js
+/bower_components
 .DS_Store
