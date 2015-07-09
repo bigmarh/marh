@@ -15,29 +15,22 @@
     <meta name="google-signin-cookiepolicy" content="single_host_origin" />
 </head>
 
-<body>
-  <div layout="column">
+<body>Add another application to your apps folder and call it here like this
+  <code>
 
-
-    <header id="header" class="container"  flex="20"></header>
-      <div layout="row">
-    <div id="main" class="animated fadeIn" flex="60"></div>
-    <footer id="footer" flex></footer>
-    </div>
-    </div>
-    <script src="../bower_components/bitcore/bitcore.min.js"></script>
-    <script src="../bower_components/bitcore-ecies/bitcore-ecies.min.js"></script>
-    <script>
-      var bitcore = require('bitcore');
-      var ECIES = require('bitcore-ecies');
-    </script>
+  &lt;script type="text/javascript"&gt;$pa.bootstrap('&lt;app name&gt;')&lt;/script&gt;
+</code>
+<p>
+  <a href="/"> Or go back home</a>
+</p>
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
       <script src="../bower_components/materialize/dist/js/materialize.min.js"></script>
       <script src="../bower_components/mithril/mithril.js"></script>
       <script src="../bundle.js"></script>
-      <script type="text/javascript">
-          $pa.bootstrap('backend')
-      </script>
+<script type="text/javascript">
+  //Uncomment the following line
+  //<script type="text/javascript">$pa.bootstrap('<app name>')</script>
+</script>
 </body>
 
 

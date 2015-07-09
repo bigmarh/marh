@@ -24,12 +24,7 @@ module.exports = function(app, Parse) {
           },
           '1 click= app, 2 clicks = comp'
         ),
-        m('button', {
-            class: m.route() === '/' ? 'active item' : 'item',
-            onclick: $location.bind(window, '/a/')
-          },
-          'backend'
-        )
+        m('a[href="/a"]', 'To backend App')
       )
     ];
   };
