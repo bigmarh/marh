@@ -10,7 +10,7 @@ window.debugger = function(string, type) {
 }
 
 //Load styles
-require('../style/materialize.min.css')
+require('../dist/bower_components/materialize/dist/css/materialize.min.css')
 require('../style/animate.css')
 cssify.byUrl('../style.css');
 
