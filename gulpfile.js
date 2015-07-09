@@ -1,5 +1,3 @@
-var fs = require('fs');
-var path = require('path');
 var gulp = require('gulp');
 var browserify = require('browserify');
 var source = require("vinyl-source-stream");
