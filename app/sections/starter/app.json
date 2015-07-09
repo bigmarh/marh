@@ -1,8 +1,0 @@
-{
-  "name": "starter",
-  "layout": "main",
-  "rootModule": "hello",
-  "rootPath": "/",
-  "description": "Starter application",
-  "version": "0.0.1"
-}

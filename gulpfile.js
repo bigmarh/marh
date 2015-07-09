@@ -37,7 +37,7 @@ function browserifyShare() {
     });
   }
 
-  b.add('./app/app.js');
+  b.add('./project/app.js');
   b.transform(cssify);
   b.transform(bulkify)
   bundleShare(b);

@@ -1,0 +1,9 @@
+{
+  "name": "starter",
+  "layout": "starter",
+  "rootModule": "hello",
+  "rootPath": "/",
+  "description": "Starter application",
+  "version": "0.0.1",
+  "navs": ["primary", "side"]
+}
