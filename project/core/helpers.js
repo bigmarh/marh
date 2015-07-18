@@ -47,6 +47,9 @@ module.exports = function(Parse, app) {
         blocks.apps[key](Parse, app);
       });
     },
+    isFn: function(f) {
+      return !!(f && f.call && f.apply);
+    },
     location: function(path) {
       window.location = path;
     },

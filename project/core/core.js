@@ -24,7 +24,7 @@ module.exports = function(Parse, app) {
       });
     },
     component: function(name, attr, text, extras) {
-      attr.text = text;
+      if (attr) attr.text = text;
       return m.component($cmp[name](), attr, extras);
     },
   }

@@ -9,7 +9,7 @@ module.exports = function() {
     margin-top: -10px;
     margin-left: -10px;
     opacity: 0;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(224, 224, 224, 0.2);
     -webkit-transition: all 0.7s ease-out;
     -moz-transition: all 0.7s ease-out;
     -o-transition: all 0.7s ease-out;

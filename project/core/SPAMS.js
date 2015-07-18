@@ -27,7 +27,10 @@ module.exports = function(Parse, app) {
     helpers: require('./helpers')(Parse, app),
   }
 
+
   SPAMS.registerApp(app);
+  //Load Elements
+  require('./elements')();
   window.currentUser = SPAMS.helpers.currentUserSetup;
   //Register with SPAMS;
   window.$pa = {};

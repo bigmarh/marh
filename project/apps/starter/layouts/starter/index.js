@@ -1,5 +1,7 @@
 var emitter = require('events').EventEmitter;
 var layoutName = $pa.helpers.dirName(__dirname);
+var element = require('../../../../core/elements')();
+var button = element.button;
 module.exports = function(app, Parse) {
   var menu = {}
   menu.view = function(controller) {
@@ -7,6 +9,9 @@ module.exports = function(app, Parse) {
       m('header.ui.menu',
         $pa.c('button', {
           route: '/',
+          attrs: {
+            class: "md-raised"
+          }
         }, 'Home'),
         $pa.c('button', {
           route: '/starter'

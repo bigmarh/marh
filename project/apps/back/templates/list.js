@@ -5,11 +5,7 @@ module.exports = function(ctrl, args) {
       'h2', ctrl.fishing),
     m('md-content.list-wrapper[flex][md-scroll-y]', args.attributes,
       items.map(function(item, index) {
-        return m('.card.list-item#' + (item.key || index), m('li', {
-            onclick: function() {
-              alert(item)
-            }
-          },
+        return m('.card.list-item#' + (item.key || index), m('li',
           item));
       })),
   ]))
