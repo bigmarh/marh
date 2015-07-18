@@ -3,4 +3,5 @@ module.exports = function(app, module) {
   var path = "/" + namespace;
   app.$routes[path] = module;
   app.$routes['/todo'] = $cmp.list;
+
 }
