@@ -22,13 +22,14 @@ Parse.initialize(config.Parse.appId, config.Parse.javascriptKey);
 var app = {
   $layouts: {},
 };
-window.$cmp = require('bulk-require')(__dirname, [
-  'components/**/index.js'
-]).components;
+
 
 var SPAMS = require('./core/SPAMS')(Parse, app);
 var apps = require('bulk-require')(__dirname, ['apps/**/index.js'])
-  //load components
+window.$cmp = require('bulk-require')(__dirname, [
+  'components/**/index.js'
+]).components;
+//load components
 
 
 

@@ -1,7 +1,11 @@
 module.exports = function(ctrl, args) {
 
 
-  // function config(element, isInitialized) {
+  //  Using canvas(deprecated) 
+  //
+  //
+  //
+  //function config(element, isInitialized) {
   //   if (isInitialized) return;
   //   var ctx = element.getContext("2d");
   //   console.dir(element.parentElement);
@@ -114,7 +118,7 @@ module.exports = function(ctrl, args) {
     var Effect = {
 
       // Effect delay
-      duration: 750,
+      duration: 400,
 
       show: function(touchX, touchY) {
 
@@ -128,14 +132,11 @@ module.exports = function(ctrl, args) {
         var relativeX = touchX;
         var scale = 'scale(' + ((element.clientWidth / 100) * 10) + ')';
 
-
-
         // Attach data to element
         ripple.setAttribute('data-hold', Date.now());
         ripple.setAttribute('data-scale', scale);
         ripple.setAttribute('data-x', relativeX);
         ripple.setAttribute('data-y', relativeY);
-
         // Set ripple position
         var rippleStyle = {
           'top': relativeY + 'px',
@@ -171,7 +172,7 @@ module.exports = function(ctrl, args) {
           'cubic-bezier(0.250, 0.460, 0.450, 0.940)';
 
         ripple.setAttribute('style', convertStyle(rippleStyle));
-        setTimeout(args.click, 500)
+        setTimeout(args.click, 200)
         return ripple;
       },
 
@@ -341,11 +342,12 @@ module.exports = function(ctrl, args) {
     }
   }
   args.attrs = args.attrs || {};
-  if (args.attrs.route) args.click = function() {
-    return m.route(args.attrs.route);
+  var prefix = (args.attrs.href) ? 'a' : "";
+  if (args.route) args.click = function() {
+    return m.route(args.route);
   }
   args.attrs.config = config;
-  return m('.md-button', args.attrs, [
+  return m(prefix + '.md-button', args.attrs, [
     m('.center', args.text)
   ])
 }

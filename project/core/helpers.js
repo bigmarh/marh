@@ -28,10 +28,6 @@ module.exports = function(Parse, app) {
       }
 
     },
-    componentAbstract: function(name, attr, text, extras) {
-      attr.text = text;
-      return m.component($cmp[name](), attr, extras);
-    },
     unloadStyle: function(component) {
       if (document.getElementById(component.id))
         document.getElementsByTagName("head")[0].removeChild(document.getElementById(

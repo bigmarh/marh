@@ -36,7 +36,7 @@ module.exports = function(Parse, app) {
   window.$pa.core = SPAMS.core;
   window.$location = SPAMS.helpers.location;
   //creates global components
-  $pa.c = SPAMS.helpers.componentAbstract;
+  $pa.c = SPAMS.core.component;
 
   document.addEventListener("DOMContentLoaded", function(event) {
     var app = document.documentElement.getAttribute('marh-app');

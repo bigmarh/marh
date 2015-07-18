@@ -3,7 +3,7 @@ module.exports = function(module, app) {
     return [
       m("div.animated.slideInLeft#" + module.name + "-view",
         "This is the view for " + module.name),
-      m.component(module.$.listComp(), {
+      $pa.c('list', {
         items: module.$.reasons(),
         template: app.$tmp.list,
         class: ".address-list"

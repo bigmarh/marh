@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "back",
   "layout": "starter",
   "rootModule": "hello",
   "rootPath": "/",
