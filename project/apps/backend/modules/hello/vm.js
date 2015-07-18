@@ -6,7 +6,7 @@ module.exports = function(module, Parse, app) {
     var vm = {}
     vm.init = function() {
       this.greeting = "Hello World";
-      this.listComp = $cmp.list;
+      this.listComp = m.prop(components['list']);
       this.reasons = m.prop(Reason.list());
     }
     return vm

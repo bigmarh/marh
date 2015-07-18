@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<body  onload="document.body.style.display = 'block'" class="fadeIn animated">Add another application to your apps folder and call it here like this
+
+      <!-- <div class="md-button go" onclick="alert(4)">
+          <div class="center">Try</div>
+          <a class="md-ripple-container" style="po" onClick="alert(3)"></a>
+      </div> -->
+
+      <script src="../bower_components/mithril/mithril.js"></script>
+      <script>
+      var pages;
+        var comp = {};
+        comp.view = function(){
+          return m('.peace',[
+            "This is a component",
+            m.component(comp2)
+          ])
+        }
+
+        var comp2 = {};
+        comp2.view = function(){
+          return m('.peace',"This is a component2")
+        }
+
+
+
+        var app = {};
+        app.controller = function(){
+          return {
+            pages: m.prop([1,2,3,4,5,6,7,8,9]),
+            currentComp: function(current){
+              return {1:comp,2:comp2}[current];
+            },
+            current: 1
+          }
+        },
+        app.view = function(ctrl){
+
+
+          return [
+            m('header.header[name="steve"]',[
+              m('h2.header-title', "Mypage"),
+              m('#lafe.subheader',"Lafe")
+            ]),
+            m('.content',[
+              m('.col',[
+                m('ol',ctrl.pages().map(function(page){
+                  return m('li',page);
+                })
+              )
+            ]),
+            m('.col', m('button',{
+              onclick:function(){
+              ctrl.pages().push(3);
+              if(ctrl.current == 1) ctrl.current = 2;
+              else ctrl.current = 1;
+            }},"Add to list")),
+            m('.col', m.component(ctrl.currentComp(ctrl.current)))
+          ])
+        ]
+      }
+
+        //m.mount(document.body, app);
+      </script>
+
+
+
+</body>
+</html>

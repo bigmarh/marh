@@ -9,8 +9,7 @@
     app.$routes = {};
     app.$meta = appInfo;
     //load addons
-    var addons = bulk(__dirname, [
-      "modules/**/index.js",
+    var addons = bulk(__dirname, ["modules/**/index.js",
       "templates/*.js",
       "layouts/**/index.js"
     ]);

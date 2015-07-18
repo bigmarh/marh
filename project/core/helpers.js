@@ -5,18 +5,32 @@ module.exports = function(Parse, app) {
       replace(/^[^\/]+\/\*!?/, '').
       replace(/\*\/[^\/]+$/, '');
     },
-    loadStyle: function(style, id) {
-      var style = $pa.helpers.hDoc(style);
-      //if same element don't reload or if no style
-      if (document.getElementById(id) || style.search("function") > -1)
-        return;
-      //build styleElement
-      var styleEl = document.createElement('style');
-      styleEl.id = id;
-      var text = document.createTextNode(style);
-      styleEl.appendChild(text);
-      document.getElementsByTagName("head")[0].insertBefore(styleEl,
-        document.getElementsByTagName("head")[0].firstChild);
+    loadStyle: function(component) {
+      try {
+        var style = $pa.helpers.hDoc(component.style);
+
+        //if same element don't reload or if no style
+        if (document.getElementById(component.id) || style.search(
+            "function") >
+          -1)
+          return;
+        //build styleElement
+        var styleEl = document.createElement('style');
+        styleEl.id = component.id;
+        var text = document.createTextNode(style);
+        styleEl.appendChild(text);
+
+        // document.getElementsByTagName("head")[0].insertBefore(styleEl,
+        //   document.getElementsByTagName("head")[0].firstChild);
+        document.getElementsByTagName("head")[0].appendChild(styleEl)
+      } catch (e) {
+        console.error(e);
+      }
+
+    },
+    componentAbstract: function(name, attr, text, extras) {
+      attr.text = text;
+      return m.component($cmp[name](), attr, extras);
     },
     unloadStyle: function(component) {
       if (document.getElementById(component.id))

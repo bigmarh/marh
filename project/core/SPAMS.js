@@ -13,7 +13,8 @@ module.exports = function(Parse, app) {
       SPAMS.bootstrapCalled = true;
       var app = SPAMS.app[appName];
       //load layout if specified
-      if (app.$meta.layout) ee.emit('load.' + app.$meta.layout);
+      if (app.$meta.layout) ee.emit('load.' + app.$meta.name + '.' + app.$meta
+        .layout);
       var element = (element) ? element : document.getElementById(
         'content');
       var root = (app.$meta.root) ? app.$meta.root : '/';
@@ -34,6 +35,9 @@ module.exports = function(Parse, app) {
   window.$pa.helpers = SPAMS.helpers;
   window.$pa.core = SPAMS.core;
   window.$location = SPAMS.helpers.location;
+  //creates global components
+  $pa.c = SPAMS.helpers.componentAbstract;
+
   document.addEventListener("DOMContentLoaded", function(event) {
     var app = document.documentElement.getAttribute('marh-app');
     if (app) SPAMS.bootstrap(app);

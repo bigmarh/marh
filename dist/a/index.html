@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html marh-app="backend">
 
 <head>
     <title>Love Will Seed</title>
@@ -8,33 +8,20 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link rel="stylesheet" href="https://material.angularjs.org/latest/angular-material.min.css" media="screen" title="no title" charset="utf-8">
+
     <meta name="google-signin-clientid" content="1025476272641-drb8uo7tcuvdk2drjm7ppgb2v409pjmn.apps.googleusercontent.com" />
     <meta name="google-signin-scope" content="https://www.googleapis.com/auth/plus.profile.emails.read" />
     <meta name="google-signin-requestvisibleactions" content="http://schema.org/AddAction" />
     <!-- <meta name="google-signin-callback" content="signinCallback" /> -->
     <meta name="google-signin-cookiepolicy" content="single_host_origin" />
+
 </head>
 
-<body>Add another application to your apps folder and call it here like this
-  <br>
-  <code>&lt;script type="text/javascript"&gt;$pa.bootstrap('&lt;app name&gt;')&lt;/script&gt;</code>
-<br>
-<span>or</span>
-<p>
-  &lt;html marh-app='&lt;app name&gt;' &gt;
-</p>
-<p>
-  <a href="/"> Or go back home</a>
-</p>
+<body  onload="document.body.style.display = 'block'" class="fadeIn animated">Add another application to your apps folder and call it here like this
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
       <script src="../bower_components/materialize/dist/js/materialize.min.js"></script>
       <script src="../bower_components/mithril/mithril.js"></script>
       <script src="../bundle.js"></script>
-<script type="text/javascript">
-  //Uncomment the following line
-  //<script type="text/javascript">$pa.bootstrap('<app name>')</script>
-</script>
 </body>
-
-
 </html>
