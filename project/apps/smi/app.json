@@ -1,0 +1,9 @@
+{
+  "name": "smi",
+  "layout": "smi",
+  "rootModule": "welcome",
+  "rootPath": "/",
+  "description": "Starter application",
+  "version": "0.0.1",
+  "navs": ["primary", "side"]
+}

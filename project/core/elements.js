@@ -18,6 +18,9 @@ module.exports= function(){
     if(options.class){
       options.attrs.class = options.class;
     }
+    if(options.target){
+      options.attrs.target = options.target;
+    }
     return new $pa.c('button', options, text)
   },
   modal:function(options){
