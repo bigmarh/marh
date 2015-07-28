@@ -7,7 +7,7 @@ module.exports = function(app, Parse) {
 
     header.view = function(controller) {
         return [
-            m('h3', 'SMI CDs'),
+            m('h3', 'SMI Quick Pay')
         ];
     };
 
@@ -19,7 +19,7 @@ module.exports = function(app, Parse) {
                     m('section#content')
                 ]);
             }
-        } )
+        })
         m.mount( document.getElementById('header'), header );
     });
 
