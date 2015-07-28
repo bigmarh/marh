@@ -1,6 +1,34 @@
-node_modules/
-parse/config
-dist/bundle.js
-config.js
+# Node Dependencies
+#############################
+node_modules
+
+# add addition node ignores here as we use them
+# see also: https://github.com/github/gitignore/blob/master/Node.gitignore
+
+
+# Bower Componenets
+#############################
 dist/bower_components
+
+# Gulp Generated Bundle
+#############################
+dist/bundle.js
+
+# Parse Configs
+#############################
+parse/config
+config.js
+
+
+
+# General OS generated files
+#############################
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+
