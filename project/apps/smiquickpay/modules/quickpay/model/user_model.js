@@ -46,43 +46,14 @@ module.exports = function(module, Parse) {
         transferFunds: function(details) {
             var deferred = m.deferred();
 
-            var Account = Parse.Object.extend("Account");
-            var query = new Parse.Query(Account);
-            query.equalTo('user', module.$.currentUser);
-            query.first({
-                success: function(current_user_account) {
-                    // get the to user
-                    var query = new Parse.Query(Parse.User);
-                    query.get(details.to, {
-                        success: function(to_user) {
-                            var to_query = new Parse.Query(Account);
-                            to_query.equalTo('user', to_user);
-                            to_query.first({
-                                success: function(to_user_account) {
-                                    if( parseInt(current_user_account.get('balance')) >= parseInt(details.amount) && parseInt(details.amount) > 0 ) {
-                                        // we now have both accounts (current_user_account, to_user_account)
-                                        current_user_account.set('balance', parseInt(current_user_account.get('balance')) - parseInt(details.amount));
-                                        current_user_account.save(null, {
-                                            success: function(from_account) {
-                                                to_user_account.set('balance', parseInt(to_user_account.get('balance')) + parseInt(details.amount));
-                                                to_user_account.save(null, {
-                                                    success: function(to_account) {
-                                                        module.$.currentUserAccount = from_account;
-                                                        deferred.resolve(true);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        alert("Insufficient funds. Please try again.");
-                                        deferred.resolve(false);
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+            Parse.Cloud.run('transfer', details)
+                .then(function(response) {
+                    deferred.resolve(true);
+                }, function(error) {
+                    deferred.resolve(false);
+                    console.log(error);
+                    alert(error);
+                });
 
             return deferred.promise;
         }
