@@ -50,6 +50,7 @@ function swallowError(error) {
 
 gulp.task("watch", function() {
   gulp.watch("project/**/*.js", ["browserify-watch"]);
+  browserifyShare();
   // Start live reload server
   livereload.listen(35729);
 });
