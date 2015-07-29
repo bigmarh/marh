@@ -34,8 +34,6 @@ window.$cmp = require('bulk-require')(__dirname, [
 
 
 
-
-
 //load apps
 SPAMS.helpers.loadApps(apps);
 
