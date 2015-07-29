@@ -5,5 +5,5 @@ module.exports = {
         appName: "<app_name>",
         appId: "<appId_from_Parse>",
         javascriptKey: "<javascriptKey_from_Parse>"
-    }
+    } 
 }
