@@ -121,7 +121,7 @@ module.exports = function(module, Parse) {
                                 };
                                 m.render(document.getElementById('transfer'), successfulTransferView);
                             } else {
-                                alert('An error occured while processing your transfer. :(');
+                                // alert('An error occured while processing your transfer. :(');
                             }
                         });
                     }

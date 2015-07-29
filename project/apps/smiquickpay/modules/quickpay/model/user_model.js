@@ -59,19 +59,24 @@ module.exports = function(module, Parse) {
                             to_query.equalTo('user', to_user);
                             to_query.first({
                                 success: function(to_user_account) {
-                                    // we now have both accounts (current_user_account, to_user_account)
-                                    current_user_account.set('balance', parseInt(current_user_account.get('balance')) - parseInt(details.amount));
-                                    current_user_account.save(null, {
-                                        success: function(from_account) {
-                                            to_user_account.set('balance', parseInt(to_user_account.get('balance')) + parseInt(details.amount));
-                                            to_user_account.save(null, {
-                                                success: function(to_account) {
-                                                    module.$.currentUserAccount = from_account;
-                                                    deferred.resolve(true);
-                                                }
-                                            });
-                                        }
-                                    });
+                                    if( parseInt(current_user_account.get('balance')) >= parseInt(details.amount) && parseInt(details.amount) > 0 ) {
+                                        // we now have both accounts (current_user_account, to_user_account)
+                                        current_user_account.set('balance', parseInt(current_user_account.get('balance')) - parseInt(details.amount));
+                                        current_user_account.save(null, {
+                                            success: function(from_account) {
+                                                to_user_account.set('balance', parseInt(to_user_account.get('balance')) + parseInt(details.amount));
+                                                to_user_account.save(null, {
+                                                    success: function(to_account) {
+                                                        module.$.currentUserAccount = from_account;
+                                                        deferred.resolve(true);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        alert("Insufficient funds. Please try again.");
+                                        deferred.resolve(false);
+                                    }
                                 }
                             });
                         }
