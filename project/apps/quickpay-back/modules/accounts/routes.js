@@ -3,6 +3,6 @@ module.exports = function(app, module) {
     var path = "/" + namespace;
 
     app.$routes[path] = module;
-    app.$routes[path + '/view'] = require('./views/view')(module, null, true);
+    app.$routes[path + '/view/:id'] = require('./views/view')(module, null, true, require('./controllers/view-account')(module));
 
 }

@@ -1,9 +1,6 @@
 var bulk = require('bulk-require');
 module.exports = function(Parse, app) {
 
-    if(!Parse.User.current())
-        window.location = '/quickpay-public';
-
     var appInfo = require('./app.json');
     var parent = app;
     appInfo.name = __dirname.split('/').pop();

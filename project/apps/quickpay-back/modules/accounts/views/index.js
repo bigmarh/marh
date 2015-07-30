@@ -2,7 +2,8 @@ module.exports = function(module, Parse, needsComponent) {
 
     var view = function(controller) {
         return m('section#accounts', [m(".container", [
-            m("h4.page-header", "Accounts"),
+            m("h4.page-header.left", "Accounts"),
+            m("a.right.waves-effect.waves-light.teal.lighten-2.btn", "Add Account"),
             m("table.striped.accounts", [
                 m("thead", [
                     m("tr", [
@@ -12,28 +13,26 @@ module.exports = function(module, Parse, needsComponent) {
                     ])
                 ]),
                 m("tbody", [
-                    m("tr", [
-                        m("td", "Alvin"),
-                        m("td", "$0.87"),
-                        m("td.control", [m("a.waves-effect.waves-light.teal.lighten-2.btn", "View")])
-                    ]),
-                    m("tr", [
-                        m("td", "Alan"),
-                        m("td", "$3.76"),
-                        m("td.control", [m("a.waves-effect.waves-light.teal.lighten-2.btn", "View")])
-                    ]),
-                    m("tr", [
-                        m("td", "Jonathan"),
-                        m("td", "$7.00"),
-                        m("td.control", [m("a.waves-effect.waves-light.teal.lighten-2.btn", "View")])
-                    ])
-                ])
+                    module.$.accounts() && module.$.accounts().map(function(account, index){
+                        return m("tr", [
+                            m("td", account.get('account_name')),
+                            m("td", "$" + parseFloat(account.get('balance')).toFixed(2)),
+                            m("td.control", [
+                                m("a.waves-effect.waves-light.teal.lighten-2.btn[href='?/accounts/view/"+account.id+"']", "View")
+                            ])
+                        ])
+                    }),
+                ]),
             ]),
             "\n"
         ])]);
     };
 
-    if(needsComponent == true)
+    if(needsComponent == true){
+        if(customController != null){
+            return { view: view, controller: customController };
+        }
         return { view: view, controller: module.controller };
+    }
     return view;
 }
