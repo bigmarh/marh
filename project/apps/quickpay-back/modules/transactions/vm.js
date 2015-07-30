@@ -6,7 +6,8 @@ module.exports = function(module, Parse) {
         var vm = {};
 
         vm.models = {
-            User: require('./model/user_model')(module, Parse)
+            TransactionModel: require('./model/transactionModel')(module, Parse),
+            UserModel: require('./model/userModel')(module, Parse)
         }
 
         vm.init = function() {
