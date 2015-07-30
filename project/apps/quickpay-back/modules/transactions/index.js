@@ -12,8 +12,6 @@ module.exports = function(Parse, app) {
     else throw "There is a conflict in namespace"
     require('./routes')(app, module);
 
-
-
   } catch (e) {
     console.error(e);
   }

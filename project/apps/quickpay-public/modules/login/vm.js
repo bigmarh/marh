@@ -10,8 +10,9 @@ module.exports = function(module, Parse) {
         }
 
         vm.init = function() {
-            if (Parse.User.current())
-                window.location = '/quickpay-back'
+            console.log(Parse.User.current());
+            // if (Parse.User.current())
+            //     window.location = '/quickpay-back';
         }
 
         return vm;
