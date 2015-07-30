@@ -7,6 +7,21 @@ module.exports = function(module, Parse) {
         var UserModel = require('./model/user_model')(module, Parse);
 
         vm.views = {
+            transactions: {
+                view: function(controller) {
+                    return m('div', [
+                        m('h4', 'Transaction #' + controller.transaction_id)
+                    ]);
+                },
+                controller: function() {
+                    this.transaction_id = m.route.param('id');
+                }
+            },
+            signup: {
+                view: function() {
+                    return m('h4', 'Sign up page')
+                }
+            },
             login: {
                 view: function(controller) {
                     return m('section#login', [
