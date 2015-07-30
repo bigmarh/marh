@@ -22,3 +22,13 @@ select {
 	display: block;
 	width: 100%;
 }
+
+
+#content {
+	min-height: calc(100vh - 330px);
+	padding-top: 30px;
+}
+
+table td.control {
+	width: 120px;
+}
