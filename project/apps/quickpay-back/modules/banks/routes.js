@@ -1,8 +1,8 @@
 module.exports = function(app, module) {
     var namespace = module.name;
     var path = "/" + namespace;
-    
+
     app.$routes[path] = module;
-    // app.$routes[path + '/signup'] = module.$.views['signup'];
-    // app.$routes[path + '/transactions/:id'] = module.$.views['transactions'];
+    app.$routes[path + '/view/:id'] = require('./views/view')(module, null, true, require('./controllers/viewBank')(module));
+    app.$routes[path + '/add'] = require('./views/add')(module, null, true);
 }
