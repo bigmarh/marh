@@ -8,11 +8,12 @@ module.exports = function(module) {
 
         module.$.models.Account.getAccount().then(function(account){
             self.account(account);
-            m.redraw();
-        });
 
-        module.$.models.Account.getAccountTransactions().then(function(accountTransactions){
-            self.accountTransactions(accountTransactions);
+            module.$.models.Account.getAccountTransactions(account).then(function(accountTransactions){
+	            self.accountTransactions(accountTransactions);
+	            m.redraw();
+	        });
+	        
             m.redraw();
         });
 
