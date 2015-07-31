@@ -6,3 +6,4 @@ module.exports = function(app, module) {
     app.$routes[path + '/view/:id'] = require('./views/view')(module, null, true, require('./controllers/view-transaction')(module));
 
 }
+

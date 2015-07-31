@@ -15,7 +15,5 @@ module.exports = function(module) {
         }, function(response) {
         	alert(response);
         });
-
-
     }
 }

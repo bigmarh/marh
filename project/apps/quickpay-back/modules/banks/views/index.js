@@ -14,7 +14,7 @@ module.exports = function(module, Parse, needsComponent) {
                     ])
                 ]),
                 m("tbody", [
-                    controller.banks.map(function(bank) {
+                    module.$.banks && module.$.banks.map(function(bank) {
                         return m("tr", [
                             m("td", bank.get("name")),
                             m("td", "$" + bank.get("balance")),
