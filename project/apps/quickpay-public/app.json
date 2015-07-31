@@ -1,9 +1,0 @@
-{
-  "name": "quickpay-public",
-  "layout": "quickpay-public",
-  "rootModule": "login",
-  "rootPath": "/",
-  "description": "The quickest and easiest way to pay a friend!",
-  "version": "0.0.1",
-  "navs": ["primary", "side"]
-}

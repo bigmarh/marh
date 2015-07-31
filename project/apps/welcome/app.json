@@ -1,0 +1,9 @@
+{
+  "name": "welcome",
+  "layout": "welcome",
+  "rootModule": "welcome",
+  "rootPath": "/",
+  "description": "Welcome Application",
+  "version": "0.0.1",
+  "navs": ["primary", "side"]
+}

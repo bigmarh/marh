@@ -1,9 +1,0 @@
-{
-  "name": "smi",
-  "layout": "smi",
-  "rootModule": "cds",
-  "rootPath": "/",
-  "description": "Starter application",
-  "version": "0.0.1",
-  "navs": ["primary", "side"]
-}
