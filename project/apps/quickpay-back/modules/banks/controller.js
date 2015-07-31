@@ -1,5 +1,6 @@
 module.exports = function(module) {
     module.controller = function() {
+
         module.$.init();
         this.banks = m.prop([]);
         var self = this;
