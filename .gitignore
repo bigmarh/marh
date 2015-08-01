@@ -31,4 +31,6 @@ config.js
 ehthumbs.db
 Thumbs.db
 
-
+# Cloud Code
+#############################
+mahr-server-app/config/*

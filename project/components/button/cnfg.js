@@ -10,7 +10,7 @@ module.exports = function(ctrl, args) {
     var Effect = {
 
       // Effect delay
-      duration: 400,
+      duration: 300,
 
       show: function(touchX, touchY) {
 
@@ -84,7 +84,7 @@ module.exports = function(ctrl, args) {
         var relativeY = ripple.getAttribute('data-y');
         var scale = ripple.getAttribute('data-scale');
 
-        // Get delay beetween mousedown and mouse leave
+        // Get delay between mousedown and mouse leave
         var diff = Date.now() - Number(ripple.getAttribute(
           'data-hold'));
         var delay = 350 - diff;
