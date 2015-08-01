@@ -14,7 +14,7 @@ module.exports = function(component) {
     }
     var content = (args.content) ? args.content : [m('.center', args.text)]
     args.attrs.config = config;
-    return m(prefix + '.md-button', args.attrs, content)
+    return m(prefix + '.btn-flat', args.attrs, content)
   }
 
 }

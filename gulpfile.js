@@ -11,47 +11,45 @@ var watch;
 
 
 gulp.task('browserify-watch', function() {
-  watch = true;
-  return browserifyShare();
+    watch = true;
+    return browserifyShare();
 });
 
 function browserifyShare() {
-  var b = browserify({
-    cache: {},
-    packageCache: {},
-    fullPaths: true
-  });
+    var b = browserify({
+        cache: {},
+        packageCache: {},
+        fullPaths: true
+    });
 
-  b.add('./project/app.js');
-  b.transform(cssify);
-  b.transform(bulkify)
-  return bundleShare(b);
+    b.add('./project/app.js');
+    b.transform(cssify);
+    b.transform(bulkify)
+    return bundleShare(b);
 }
 
 function bundleShare(b) {
-
-  b.bundle()
-    .on('error', function(err) {
-      console.log(err.message);
-      this.emit('end');
-    })
-    .pipe(source('bundle.js'))
-    .pipe(gulp.dest('./dist'))
-    .pipe(gulpif(watch, livereload()));
+    b.bundle()
+        .on('error', function(err) {
+            console.log(err.message);
+            this.emit('end');
+        })
+        .pipe(source('bundle.js'))
+        .pipe(gulp.dest('./dist'))
+        .pipe(gulpif(watch, livereload()));
 }
 
 function swallowError(error) {
 
-  //If you want details of the error in the console
-  console.log(error.toString());
+    //If you want details of the error in the console
+    console.log(error.toString());
 
-  this.emit('end');
+    this.emit('end');
 }
 
 gulp.task("watch", function() {
-  gulp.watch("project/**/*.js", ["browserify-watch"]);
+    gulp.watch("project/**/*.js", ["browserify-watch"]);
     browserifyShare();
-
-  // Start live reload server
-  livereload.listen(35729);
+    // Start live reload server
+    livereload.listen(35729);
 });
