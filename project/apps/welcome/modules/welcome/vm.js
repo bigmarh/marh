@@ -3,7 +3,7 @@ module.exports = function(module, Parse) {
     var vm = {}
     vm.init = function() {
       this.greeting = "Welcome to MARH";
-      this.email = currentUser('email');
+      this.username = currentUser('username');
     }
     return vm;
   }())

@@ -12,7 +12,7 @@ window.debugger = function(string, type) {
 //Load styles
 require('../dist/bower_components/materialize/dist/css/materialize.min.css')
 require('../dist/bower_components/animate.css/animate.min.css')
-cssify.byUrl('https://material.angularjs.org/latest/angular-material.min.css')
+require('../style/angular-layout.css')
 cssify.byUrl('../style.css');
 
 //require parse

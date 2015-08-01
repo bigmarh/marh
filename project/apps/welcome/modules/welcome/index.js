@@ -10,13 +10,14 @@ module.exports = function(Parse, app) {
         require('./view')(module, app);
 
         // Load submodules
-        module.submodules = bulk(__dirname, [
+        var sm = bulk(__dirname, [
             "./submodules/**/index.js"
         ]);
 
-        for(submodule in module.submodules.submodules) {
-            var submodule = module.submodules.submodules[submodule];
-            submodule(Parse, module);
+        module.submodules = sm.submodules;
+        console.log(module.submodules)
+        for(key in module.submodules) {
+            module.submodules[key](Parse, module);
         }
 
         //Register module with

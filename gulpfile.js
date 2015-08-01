@@ -29,7 +29,6 @@ function browserifyShare() {
 }
 
 function bundleShare(b) {
-
     b.bundle()
         .on('error', function(err) {
             console.log(err.message);
