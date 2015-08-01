@@ -3,20 +3,22 @@ module.exports = function(Parse, app) {
     try {
         var module = {
             name: __dirname.split('/').pop(),
-            appName: "welcome"
+            appName: "welcome",
+            Parse: Parse
         };
         require('./vm')(module, Parse);
         require('./controller')(module, Parse);
         require('./view')(module, app);
 
         // Load submodules
-        module.submodules = bulk(__dirname, [
+        var addOns = bulk(__dirname, [
             "./submodules/**/index.js"
         ]);
 
-        for(submodule in module.submodules.submodules) {
-            var submodule = module.submodules.submodules[submodule];
-            submodule(Parse, module);
+        module.submodules = addOns.submodules;
+
+        for(submodule in module.submodules) {
+            module.submodules[submodule](Parse, module);
         }
 
         //Register module with
