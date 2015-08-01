@@ -1,8 +1,8 @@
 module.exports = function() {
   /*!
 
-    .example {
-      
+    h3 {
+      color:red;
     }
 */
 

@@ -11,7 +11,7 @@ module.exports = function(app, Parse) {
                     route: '/',
                 }, 'Home'),
                 $pa.c('button', {
-                    route: '/example'
+                    route: '/welcome/example'
                 }, 'Example'),
                 $pa.c('button', {
                     href: '/a'

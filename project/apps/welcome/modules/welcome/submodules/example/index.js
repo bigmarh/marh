@@ -1,12 +1,14 @@
   module.exports = function(Parse, module) {
-    var component = {
+    var hashids = require('hashids')('kfka dasfi qwefioinoinqfoin i9239');
+    var submodule = {
       name: __dirname.split('/').pop(),
       enabled: true,
+      db: Parse
     }
-    
-    component.style = require('./style');
-    component.controller = require('./controller')(Parse, module);
-    component.view = require('./view')(Parse, module);
-    return component;
+    submodule.id = hashids.encode(new Date().getTime());
+    submodule.style = require('./style');
+    submodule.controller = require('./controller')(submodule);
+    submodule.view = require('./view')(submodule);
+    return submodule;
 
   }

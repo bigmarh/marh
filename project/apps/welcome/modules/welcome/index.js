@@ -15,7 +15,6 @@ module.exports = function(Parse, app) {
         ]);
 
         module.submodules = sm.submodules;
-        console.log(module.submodules)
         for(key in module.submodules) {
             module.submodules[key](Parse, module);
         }
