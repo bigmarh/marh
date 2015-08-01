@@ -9,13 +9,10 @@ module.exports = function(app, Parse) {
             m('header.ui.menu',
                 $pa.c('button', {
                     route: '/',
-                    attrs: {
-                        class: "md-raised"
-                    }
                 }, 'Home'),
                 $pa.c('button', {
-                    route: '/starter'
-                }, 'Start'),
+                    route: '/welcome/example'
+                }, 'Example'),
                 $pa.c('button', {
                     href: '/a'
                 }, 'Backend')
@@ -46,7 +43,6 @@ module.exports = function(app, Parse) {
                 ])
             }
         });
-
         m.mount(document.getElementById('header'), menu);
         m.render(
             document.getElementById('main'), {
