@@ -12,6 +12,7 @@ module.exports = function(Parse, app) {
       )
       SPAMS.bootstrapCalled = true;
       var app = SPAMS.app[appName];
+
       //load layout if specified
       if (app.$meta.layout) ee.emit('load.' + app.$meta.name + '.' + app.$meta
         .layout);

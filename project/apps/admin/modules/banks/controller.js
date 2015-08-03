@@ -1,7 +1,5 @@
 module.exports = function(module) {
-    module.controller = function() {
-
-        module.$.init();
-        
-    }
+  module.controller = function() {
+    module.$.init();
+  }
 }

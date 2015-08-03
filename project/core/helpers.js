@@ -42,7 +42,7 @@ module.exports = function(Parse, app) {
     loadApps: function(blocks) {
       //load apps
       if (!blocks.apps) m.mount(document.body,
-        "No apps. No Happs! Add And application to you app folder");
+        "No apps. No Happs! Add an application to you app folder");
       Object.keys(blocks.apps).map(function(key) {
         blocks.apps[key](Parse, app);
       });

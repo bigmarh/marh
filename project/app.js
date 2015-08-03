@@ -4,9 +4,9 @@ var emitter = require('events').EventEmitter;
 window.ee = new emitter();
 window.debug = true;
 window.debugger = function(string, type) {
-    if (!debug) return;
-    if (type) return console[type](string);
-    console.log(string)
+  if (!debug) return;
+  if (type) return console[type](string);
+  console.log(string)
 }
 
 //Load styles
@@ -21,16 +21,20 @@ var config = require("./config");
 Parse.initialize(config.Parse.appId, config.Parse.javascriptKey);
 //build app
 var app = {
-    $layouts: {},
+  $layouts: {}
 };
+
+//load global components
+app.$cmp = require('bulk-require')(__dirname, [
+  'components/**/index.js'
+]).components;
+app.$libs = require('bulk-require')(__dirname, [
+  'libs/**/*.js'
+]).libs;
 
 
 var SPAMS = require('./core/SPAMS')(Parse, app);
 var apps = require('bulk-require')(__dirname, ['apps/**/index.js'])
-window.$cmp = require('bulk-require')(__dirname, [
-    'components/**/index.js'
-]).components;
-//load components
 
 
 
@@ -38,30 +42,30 @@ window.$cmp = require('bulk-require')(__dirname, [
 SPAMS.helpers.loadApps(apps);
 
 (function() {
-    var lastTime = 0;
-    var vendors = ['webkit', 'moz'];
-    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x] +
-            'RequestAnimationFrame'];
-        window.cancelAnimationFrame =
-            window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] +
-                'CancelRequestAnimationFrame'];
-    }
+  var lastTime = 0;
+  var vendors = ['webkit', 'moz'];
+  for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+    window.requestAnimationFrame = window[vendors[x] +
+      'RequestAnimationFrame'];
+    window.cancelAnimationFrame =
+      window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] +
+        'CancelRequestAnimationFrame'];
+  }
 
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() {
-                    callback(currTime + timeToCall);
-                },
-                timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
+  if (!window.requestAnimationFrame)
+    window.requestAnimationFrame = function(callback, element) {
+      var currTime = new Date().getTime();
+      var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+      var id = window.setTimeout(function() {
+          callback(currTime + timeToCall);
+        },
+        timeToCall);
+      lastTime = currTime + timeToCall;
+      return id;
+    };
 
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
+  if (!window.cancelAnimationFrame)
+    window.cancelAnimationFrame = function(id) {
+      clearTimeout(id);
+    };
 }());

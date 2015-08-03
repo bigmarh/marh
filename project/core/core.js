@@ -1,32 +1,38 @@
 module.exports = function(Parse, app) {
+
   var core = {
-    addOrgans: function(addons, app) {
-      // load layouts
+    loadLibrary: function(name, params) {
+      return app.$libs[name][name](params);
+    },
+    addOrgans: function(addons, module) {
+      // load components
       if (addons.components)
         Object.keys(addons.components).map(function(key) {
-          addons.components[key](app, Parse);
+          addons.components[key](module, Parse);
         });
       // load layouts
       if (addons.layouts)
         Object.keys(addons.layouts).map(function(key) {
-          addons.layouts[key](app, Parse);
+          addons.layouts[key](module, Parse);
         });
       //set plugins
-      app.$tmp = app.$templates = addons.templates;
-      app.$cmp = app.$components = addons.components;
-      console.log("Added " + app.$meta.name + " goods");
+      module.$tmps = addons.templates;
+      module.$cmps = addons.components;
+
+      console.log("Added " + module.$meta.name + " goods");
       if (!addons.modules)
-        throw "The " + app.$meta.name +
+        throw "The " + module.$meta.name +
         " section is missing the module folder";
       //load modules
       Object.keys(addons.modules).map(function(key) {
-        addons.modules[key](Parse, app);
+        addons.modules[key](Parse, module);
       });
     },
     component: function(name, attr, text, extras) {
       if (attr) attr.text = text;
-      return m.component($cmp[name](), attr, extras);
+      return m.component(app.$cmp[name](), attr, extras);
     },
   }
+  window.loadLibrary = core.loadLibrary;
   return core;
 }

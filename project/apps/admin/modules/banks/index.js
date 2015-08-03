@@ -2,10 +2,11 @@ module.exports = function(Parse, app) {
   try {
     var module = {
       name: __dirname.split('/').pop(),
-      appName: __dirname.split('/').pop()
+      appName: __dirname.split('/').pop(),
+      db: Parse
     };
-    require('./vm')(module, Parse);
-    require('./controller')(module, Parse);
+    require('./vm')(module);
+    require('./controller')(module);
     require('./view')(module, app);
     //Register module with
     if (!app[module.name]) app[module.name] = module;

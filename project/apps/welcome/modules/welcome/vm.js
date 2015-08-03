@@ -1,4 +1,4 @@
-module.exports = function(module, Parse) {
+module.exports = function(module) {
   module.$ = (function() {
     var vm = {}
     vm.init = function() {
