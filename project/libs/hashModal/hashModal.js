@@ -66,7 +66,7 @@
           controller: function() {
             this.cancel = function(close) {
               options.cancel.action();
-              setTimeout(hashModal.remove, 500);
+              setTimeout(hashModal.remove, 200);
             }
             this.confirm = function() {
               options.confirm.action();
