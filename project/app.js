@@ -4,9 +4,8 @@ var emitter = require('events').EventEmitter;
 window.ee = new emitter();
 window.debug = true;
 window.debugger = function(string, type) {
-  if (!debug) return;
-  if (type) return console[type](string);
-  console.log(string)
+    if (!debug) return;
+    if (type) return console[type](string);
 }
 
 //Load styles
@@ -18,54 +17,60 @@ cssify.byUrl('../style.css');
 //require parse
 var Parse = require('parse-browserify');
 var config = require("./config");
+var globalConfig = window.globalConfig = require("./globalConfig");
 Parse.initialize(config.Parse.appId, config.Parse.javascriptKey);
 //build app
 var app = {
-  $layouts: {}
+    $layouts: {},
+    globalConfig: config
 };
 
 //load global components
 app.$cmp = require('bulk-require')(__dirname, [
-  'components/**/index.js'
+    'components/**/index.js'
 ]).components;
 app.$libs = require('bulk-require')(__dirname, [
-  'libs/**/*.js'
+    'libs/**/*.js'
 ]).libs;
-
 
 var SPAMS = require('./core/SPAMS')(Parse, app);
 var apps = require('bulk-require')(__dirname, ['apps/**/index.js'])
 
-
-
 //load apps
 SPAMS.helpers.loadApps(apps);
 
+// load and initialize the hashModal
+
+var hashModal = loadLibrary('hashModal', {
+    app: app
+}).init();
+
+
 (function() {
-  var lastTime = 0;
-  var vendors = ['webkit', 'moz'];
-  for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-    window.requestAnimationFrame = window[vendors[x] +
-      'RequestAnimationFrame'];
-    window.cancelAnimationFrame =
-      window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] +
-        'CancelRequestAnimationFrame'];
-  }
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] +
+            'RequestAnimationFrame'];
+        window.cancelAnimationFrame =
+            window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] +
+                'CancelRequestAnimationFrame'];
+    }
 
-  if (!window.requestAnimationFrame)
-    window.requestAnimationFrame = function(callback, element) {
-      var currTime = new Date().getTime();
-      var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-      var id = window.setTimeout(function() {
-          callback(currTime + timeToCall);
-        },
-        timeToCall);
-      lastTime = currTime + timeToCall;
-      return id;
-    };
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() {
+                    callback(currTime + timeToCall);
+                },
+                timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
 
-  if (!window.cancelAnimationFrame)
-    window.cancelAnimationFrame = function(id) {
-      clearTimeout(id);
-    };
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
 }());

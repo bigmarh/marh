@@ -1,9 +1,9 @@
 {
-  "name": "quickpay-back",
-  "layout": "quickpay-back",
-  "rootModule": "accounts",
+  "name": "Admin",
+  "layout": "defualt",
+  "rootModule": "welcome",
   "rootPath": "/",
-  "description": "The quickest and easiest way to pay a friend!",
+  "description": "Admin for the back",
   "version": "0.0.1",
   "navs": ["primary", "side"]
 }
