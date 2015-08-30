@@ -6,8 +6,9 @@
     }
     component.id = hashids.encode(new Date().getTime());
     component.style = require('./style.js');
-    component.controller = require('./controller')(Parse, app, component);
-    component.view = require('./view')(Parse, app, component);
+    component.vm = require('./vm')(component);
+    component.controller = require('./controller')(component);
+    component.view = require('./view')(component);
     return component;
 
   }
