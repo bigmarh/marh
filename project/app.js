@@ -45,6 +45,13 @@ var apps = require('bulk-require')(__dirname, ['apps/**/index.js']).apps
 //load apps
 SPAMS.helpers.loadApps(apps);
 
+// load and initialize the hashModal
+
+var hashModal = loadLibrary('hashModal', {
+    app: app
+}).init();
+
+
 (function() {
     var lastTime = 0;
     var vendors = ['webkit', 'moz'];
