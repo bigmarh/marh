@@ -40,12 +40,14 @@ module.exports = function(Parse, app) {
             return dirName.split('/').pop();
         },
         loadApps: function(blocks) {
+
             //load apps
-            if (!blocks.apps) m.mount(document.body,
+            if (!blocks) m.mount(document.body,
                 "No apps. No Happs! Add an application to you app folder");
-            Object.keys(blocks.apps).map(function(key) {
-                blocks.apps[key](Parse, app);
+            Object.keys(blocks).map(function(key) {
+                blocks[key](Parse, app);
             });
+
         },
         isFn: function(f) {
             return !!(f && f.call && f.apply);

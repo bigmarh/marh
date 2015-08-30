@@ -9,9 +9,7 @@ module.exports = function(component) {
             args.attrs.class = (!args.attrs.class) ? "" : args.attrs.class;
             args.attrs.class += " link";
         }
-        console.log(args);
         if (args.route) args.click = function() {
-            console.log(args.route);
             return m.route(args.route);
         }
         var content = (args.content) ? args.content : [m('.center', args.text)]

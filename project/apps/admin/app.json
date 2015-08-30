@@ -1,9 +1,0 @@
-{
-  "name": "Admin",
-  "layout": "defualt",
-  "rootModule": "welcome",
-  "rootPath": "/",
-  "description": "Admin for the back",
-  "version": "0.0.1",
-  "navs": ["primary", "side"]
-}

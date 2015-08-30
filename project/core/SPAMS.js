@@ -12,7 +12,8 @@ module.exports = function(Parse, app) {
             )
             SPAMS.bootstrapCalled = true;
             var app = SPAMS.app[appName];
-
+            if(!app) 
+                return console.error("Add an application to project/apps named "+appName+".");
             //load layout if specified
             if (app.$meta.layout) ee.emit('load.' + app.$meta.name + '.' + app.$meta
                 .layout);

@@ -1,3 +1,5 @@
+(function(){
+
 //Load bitcoin Libraries
 var cssify = require('cssify');
 var emitter = require('events').EventEmitter;
@@ -21,9 +23,12 @@ var globalConfig = window.globalConfig = require("./globalConfig");
 Parse.initialize(config.Parse.appId, config.Parse.javascriptKey);
 //build app
 var app = {
+    id:"Main",
     $layouts: {},
     globalConfig: config
 };
+// load and initialize the hashModal
+var hashModal = require('./core/libs/hashModal/hashModal')({app:app}).init();
 
 //load global components
 app.$cmp = require('bulk-require')(__dirname, [
@@ -32,19 +37,13 @@ app.$cmp = require('bulk-require')(__dirname, [
 app.$libs = require('bulk-require')(__dirname, [
     'libs/**/*.js'
 ]).libs;
-
+//load SPAMS class
 var SPAMS = require('./core/SPAMS')(Parse, app);
-var apps = require('bulk-require')(__dirname, ['apps/**/index.js'])
+var apps = require('bulk-require')(__dirname, ['apps/**/index.js']).apps
+
 
 //load apps
 SPAMS.helpers.loadApps(apps);
-
-// load and initialize the hashModal
-
-var hashModal = loadLibrary('hashModal', {
-    app: app
-}).init();
-
 
 (function() {
     var lastTime = 0;
@@ -74,3 +73,5 @@ var hashModal = loadLibrary('hashModal', {
             clearTimeout(id);
         };
 }());
+    
+})()

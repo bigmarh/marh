@@ -34,3 +34,5 @@ Thumbs.db
 # Cloud Code
 #############################
 cloud/config/*
+project/globalConfig.js
+

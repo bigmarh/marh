@@ -1,5 +1,4 @@
 module.exports = function(params) {
-
     var modalTemplate = require('./templates/modal-template');
     var routeHandler = require('./helpers/routeHandler').routeHandler;
     var hashModal = {
@@ -14,7 +13,10 @@ module.exports = function(params) {
                 this.message = window.location['hash'];
             },
             view: function(ctrl) {
-                return m('.hello', 'Hope this works ' + ctrl.message);
+                return m('.content',[
+                    m('.hello', 'Hope this works ' + ctrl.message),
+                    m('a.testModal',{href:'#welcome/welcome/add'},"Click here to change the modal")
+                    ]);
             }
         },
         current: {},
@@ -34,13 +36,16 @@ module.exports = function(params) {
         },
         routeChange: function(options) {
             if (!window.location['hash']) return hashModal.remove();
-            var routearray = routeHandler(window.location['hash'], params);
-
-            options.content = routearray[0];
-            hashModal.modalOptions = routearray[2] || hashModal.modalOptions;
-            if (routearray[1]) {
-                for (opt in routearray[1]) {
-                    options[opt] = routearray[1][opt];
+            var routeObj = routeHandler(window.location['hash'], params);
+            if(!routeObj){
+             console.error("There is an error retrieving component for the modal")
+             return window.location ='#';
+            }
+            options.content = routeObj.content;
+            hashModal.modalOptions = routeObj.modalOptions || hashModal.modalOptions;
+            if (routeObj.options) {
+                for (opt in routeObj.options) {
+                    options[opt] = routeObj.options[opt];
                 };
             }
             if (!hashModal.current.active) hashModal.openModal(options);
@@ -83,10 +88,10 @@ module.exports = function(params) {
                 options.content = options.content || hashModal.content;
             var modal = hashModal.current;
 
-modal.style.width = (options.width) ? options.width +
-                ((isNaN(options.width) && options.width.indexOf('%') > 0)? "" :"px"): "";
-                     modal.style.height = (options.height) ? options.height +
-                ((isNaN(options.height) && options.height.indexOf('%') > 0)? "" :"px"): "";
+            modal.style.width = (options.width) ? options.width +
+                ((isNaN(options.width) && options.width.indexOf('%') > 0) ? "" : "px") : "";
+            modal.style.height = (options.height) ? options.height +
+                ((isNaN(options.height) && options.height.indexOf('%') > 0) ? "" : "px") : "";
             var component = m.component({
                 controller: function() {
                     this.cancel = function(close) {
@@ -100,7 +105,6 @@ modal.style.width = (options.width) ? options.width +
                 },
                 view: modalTemplate
             }, options)
-
             m.mount(hashModal.current, component);
         },
         openModal: function(options) {

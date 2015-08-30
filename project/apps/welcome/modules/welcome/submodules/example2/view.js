@@ -1,5 +1,5 @@
 module.exports = function(module) {
-  return function(ctrl, args) {
-    return m('h5', 'Welcome to ' + module.name + ' submodule');
-  }
+    return function(ctrl, args) {
+        return m("div", "Intro to Example 2")
+    }
 }

@@ -1,11 +1,11 @@
 module.exports = function(Parse, app) {
+
     var core = {
         cryptojs: require('crypto-js'),
         loadLibrary: function(name, params) {
             return app.$libs[name][name](params);
         },
         addOrgans: function(addons, module) {
-
             // load components
             if (addons.components)
                 Object.keys(addons.components).map(function(key) {
@@ -22,7 +22,7 @@ module.exports = function(Parse, app) {
 
             if (!addons.modules)
                 throw "The " + module.$meta.name +
-                " app is missing the module folder";
+                " section is missing the module folder";
             //load modules
             Object.keys(addons.modules).map(function(key) {
                 addons.modules[key](Parse, module);
@@ -32,17 +32,28 @@ module.exports = function(Parse, app) {
             if (attr) attr.text = text;
             return m.component(app.$cmp[name](Parse, app), attr, extras);
         },
-        moduleIndex: function(obj) {
-
-            var module = obj;
-
+        moduleIndex: function(db,app,directory) {
+            directory = '.../'+directory.split('/').splice(2).join('/');
             try {
-                obj.vm(module);
-                obj.view(module);
-                obj.controller(module)
-                module.submodules = obj.addons.submodules;
-                module.model = obj.addons.model;
+                var module = {
+                    name: directory.split('/').pop(),
+                    templates: app.$tmps,
+                    db: db,
+                    globalConfig: app.globalConfig
+                };
 
+                require(directory+'/vm')(module, Parse);
+                require(directory+'/controller')(module, Parse);
+                require(directory+'/view')(module, app);
+
+                // Load addons
+                var addons = bulk(directory, [
+                    "./submodules/**/index.js",
+                    "./model/**.js"
+                ]);
+
+                module.submodules = addons.submodules;
+                module.model = addons.model;
                 for (model in module.model) {
                     module.model[model] = module.model[model](module, module.db);
                 }
@@ -50,11 +61,10 @@ module.exports = function(Parse, app) {
                     module.submodules[submodule](module);
                 }
 
-                //Register module with app
-                if (!obj.app[module.name]) obj.app[module.name] = module;
-                else throw "There is a conflict in namespace";
-                obj.app[module.name] = module;
-                obj.routes(module, obj.app);
+                //Register module with
+                if (!app[module.name]) app[module.name] = module;
+                else throw "There is a conflict in namespace"
+                require(directory+'/routes')(app, module);
             } catch (e) {
                 console.error(e);
             }

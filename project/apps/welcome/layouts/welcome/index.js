@@ -20,7 +20,7 @@ module.exports = function(app, Parse) {
           href: '/admin'
         }, 'Admin'),
         $pa.c('button', {
-          href: '#admin'
+          href: '#welcome/welcome/add'
         }, 'hash_modal')
       )
     ];

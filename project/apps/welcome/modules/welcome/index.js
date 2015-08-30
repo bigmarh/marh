@@ -1,33 +1,22 @@
-var bulk = require('bulk-require');
-module.exports = function(Parse, app) {
-  try {
-    var module = {
-      name: __dirname.split('/').pop(),
-      appName: "welcome",
-      db: Parse
-    };
-    require('./vm')(module);
-    require('./controller')(module);
-    require('./view')(module, app);
-
-    // Load submodules
-    var sm = bulk(__dirname, [
-      "./submodules/**/index.js"
-    ]);
-
-    module.submodules = sm.submodules;
-
-    for (submodule in module.submodules) {
-      module.submodules[submodule](module);
+module.exports = function(Parse, project) {
+  
+     var moduleObj = {
+        name:__dirname.split('/').pop(),
+        id:__dirname.split('/').pop() + '-app',
+        db:Parse,
+        app:project,
+        directory:__dirname.split('/').splice(2).join("/"),
+        vm:require('./vm'),
+        controller:require('./controller'),
+        view:require('./view'),
+        routes: require('./routes'),
     }
-    //Register module with
-    if (!app[module.name]) app[module.name] = module;
-    else throw "There is a conflict in namespace"
-    require('./routes')(app, module);
-
-  } catch (e) {
-    console.error(e);
-  }
-
-
+      // Load addons
+    var addons = require('bulk-require')(__dirname, [
+        "./submodules/**/index.js",
+        "./model/**.js"
+    ]);
+               
+    moduleObj.addons  = addons;
+    return $pa.core.moduleIndex(moduleObj);
 }

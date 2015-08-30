@@ -1,4 +1,4 @@
-module.exports = function(app, module) {
+module.exports = function(module,app) {
   var namespace = module.name;
   var path = "/" + namespace;
 
