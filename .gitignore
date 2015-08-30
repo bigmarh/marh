@@ -16,7 +16,7 @@ dist/bundle.js
 
 # Parse Configs
 #############################
-parse/config
+cloud/config.js
 config.js
 
 
@@ -33,4 +33,4 @@ Thumbs.db
 
 # Cloud Code
 #############################
-mahr-server-app/config/*
+cloud/config/*

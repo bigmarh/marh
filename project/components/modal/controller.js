@@ -1,6 +1,7 @@
 module.exports = function(Parse, app, component) {
   var toolbar = require('./tmpl/toolbar');
   var footer = require('./tmpl/footer');
+
   return function(args) {
     var controller = {};
     //load style
@@ -24,6 +25,8 @@ module.exports = function(Parse, app, component) {
       //unloads style when componet is unloaded
       $pa.helpers.unloadStyle(component);
     }
+
+
 
     return controller;
   }
