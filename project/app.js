@@ -6,7 +6,6 @@ window.debug = true;
 window.debugger = function(string, type) {
     if (!debug) return;
     if (type) return console[type](string);
-    console.log(string)
 }
 
 //Load styles
@@ -18,24 +17,34 @@ cssify.byUrl('../style.css');
 //require parse
 var Parse = require('parse-browserify');
 var config = require("./config");
+var globalConfig = window.globalConfig = require("./globalConfig");
 Parse.initialize(config.Parse.appId, config.Parse.javascriptKey);
 //build app
 var app = {
     $layouts: {},
+    globalConfig: config
 };
 
+//load global components
+app.$cmp = require('bulk-require')(__dirname, [
+    'components/**/index.js'
+]).components;
+app.$libs = require('bulk-require')(__dirname, [
+    'libs/**/*.js'
+]).libs;
 
 var SPAMS = require('./core/SPAMS')(Parse, app);
 var apps = require('bulk-require')(__dirname, ['apps/**/index.js'])
-window.$cmp = require('bulk-require')(__dirname, [
-    'components/**/index.js'
-]).components;
-//load components
-
-
 
 //load apps
 SPAMS.helpers.loadApps(apps);
+
+// load and initialize the hashModal
+
+var hashModal = loadLibrary('hashModal', {
+    app: app
+}).init();
+
 
 (function() {
     var lastTime = 0;

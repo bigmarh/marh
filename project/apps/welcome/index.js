@@ -1,5 +1,10 @@
   var bulk = require('bulk-require');
+
+
   module.exports = function(Parse, app) {
+    var hashModal = loadLibrary('hashModal', {
+      app: app
+    }).init;
     var appInfo = require('./app.json');
     var parent = app;
     appInfo.name = __dirname.split('/').pop();
@@ -14,11 +19,15 @@
       "templates/*.js",
       "layouts/**/index.js"
     ]);
+
     //Add vital pieces to make application run
     $pa.core.addOrgans(addons, app);
     if (appInfo.rootPath) {
       app.$meta.root = appInfo.rootPath;
       app.$routes[appInfo.rootPath] = app[appInfo.rootModule];
     }
+
+    //load Hash Modal
+    hashModal();
 
   }
