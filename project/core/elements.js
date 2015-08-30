@@ -1,9 +1,13 @@
 module.exports = function() {
   //global component for easier use registration
   var Elements = {
-    button: function(text, action, options, isHref) {
+    button: function(content, action, options, isHref) {
       var options = options || {};
       options.attrs = {};
+      if(typeof content != 'string'){
+          options.content = content;
+          content = null;
+      }  
       if (isHref) {
         options.href = action;
       } else {
@@ -14,13 +18,16 @@ module.exports = function() {
         }
 
       }
+      if(options.id){
+         options.attrs.id = options.id;
+      }
       if (options.class) {
         options.attrs.class = options.class;
       }
       if (options.target) {
         options.attrs.target = options.target;
       }
-      return new $pa.c('button', options, text)
+      return new $pa.c('button', options, content)
     },
     modal: function(options) {
       this.open = function(options) {
@@ -38,6 +45,12 @@ module.exports = function() {
   }
   window.modal = function(options) {
     return new Elements.modal().open.bind(this, options);
+  }
+  window.autoComplete = function(options) {
+    return new $pa.c('autoComplete', options)
+  }
+  window.search = function(options) {
+    return new $pa.c('search', options)
   }
   window.button = Elements.button;
   return Elements;
