@@ -27,7 +27,7 @@ module.exports = function() {
       if (options.target) {
         options.attrs.target = options.target;
       }
-      return new $pa.c('button', options, content)
+      return new $pa.c('$button', options, content)
     },
     modal: function(options) {
       this.open = function(options) {
@@ -36,7 +36,7 @@ module.exports = function() {
         var modal = document.createElement('div');
         modal.id = "modal";
         document.body.appendChild(modal)
-        m.render(modal, $pa.c('modal', options))
+        m.render(modal, $pa.c('$modal', options))
       }
       this.close = function() {
         alert("Modal is closing");
@@ -47,10 +47,10 @@ module.exports = function() {
     return new Elements.modal().open.bind(this, options);
   }
   window.autoComplete = function(options) {
-    return new $pa.c('autoComplete', options)
+    return new $pa.c('$autoComplete', options)
   }
   window.search = function(options) {
-    return new $pa.c('search', options)
+    return new $pa.c('$search', options)
   }
   window.button = Elements.button;
   return Elements;

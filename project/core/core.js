@@ -1,11 +1,48 @@
 module.exports = function(Parse, app) {
+    var organTypes = $globalConfig.organTypes;
     var core = {
         cryptojs: require('crypto-js'),
+        load: {},
+        _loader: function(type, name, params, newInstance) {
+            if (type == "service") {
+                if (app[organTypes[type]][name]) {
+                    return __check(app[organTypes[type]][name]);
+                } else {
+                    return __check(app.$core[organTypes[type]][name], true);
+                }
+            } else {
+                if (app[organTypes[type]][name] && app[organTypes[type]][name][name]) {
+                    return __check(app[organTypes[type]][name][name]);
+                } else {
+                    return __check(app.$core[organTypes[type]][name][name], true);
+                }
+            }
+            function __check(organ, isCore) {
+    
+                if (!organ) return console.error("The organ " + name + " does not exist.  Please check your filenames");
+                var base = (isCore) ? app.$core : app;
+                if (organ.__initialized) {
+                    return organ;
+                }
+                organ = organ(params, app);
+                organ.__initialized = true;
+
+                if (type == "service") {
+                   base[organTypes[type]][name] = organ;
+                   return  base[organTypes[type]][name]
+                }
+
+                
+                if (newInstance) return organ;
+                base[organTypes[type]][name][name] = organ;
+                return base[organTypes[type]][name][name];
+                 
+            }
+        },
         loadLibrary: function(name, params) {
-            return app.$libs[name][name](params);
+            return core._loader("library", name, params);
         },
         addOrgans: function(addons, module) {
-
             // load components
             if (addons.components)
                 Object.keys(addons.components).map(function(key) {
@@ -22,7 +59,7 @@ module.exports = function(Parse, app) {
 
             if (!addons.modules)
                 throw "The " + module.$meta.name +
-                " app is missing the module folder";
+                " section is missing the module folder";
             //load modules
             Object.keys(addons.modules).map(function(key) {
                 addons.modules[key](Parse, module);
@@ -30,36 +67,18 @@ module.exports = function(Parse, app) {
         },
         component: function(name, attr, text, extras) {
             if (attr) attr.text = text;
-            return m.component(app.$cmp[name](Parse, app), attr, extras);
+            var component = (app.$cmp[name]) ? app.$cmp[name](Parse, app) : app.$core.$cmp[name](Parse, app);
+            return m.component(component, attr, extras);
         },
-        moduleIndex: function(obj) {
-
-            var module = obj;
-
-            try {
-                obj.vm(module);
-                obj.view(module);
-                obj.controller(module)
-                module.submodules = obj.addons.submodules;
-                module.model = obj.addons.model;
-
-                for (model in module.model) {
-                    module.model[model] = module.model[model](module, module.db);
-                }
-                for (submodule in module.submodules) {
-                    module.submodules[submodule](module);
-                }
-
-                //Register module with app
-                if (!obj.app[module.name]) obj.app[module.name] = module;
-                else throw "There is a conflict in namespace";
-                obj.app[module.name] = module;
-                obj.routes(module, obj.app);
-            } catch (e) {
-                console.error(e);
-            }
-        }
     }
+
+    Object.keys(organTypes).map(function(type) {
+        core.load[type] = function(name, params, newInstance) {
+            return core._loader(type, name, params)
+        }
+    })
+    window.cryptoJs = core.cryptojs;
+    window.$load = core.load;
     window.loadLibrary = core.loadLibrary;
     return core;
 }
