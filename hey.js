@@ -5,6 +5,6 @@ var path = require('path');
 
 app.use(express.static(path.join(__dirname, '/dist')));
 
-http.listen(3401, function() {
-  console.log('listening on *:3401');
+http.listen(3402, function() {
+  console.log('listening on *:3402');
 });
